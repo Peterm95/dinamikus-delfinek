@@ -1113,39 +1113,30 @@
                     const formData = new FormData(form);
                     
                     // Küldés a Google Sheets-be
-                    fetch(scriptURL, { method: 'POST', body: formData })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Szerver hiba történt (Státusz: ' + response.status + ')');
-                        }
-                        return response.json(); // Megvárjuk és feldolgozzuk a Google JSON válaszát
-                    })
-                    .then(data => {
-                        // Visszaállítjuk a gombot
-                        if(submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
-                        }
-                        
-                        // Csak akkor mutatjuk a sikeres ablakot, ha a Google visszajelzett, hogy sikerült a mentés
-                        if (data && data.result === "success") {
-                            if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
-                            if(customModal) customModal.style.display = 'flex';
-                        } else {
-                            // Ha a Google válaszolt, de hibát küldött (pl. nem létező fül név a táblázatban)
-                            alert('A Google rendszer fogadta a kérést, de hibát jelzett: ' + (data.error || 'Ismeretlen hiba'));
-                        }
-                    })
-                    .catch(error => {
-                        // Ez a rész fut le, ha a Google teljesen blokkolja (CORS hiba / Rossz URL)
-                        console.error('Hiba történt!', error);
-                        alert('Hiba történt az adatok küldése közben!\n\nLehetséges okok:\n1. Nem "Új verzióként" telepítetted a Google Scriptet.\n2. A Google Scriptben a hozzáférés nem "Bárki" (Anyone) opcióra van állítva.\n\nA pontos hiba: ' + error.message);
-                        
-                        if(submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
-                        }
-                    });
+                    fetch(scriptURL,{
+    method:'POST',
+    body:formData,
+    mode:'no-cors'
+})
+.then(()=>{
+
+    submitBtn.disabled=false;
+    submitBtn.innerText='Ingyenes próbaórára jelentkezem';
+
+    registeredChildNameSpan.innerText=gyermekNeve;
+    customModal.style.display='flex';
+
+})
+.catch(error=>{
+
+    console.error(error);
+
+    submitBtn.disabled=false;
+    submitBtn.innerText='Ingyenes próbaórára jelentkezem';
+
+    alert('Hiba történt a jelentkezés küldése közben.');
+
+});
                 });
             }
 
