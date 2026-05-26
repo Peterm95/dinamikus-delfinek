@@ -1023,47 +1023,61 @@
             });
 
             // ═══════════ APPS SCRIPT ŰRLAP KÜLDÉS ═══════════
-const form = document.getElementById('registration-form');
-const successMessage = document.getElementById('success-message');
-const submitBtn = document.getElementById('submit-btn');
-const hiddenDaysInput = document.getElementById('selected-days-input');
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registration-form');
+    const successMessage = document.getElementById('success-message');
+    const submitBtn = document.getElementById('submit-btn');
+    const hiddenDaysInput = document.getElementById('selected-days-input');
 
-// A Te egyedi Google Apps Script webalkalmazás URL-ed
-const scriptURL = 'https://script.google.com/macros/s/AKfycbySCMRnGOg7wFsntgk5HbkH70V6eamld0QsF6NpunKs3QU56luaSvGTNhs0HR_t7wVp2w/exec';
+    // Ellenőrizzük, hogy létezik-e az űrlap az oldalon
+    if (!form) return;
 
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Kiválasztott napok összeszedése vesszővel elválasztva
-    const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
-    const selectedDays = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
-    hiddenDaysInput.value = selectedDays;
-
-    if(checkedBoxes.length === 0) {
-        alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnének!');
-        return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.innerText = 'Küldés folyamatban...';
-
-    const formData = new FormData(form);
-    
-    // Beküldés a Google Táblázatba az Apps Scripten keresztül
-    fetch(scriptURL, { method: 'POST', body: formData })
-    .then(response => {
-        submitBtn.disabled = false;
-        submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        form.style.display = 'none';
-        successMessage.style.display = 'block';
-        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    })
-    .catch(error => {
-        console.error('Hiba történt!', error.message);
-        alert('Hiba történt a küldés során. Kérjük, próbálja meg újra vagy keressen minket telefonon!');
-        submitBtn.disabled = false;
-        submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
+        // 1. Kiválasztott napok összeszedése vesszővel elválasztva
+        const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
+        const selectedDays = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
+        
+        if (hiddenDaysInput) {
+            hiddenDaysInput.value = selectedDays;
+        }
+
+        // 2. Validálás: kötelező legalább egy napot választani
+        if (checkedBoxes.length === 0) {
+            alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnének!');
+            return;
+        }
+
+        // 3. Gomb letiltása a dupla kattintás ellen
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Küldés folyamatban...';
+
+        // 4. Adatok előkészítése a küldésre
+        const formData = new FormData(form);
+        
+        // A Te egyedi Google Apps Script webalkalmazás URL-ed
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbySCMRnGOg7wFsntgk5HbkH70V6eamld0QsF6NpunKs3QU56luaSvGTNhs0HR_t7wVp2w/exec';
+
+        // 5. Beküldés a Google Táblázatba
+        fetch(scriptURL, { method: 'POST', body: formData })
+        .then(response => {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
+            
+            // Űrlap elrejtése, sikeres üzenet mutatása
+            form.style.display = 'none';
+            if (successMessage) {
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        })
+        .catch(error => {
+            console.error('Hiba történt!', error.message);
+            alert('Hiba történt a küldés során. Kérjük, próbálja meg újra vagy keressen minket telefonon!');
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
+        });
     });
 });
     </script>
