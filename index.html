@@ -1084,11 +1084,12 @@
             const registeredChildNameSpan = document.getElementById('registered-child-name');
             const modalOkBtn = document.getElementById('modal-ok-btn');
 
+            // ⚠️ IDE MÁSOLD BE AZT AZ URL-T, amit a Google Apps Script "Új telepítés" (Deploy) gombjánál kapsz!
+            // Győződj meg róla, hogy a Google-ben a "Who has access" beállítás: "Anyone" (Bárki)!
             const scriptURL = 'https://script.google.com/macros/s/AKfycbxN6bhuQN4nJTUepCNIwf2WWjXeEfqb6L38a9M9NsrKxhSsh-6-fDmfqpLzVF-ZzTR_HQ/exec';
 
             if (form) {
                 form.addEventListener('submit', function(e) {
-                    // EZ AZ A SOR, ami kötelezően megállítja az oldal frissülését!
                     e.preventDefault();
 
                     // Napok ellenőrzése és összefűzése
@@ -1109,31 +1110,41 @@
 
                     // Gyermek nevének kimentése
                     const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
-
                     const formData = new FormData(form);
                     
                     // Küldés a Google Sheets-be
                     fetch(scriptURL, { method: 'POST', body: formData })
                     .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Szerver hiba történt (Státusz: ' + response.status + ')');
+                        }
+                        return response.json(); // Megvárjuk és feldolgozzuk a Google JSON válaszát
+                    })
+                    .then(data => {
                         // Visszaállítjuk a gombot
                         if(submitBtn) {
                             submitBtn.disabled = false;
                             submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
                         }
                         
-                        // Név beírása és a felugró ablak megnyitása
-                        if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
-                        if(customModal) customModal.style.display = 'flex';
+                        // Csak akkor mutatjuk a sikeres ablakot, ha a Google visszajelzett, hogy sikerült a mentés
+                        if (data && data.result === "success") {
+                            if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
+                            if(customModal) customModal.style.display = 'flex';
+                        } else {
+                            // Ha a Google válaszolt, de hibát küldött (pl. nem létező fül név a táblázatban)
+                            alert('A Google rendszer fogadta a kérést, de hibát jelzett: ' + (data.error || 'Ismeretlen hiba'));
+                        }
                     })
                     .catch(error => {
-                        console.error('Hiba történt!', error.message);
-                        // Teszteléshez: Ha a Google Script hibaágra futna, akkor is nyissa meg a felugrót, hogy lásd a működést!
+                        // Ez a rész fut le, ha a Google teljesen blokkolja (CORS hiba / Rossz URL)
+                        console.error('Hiba történt!', error);
+                        alert('Hiba történt az adatok küldése közben!\n\nLehetséges okok:\n1. Nem "Új verzióként" telepítetted a Google Scriptet.\n2. A Google Scriptben a hozzáférés nem "Bárki" (Anyone) opcióra van állítva.\n\nA pontos hiba: ' + error.message);
+                        
                         if(submitBtn) {
                             submitBtn.disabled = false;
                             submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
                         }
-                        if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
-                        if(customModal) customModal.style.display = 'flex';
                     });
                 });
             }
@@ -1142,14 +1153,12 @@
             if(modalOkBtn) {
                 modalOkBtn.addEventListener('click', function() {
                     if(customModal) customModal.style.display = 'none';
-                    if(form) form.reset(); // Kiüríti a szöveges mezőket
+                    if(form) form.reset(); 
                     
-                    // Checkboxok kiürítése kézzel is biztos ami biztos
                     const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
                     checkedBoxes.forEach(cb => cb.checked = false);
                     if(hiddenDaysInput) hiddenDaysInput.value = '';
 
-                    // Finom görgetés vissza a formhoz
                     if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 });
             }
