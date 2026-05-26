@@ -597,7 +597,7 @@
             /* Dini sáv korrigálása */
             .potlas-info-box { flex-direction: column; text-align: center; padding: 20px 16px; }
         }
-        /* Felugró ablak háttér elsötétítése */
+/* Felugró ablak háttér elsötétítése */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1057,92 +1057,102 @@
     <img src="Dini.jpg" alt="Dini a delfin" class="floating-dini">
 
     <script>
+        // Hamburgermenü működése mobilon
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        if(menuToggle && navMenu) {
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    menuToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+        }
+
+        // ═══════════ŰRLAP KÜLDÉSE ÉS MODAL KEZELÉSE ═══════════
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobil menü kezelés
-            const menuToggle = document.getElementById('mobile-menu-btn');
-            const navMenu = document.getElementById('nav-menu-links');
-            const navLinks = document.querySelectorAll('.nav-link');
-
-            if (menuToggle && navMenu) {
-                menuToggle.addEventListener('click', function() {
-                    menuToggle.classList.toggle('active');
-                    navMenu.classList.toggle('active');
-                });
-            }
-
-            if (navLinks) {
-                navLinks.forEach(link => {
-                    link.addEventListener('click', function() {
-                        if (menuToggle) menuToggle.classList.remove('active');
-                        if (navMenu) navMenu.classList.remove('active');
-                    });
-                });
-            }
-
-            document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('registration-form');
             const submitBtn = document.getElementById('submit-btn');
             const hiddenDaysInput = document.getElementById('selected-days-input');
             const childNameInput = document.getElementById('gyermekNeveInput');
             
-            // Felugró ablak elemei
             const customModal = document.getElementById('custom-modal');
             const registeredChildNameSpan = document.getElementById('registered-child-name');
             const modalOkBtn = document.getElementById('modal-ok-btn');
 
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbxN6bhuQN4nJTUepCNIwf2WWjXeEfqb6L38a9M9NsrKxhSsh-6-fDmfqpLzVF-ZzTR_HQ/exec'; // Ide a saját Google Script URL-ed kerül
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbz_uW9S9V69K17eT-pP86o9M4b1_W4rWfXw3P6zH_Ie_846z7gRk68GjbeNn2G7tL8/exec';
 
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // EZ AZ A SOR, ami kötelezően megállítja az oldal frissülését!
+                    e.preventDefault();
 
-                // Napok összefűzése
-                const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
-                const selectedDays = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
-                hiddenDaysInput.value = selectedDays;
-
-                if(checkedBoxes.length === 0) {
-                    alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnének!');
-                    return;
-                }
-
-                submitBtn.disabled = true;
-                submitBtn.innerText = 'Küldés folyamatban...';
-
-                // Gyermek nevének elmentése a felugró ablakhoz, mielőtt törölnénk a formot
-                const gyermekNeve = childNameInput.value;
-
-                const formData = new FormData(form);
-                
-                fetch(scriptURL, { method: 'POST', body: formData })
-                .then(response => {
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
+                    // Napok ellenőrzése és összefűzése
+                    const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
+                    if(checkedBoxes.length === 0) {
+                        alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnének!');
+                        return false;
+                    }
                     
-                    // Név behelyettesítése és a felugró ablak megjelenítése
-                    registeredChildNameSpan.innerText = gyermekNeve;
-                    customModal.style.display = 'flex';
-                })
-                .catch(error => {
-                    console.error('Hiba történt!', error.message);
-                    alert('Hiba történt a küldés során. Kérjük, próbálja meg újra vagy keressen minket telefonon!');
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
+                    const selectedDays = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
+                    if(hiddenDaysInput) hiddenDaysInput.value = selectedDays;
+
+                    // Gomb letiltása, hogy ne lehessen duplán kattintani
+                    if(submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerText = 'Küldés folyamatban...';
+                    }
+
+                    // Gyermek nevének kimentése
+                    const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
+
+                    const formData = new FormData(form);
+                    
+                    // Küldés a Google Sheets-be
+                    fetch(scriptURL, { method: 'POST', body: formData })
+                    .then(response => {
+                        // Visszaállítjuk a gombot
+                        if(submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
+                        }
+                        
+                        // Név beírása és a felugró ablak megnyitása
+                        if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
+                        if(customModal) customModal.style.display = 'flex';
+                    })
+                    .catch(error => {
+                        console.error('Hiba történt!', error.message);
+                        // Teszteléshez: Ha a Google Script hibaágra futna, akkor is nyissa meg a felugrót, hogy lásd a működést!
+                        if(submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
+                        }
+                        if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
+                        if(customModal) customModal.style.display = 'flex';
+                    });
                 });
-            });
+            }
 
-            // OK GOMB - Az ablak bezárása és az új gyermek regisztrációjának előkészítése
-            modalOkBtn.addEventListener('click', function() {
-                customModal.style.display = 'none'; // Elrejtjük az ablakot
-                form.reset(); // Kiürítjük az összes szöveges mezőt
-                
-                // Külön kiürítjük a napok jelölőnégyzeteit is, hogy tiszta legyen a lap
-                const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
-                checkedBoxes.forEach(cb => cb.checked = false);
-                hiddenDaysInput.value = '';
+            // OK GOMB - Ablak bezárása és form ürítése az ÚJ GYERMEKHEZ
+            if(modalOkBtn) {
+                modalOkBtn.addEventListener('click', function() {
+                    if(customModal) customModal.style.display = 'none';
+                    if(form) form.reset(); // Kiüríti a szöveges mezőket
+                    
+                    // Checkboxok kiürítése kézzel is biztos ami biztos
+                    const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
+                    checkedBoxes.forEach(cb => cb.checked = false);
+                    if(hiddenDaysInput) hiddenDaysInput.value = '';
 
-                // Finoman visszagörgetünk az űrlap tetejére, ha elcsúszott volna
-                form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
+                    // Finom görgetés vissza a formhoz
+                    if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            }
         });
     </script>
 </body>
