@@ -907,62 +907,61 @@
                 </div>
 
                 <form id="registration-form">
-    <div class="form-group">
-        <label class="form-label">Gyermek teljes neve</label>
-        <input type="text" name="Gyermek teljes neve" class="form-input" placeholder="Pl. Kovács Bence" required>
-    </div>
+                        <div class="form-group">
+                            <label class="form-label">Gyermek teljes neve</label>
+                            <input type="text" name="gyermekNeve" class="form-input" placeholder="Pl. Kovács Bence" required>
+                        </div>
 
-    <div class="form-group">
-        <label class="form-label">Gyermek születési ideje</label>
-        <input type="date" name="Gyermek születési ideje" class="form-input" required>
-    </div>
-    
-    <div class="form-group">
-        <label class="form-label">Törvényes képviselő teljes neve</label>
-        <input type="text" name="Törvényes képviselő teljes neve" class="form-input" placeholder="Pl. Kovács Anna" required>
-    </div>
+                        <div class="form-group">
+                            <label class="form-label">Gyermek születési ideje</label>
+                            <input type="date" name="gyermekSzuletesi" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Törvényes képviselő teljes neve</label>
+                            <input type="text" name="szuloNeve" class="form-input" placeholder="Pl. Kovács Anna" required>
+                        </div>
 
-    <div class="form-group">
-        <label class="form-label">Törvényes képviselő e-mail címe</label>
-        <input type="email" name="Törvényes képviselő e-mail címe" class="form-input" placeholder="minta@email.hu" required>
-    </div>
+                        <div class="form-group">
+                            <label class="form-label">Törvényes képviselő e-mail címe</label>
+                            <input type="email" name="email" class="form-input" placeholder="minta@email.hu" required>
+                        </div>
 
-    <div class="form-group">
-        <label class="form-label">Törvényes képviselő telefonszáma</label>
-        <input type="tel" name="Törvényes képviselő telefonszáma" class="form-input" placeholder="Pl. +36 20 123 4567" required>
-    </div>
+                        <div class="form-group">
+                            <label class="form-label">Törvényes képviselő telefonszáma</label>
+                            <input type="tel" name="telefon" class="form-input" placeholder="Pl. +36 20 123 4567" required>
+                        </div>
 
-    <div class="form-group">
-        <label class="form-label">Törvényes képviselő lakcíme</label>
-        <input type="text" name="Törvényes képviselő lakcíme" class="form-input" placeholder="9025 Győr, Minta utca 12." required>
-    </div>
+                        <div class="form-group">
+                            <label class="form-label">Törvényes képviselő lakcíme</label>
+                            <input type="text" name="lakcim" class="form-input" placeholder="9025 Győr, Minta utca 12." required>
+                        </div>
 
-    <div class="form-group">
-        <label class="form-label">Melyik nap(ok)on szeretne járni a gyermek?</label>
-        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-            <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
-                <input type="checkbox" class="day-checkbox" value="Hétfő" style="transform: scale(1.2);"> Hétfő (15:00 - 16:00)
-            </label>
-            <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
-                <input type="checkbox" class="day-checkbox" value="Kedd" style="transform: scale(1.2);"> Kedd (15:00 - 16:00)
-            </label>
-            <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
-                <input type="checkbox" class="day-checkbox" value="Csütörtök" style="transform: scale(1.2);"> Csütörtök (15:00 - 16:00)
-            </label>
-            <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
-                <input type="checkbox" class="day-checkbox" value="Péntek" style="transform: scale(1.2);"> Péntek (15:00 - 16:00)
-            </label>
-        </div>
-        <input type="hidden" name="Melyik nap(ok)on szeretne járni a gyermek?" id="selected-days-input">
-    </div>
+                        <div class="form-group">
+                            <label class="form-label">Melyik nap(ok)on szeretne járni a gyermek?</label>
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                                <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
+                                    <input type="checkbox" class="day-checkbox" value="Hétfő" style="transform: scale(1.2);"> Hétfő (15:00 - 16:00)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
+                                    <input type="checkbox" class="day-checkbox" value="Kedd" style="transform: scale(1.2);"> Kedd (15:00 - 16:00)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
+                                    <input type="checkbox" class="day-checkbox" value="Csütörtök" style="transform: scale(1.2);"> Csütörtök (15:00 - 16:00)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
+                                    <input type="checkbox" class="day-checkbox" value="Péntek" style="transform: scale(1.2);"> Péntek (15:00 - 16:00)
+                                </label>
+                            </div>
+                            <input type="hidden" name="napok" id="selected-days-input">
+                        </div>
 
-    <div class="form-group">
-        <label class="form-label">Megjegyzés / Különleges igény</label>
-        <textarea name="Megjegyzés / Különleges igény" class="form-input" rows="3" placeholder="Pl. vízbiztonság állapota, betegségek, egyéb kérések..." style="resize: vertical; min-height: 80px;"></textarea>
-    </div>
+                        <div class="form-group">
+                            <label class="form-label">Megjegyzés / Különleges igény</label>
+                            <textarea name="megjegyzes" class="form-input" rows="3" placeholder="Pl. vízbiztonság állapota, betegségek, egyéb kérések..." style="resize: vertical; min-height: 80px;"></textarea>
+                        </div>
 
-    <button type="submit" id="submit-btn" class="cta-btn" style="width: 100%; margin-top: 10px;">Ingyenes próbaórára jelentkezem</button>
-</form>
+                        <button type="submit" id="submit-btn" class="cta-btn" style="width: 100%; margin-top: 10px;">Ingyenes próbaórára jelentkezem</button>
+                    </form>
             </div>
 
 <div class="decor-avatar decor-bg-sky" style="position: absolute; top: 45%; right: 70px; width: 120px;">
@@ -1010,76 +1009,71 @@
             const navMenu = document.getElementById('nav-menu-links');
             const navLinks = document.querySelectorAll('.nav-link');
 
-            menuToggle.addEventListener('click', function() {
-                menuToggle.classList.toggle('active');
-                navMenu.classList.toggle('active');
-            });
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    menuToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
+            if (menuToggle && navMenu) {
+                menuToggle.addEventListener('click', function() {
+                    menuToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
                 });
-            });
+            }
+
+            if (navLinks) {
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (menuToggle) menuToggle.classList.remove('active');
+                        if (navMenu) navMenu.classList.remove('active');
+                    });
+                });
+            }
 
             // ═══════════ APPS SCRIPT ŰRLAP KÜLDÉS ═══════════
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('registration-form');
-    const successMessage = document.getElementById('success-message');
-    const submitBtn = document.getElementById('submit-btn');
-    const hiddenDaysInput = document.getElementById('selected-days-input');
+            const form = document.getElementById('registration-form');
+            const successMessage = document.getElementById('success-message');
+            const submitBtn = document.getElementById('submit-btn');
+            const hiddenDaysInput = document.getElementById('selected-days-input');
 
-    // Ellenőrizzük, hogy létezik-e az űrlap az oldalon
-    if (!form) return;
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbySCMRnGOg7wFsntgk5HbkH70V6eamld0QsF6NpunKs3QU56luaSvGTNhs0HR_t7wVp2w/exec';
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // 1. Kiválasztott napok összeszedése vesszővel elválasztva
-        const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
-        const selectedDays = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
-        
-        if (hiddenDaysInput) {
-            hiddenDaysInput.value = selectedDays;
-        }
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
+                    const selectedDays = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
+                    
+                    if (hiddenDaysInput) {
+                        hiddenDaysInput.value = selectedDays;
+                    }
 
-        // 2. Validálás: kötelező legalább egy napot választani
-        if (checkedBoxes.length === 0) {
-            alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnének!');
-            return;
-        }
+                    if (checkedBoxes.length === 0) {
+                        alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnének!');
+                        return;
+                    }
 
-        // 3. Gomb letiltása a dupla kattintás ellen
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'Küldés folyamatban...';
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'Küldés folyamatban...';
 
-        // 4. Adatok előkészítése a küldésre
-        const formData = new FormData(form);
-        
-        // A Te egyedi Google Apps Script webalkalmazás URL-ed
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbySCMRnGOg7wFsntgk5HbkH70V6eamld0QsF6NpunKs3QU56luaSvGTNhs0HR_t7wVp2w/exec';
-
-        // 5. Beküldés a Google Táblázatba
-        fetch(scriptURL, { method: 'POST', body: formData })
-        .then(response => {
-            submitBtn.disabled = false;
-            submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
-            
-            // Űrlap elrejtése, sikeres üzenet mutatása
-            form.style.display = 'none';
-            if (successMessage) {
-                successMessage.style.display = 'block';
-                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const formData = new FormData(form);
+                    
+                    fetch(scriptURL, { method: 'POST', body: formData })
+                    .then(response => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
+                        
+                        form.style.display = 'none';
+                        if (successMessage) {
+                            successMessage.style.display = 'block';
+                            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Hiba történt!', error.message);
+                        alert('Hiba történt a küldés során. Kérjük, próbálja meg újra vagy keressen minket telefonon!');
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
+                    });
+                });
             }
-        })
-        .catch(error => {
-            console.error('Hiba történt!', error.message);
-            alert('Hiba történt a küldés során. Kérjük, próbálja meg újra vagy keressen minket telefonon!');
-            submitBtn.disabled = false;
-            submitBtn.innerText = 'Ingyenes próbaórára jelentkezem';
         });
-    });
-});
     </script>
 </body>
 </html>
