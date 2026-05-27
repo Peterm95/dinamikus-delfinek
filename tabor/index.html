@@ -2,18 +2,18 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dinamikus Delfinek - Nyári Úszó és Élménytábor 2026 - Győr</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* ═══════════ CSS RESET & ALAPBEÁLLÍTÁSOK ═══════════ */
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { overflow-x: hidden; width: 100%; position: relative; }
         html { scroll-behavior: smooth; }
         body { 
             font-family: 'Nunito', sans-serif; 
             background: #f0f9ff; 
             color: #1e293b;
-            overflow-x: hidden;
         }
 
         :root {
@@ -30,7 +30,7 @@
             --shadow-md:  0 16px 36px rgba(3, 22, 64, 0.08);
             --shadow-lg:  0 24px 50px rgba(3, 22, 64, 0.14);
             --radius-round: 36px;
-	--navy:    #0a3075;
+	        --navy:    #0a3075;
             --navy2:   #061e50;
             --navy3:   #0d1f4c;
             --yellow-lt:#fffde7;
@@ -50,9 +50,10 @@
             padding: 0 24px;
             position: relative;
             z-index: 5;
+            width: 100%;
         }
 
-        .section-space { padding: 60px 0; }
+        .section-space { padding: 60px 0; overflow: hidden; }
         .section-title { font-size: 44px; font-weight: 900; color: var(--navy-deep); text-align: center; margin-bottom: 14px; line-height: 1.2; }
         .section-title span { color: var(--blue-bright); }
         .section-sub { font-size: 18px; color: #475569; text-align: center; margin-bottom: 55px; max-width: 780px; margin-left: auto; margin-right: auto; line-height: 1.6; }
@@ -107,6 +108,7 @@
             box-shadow: 0 8px 24px rgba(245, 196, 0, 0.3);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 2px solid rgba(255,255,255,0.2); cursor: pointer;
+            text-align: center;
         }
         .cta-btn:hover {
             transform: scale(1.03) translateY(-2px);
@@ -149,6 +151,7 @@
             display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 196, 0, 0.12);
             border: 1px solid rgba(245, 196, 0, 0.35); padding: 8px 18px; border-radius: 50px;
             color: var(--yellow); font-weight: 800; font-size: 14px; margin-bottom: 24px;
+            max-width: 100%; text-align: left;
         }
         .h-headline {
             font-size: 60px; font-weight: 900; color: var(--white); line-height: 1.1; margin-bottom: 22px;
@@ -157,7 +160,7 @@
         .h-sub { font-size: 20px; color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 38px; }
         .hero-btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
 
-        .hero-image-frame { display: flex; justify-content: center; position: relative; }
+        .hero-image-frame { display: flex; justify-content: center; position: relative; max-width: 100%; }
         .hero-main-card {
             width: 100%; max-width: 360px; background: var(--white); padding: 5px;
             border-radius: 28px; box-shadow: var(--shadow-lg); transform: rotate(3deg);
@@ -293,19 +296,31 @@
             border: 2px solid #e2e8f0;
         }
         .form-ui-grid { 
-        display: flex; 
-        flex-direction: column; 
-        gap: 24px; 
-    }
-        .form-ui-group { margin-bottom: 2px; }
+            display: flex; 
+            flex-direction: column; 
+            gap: 24px; 
+        }
+        .form-ui-group { margin-bottom: 2px; width: 100%; }
         .form-ui-group.full { grid-column: span 2; }
         .form-ui-label { display: block; font-size: 15px; font-weight: 800; color: var(--navy-deep); margin-bottom: 8px; }
+        
         .form-ui-input {
             width: 100%; padding: 15px 18px; border: 2px solid #cbd5e1; border-radius: 14px;
             font-family: 'Nunito', sans-serif; font-size: 15.5px; outline: none; transition: all 0.2s;
             background: #f8fafc;
+            min-width: 0; /* Megakadályozza az input túlnyúlását mobilon */
         }
         .form-ui-input:focus { border-color: var(--blue-bright); box-shadow: 0 0 0 4px rgba(0, 162, 255, 0.12); background: var(--white); }
+        
+        /* Reszponzív dátumválasztó fix */
+        input[type="date"].form-ui-input {
+            min-height: 55px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-position: right 14px center;
+            background-repeat: no-repeat;
+        }
 
         .tile-selector { display: flex; flex-direction: column; gap: 14px; margin-top: 2px;}
         .tile-option {
@@ -318,7 +333,7 @@
         .tile-option.warning { border-color: var(--orange); background: #fff7ed; }
         .tile-option.warning:hover { background: #ffedd5; }
         
-        .tile-option input { transform: scale(1.3); accent-color: var(--blue-bright); }
+        .tile-option input { transform: scale(1.3); accent-color: var(--blue-bright); flex-shrink: 0; }
         .tile-title { font-size: 16px; color: var(--navy-deep); display: block; font-weight: 800; }
         .tile-subtitle { font-size: 13.5px; color: #64748b; font-weight: normal; margin-top: 1px; }
         .tile-badge { position: absolute; top: -10px; right: 15px; font-size: 11px; padding: 2px 10px; border-radius: 20px; color: white; font-weight: 800; text-transform: uppercase;}
@@ -329,10 +344,10 @@
             background: #f8fafc; border: 2px dashed #cbd5e1; padding: 20px; border-radius: 14px; margin-top: 10px;
         }
         .form-checkbox-label { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: 14.5px; line-height: 1.5; font-weight: 600;}
-        .form-checkbox-label input { transform: scale(1.2); margin-top: 4px; accent-color: var(--blue-bright); }
+        .form-checkbox-label input { transform: scale(1.2); margin-top: 4px; accent-color: var(--blue-bright); flex-shrink: 0; }
         .form-checkbox-label a { color: var(--blue-royal); text-decoration: underline; font-weight: 700; }
 
-/* ═══════════ INTERAKTÍV NAPI PROGRAM STÍLUSOK ═══════════ */
+        /* ═══════════ INTERAKTÍV NAPI PROGRAM STÍLUSOK ═══════════ */
         .daily-program-section {
             background: linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 100%);
             padding-bottom: 40px;
@@ -375,6 +390,7 @@
             margin: 0 auto;
             position: relative;
             min-height: 380px;
+            width: 100%;
         }
         .day-panel {
             background: var(--white);
@@ -448,52 +464,31 @@
             margin-top: 30px;
         }
 
-        @media (max-width: 480px) {
-            .tab-btn {
-                font-size: 15px;
-                padding: 8px 16px;
-                border-radius: 16px;
-            }
-            .day-panel { padding: 20px; }
-            .panel-header { font-size: 26px; }
-            .timeline-item { grid-template-columns: 70px 1fr; gap: 10px; }
-            .time-badge { font-size: 14px; padding: 4px 8px; }
-            .activity-card { font-size: 14.5px; padding: 10px 14px; }
-        }
-        
-/* ═══════════ LÁBLÉC (FINALIZÁLT VERTKÁLIS ELRENDEZÉSSEL) ═══════════ */
+        /* ═══════════ LÁBLÉC SZEKCIÓ ═══════════ */
         .footer { 
             background: #031640; padding: 70px 0 40px; text-align: center; color: var(--white);
             border-top: 5px solid var(--yellow);
+            position: relative;
         }
         
         .footer-top-wave {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            overflow: hidden;
-            line-height: 0;
+            top: 0; left: 0; width: 100%;
+            overflow: hidden; line-height: 0;
             transform: translateY(-99%);
             z-index: 10;
         }
         .footer-top-wave svg {
-            position: relative;
-            display: block;
-            width: calc(100% + 1.3px);
-            height: 50px;
+            position: relative; display: block;
+            width: calc(100% + 1.3px); height: 50px;
         }
 
-        /* Dekorációs kép asztali nézetben: Teljesen a vonal FELETT */
         .footer-wave-photo {
             position: absolute;
-            bottom: 0px; /* Pontosan a vonal tetejére ül rá, nem lóg alá */
-            left: 50%;
+            bottom: 0px; left: 50%;
             transform: translateX(-50%);
-            width: 300px; /* Szélesség (igazítsd a képedhez, ha szükséges) */
-            height: auto;
-            z-index: 20;
-            pointer-events: none;
+            width: 300px; height: auto;
+            z-index: 20; pointer-events: none;
         }
 
         .footer-main-row {
@@ -504,202 +499,64 @@
             padding-bottom: 25px;
             margin-bottom: 30px;
             gap: 20px;
-            position: relative; /* Referenciapont az abszolút képnek */
+            position: relative;
         }
 
-        .footer-logo-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .footer-logo-brand { display: flex; align-items: center; gap: 12px; }
         .footer-brand-title {
-            font-family: 'Baloo 2', cursive;
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--white);
+            font-family: 'Baloo 2', cursive; font-size: 22px; font-weight: 900; color: var(--white);
         }
 
         .f-facebook-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--white);
-            color: var(--navy2);
-            padding: 10px 22px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 14px;
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--white); color: var(--navy2);
+            padding: 10px 22px; border-radius: 50px; text-decoration: none;
+            font-weight: 800; font-size: 14px;
             box-shadow: 0 4px 12px rgba(255,255,255,0.15);
             transition: transform 0.2s, background-color 0.2s;
         }
-        .f-facebook-cta:hover {
-            transform: translateY(-2px);
-            background: var(--yellow-lt);
-        }
+        .f-facebook-cta:hover { transform: translateY(-2px); background: var(--yellow-lt); }
 
         .footer-content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 40px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;
         }
-
-        .footer-left-col {
-            text-align: left;
-        }
+        .footer-left-col { text-align: left; }
         .footer-section-title {
-            font-family: 'Baloo 2', cursive;
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--yellow);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-bottom: 12px;
+            font-family: 'Baloo 2', cursive; font-size: 14px; font-weight: 800; color: var(--yellow);
+            text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;
         }
         .footer-info-text {
-            font-family: 'Nunito', sans-serif;
-            font-size: 14.5px;
-            color: rgba(255,255,255,0.8);
-            line-height: 1.6;
+            font-family: 'Nunito', sans-serif; font-size: 14.5px; color: rgba(255,255,255,0.8); line-height: 1.6;
         }
         .footer-phone-link {
-            color: var(--yellow);
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 18px;
-            display: inline-block;
-            margin-top: 5px;
-            transition: color 0.2s;
+            color: var(--yellow); text-decoration: none; font-weight: 800; font-size: 18px;
+            display: inline-block; margin-top: 5px; transition: color 0.2s;
         }
-        .footer-phone-link:hover {
-            color: var(--white);
-        }
+        .footer-phone-link:hover { color: var(--white); }
 
         .footer-right-col {
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            justify-content: center;
+            text-align: right; display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
         }
-        .footer-sig-img {
-            max-width: 130px;
-            height: auto;
-            display: block;
+        .footer-sig-img { max-width: 130px; height: auto; display: block; }
+        .footer-copyright { opacity: 0.35; font-size: 12px; display: block; margin-top: 20px; color: var(--white); text-align: center; }
+
+        /* ═══════════ MODAL MODELLING ═══════════ */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 9999;
         }
-
-        .footer-copyright {
-            opacity: 0.35;
-            font-size: 12px;
-            display: block;
-            margin-top: 20px;
-            color: var(--white);
-            text-align: center;
+        .modal-tartalom {
+            background-color: #ffffff; padding: 30px; border-radius: 12px; text-align: center;
+            max-width: 450px; width: 90%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); animation: felugras 0.3s ease-out;
         }
+        .modal-tartalom h2 { color: #007bff; margin-top: 0; }
+        .modal-tartalom p { font-size: 16px; color: #333; margin: 20px 0; line-height: 1.5; }
+        @keyframes felugras { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* ═══════════ MOBILOS LÁBLÉC IGAZÍTÁS (768px alatt) ═══════════ */
-        @media (max-width: 768px) {
-            .footer { padding: 50px 0 30px; }
-            
-            .footer-main-row { 
-                display: flex;
-                flex-direction: column; 
-                text-align: center; 
-                gap: 20px; 
-            }
-
-            /* Kivesszük az abszolút pozícióból mobilon */
-            .footer-wave-photo {
-                position: static;
-                transform: none;
-                margin: 0 auto;
-                display: block;
-                width: 100px;
-                /* Elrendezési sorrend: Kép legyen az 1. */
-                order: 1; 
-            }
-            
-            /* Szöveg legyen a 2. */
-            .footer-logo-brand { 
-                order: 2; 
-                flex-direction: column; 
-                gap: 6px; 
-            }
-            
-            /* Facebook gomb legyen a 3. */
-            .f-facebook-cta { 
-                order: 3; 
-            }
-
-            .footer-content-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
-            .footer-left-col { text-align: center; }
-            .footer-right-col { text-align: center; align-items: center; }
-        }
-/* A teljes képernyőt lefedő sötét háttér */
-#custom-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Áttetsző fekete háttér */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999; /* Hogy biztosan minden felett legyen */
-}
-
-/* A tényleges fehér felugró kártya */
-.modal-tartalom {
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  max-width: 450px;
-  width: 90%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  animation: felugras 0.3s ease-out; /* Egy kis finom animáció */
-}
-
-.modal-tartalom h2 {
-  color: #007bff; /* Ide jöhet a saját színed */
-  margin-top: 0;
-}
-
-.modal-tartalom p {
-  font-size: 16px;
-  color: #333;
-  margin: 20px 0;
-  line-height: 1.5;
-}
-
-/* A felugró ablak "Rendben" gombja */
-#modal-ok-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-#modal-ok-btn:hover {
-  background-color: #0056b3;
-}
-
-/* Finom animáció a megjelenéshez */
-@keyframes felugras {
-  from { transform: scale(0.7); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-        /* RESPONSIVE STYLING */
+        /* ═══════════ MULTI-STAGE RESPONSIVE QUERIES ═══════════ */
         @media (max-width: 992px) {
             .hero-layout, .prog-grid, .tabor-content-wrapper, .tabor-include-grid, .form-ui-grid, .tile-selector { 
-                grid-template-columns: 1fr; 
+                grid-template-columns: 1fr !important; 
             }
             .form-ui-group.full { grid-column: span 1; }
             .hero { padding: 150px 0 90px; text-align: center; }
@@ -746,6 +603,29 @@
 
         @media (max-width: 768px) {
             .nav-menu { display: none; }
+            .footer { padding: 50px 0 30px; }
+            .footer-main-row { flex-direction: column; text-align: center; gap: 20px; }
+            .footer-wave-photo { position: static; transform: none; margin: 0 auto; display: block; width: 120px; order: 1; }
+            .footer-logo-brand { order: 2; flex-direction: column; gap: 6px; }
+            .f-facebook-cta { order: 3; }
+            .footer-content-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+            .footer-left-col { text-align: center; }
+            .footer-right-col { text-align: center; align-items: center; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+            .tab-btn { font-size: 15px; padding: 8px 16px; border-radius: 16px; }
+            .day-panel { padding: 20px; }
+            .panel-header { font-size: 26px; }
+            .timeline-item { grid-template-columns: 70px 1fr; gap: 10px; }
+            .time-badge { font-size: 14px; padding: 4px 8px; }
+            .activity-card { font-size: 14.5px; padding: 10px 14px; flex-wrap: wrap; }
+            .form-container-box { padding: 25px 15px; }
+            .h-badge { font-size: 13px; padding: 6px 12px; }
+            .cta-btn { width: 100%; padding: 14px 20px; font-size: 17px; }
+            .tile-option { padding: 14px; gap: 10px; }
+            .tile-badge { right: 10px; }
         }
     </style>
 </head>
@@ -768,7 +648,7 @@
             </div>
 
             <div>
-                <a href="#jelentkezes" class="cta-btn" style="padding: 10px 22px; font-size: 15px; box-shadow: none;">Helyfoglalás</a>
+                <a href="#jelentkezes" class="cta-btn" style="padding: 10px 22px; font-size: 15px; box-shadow: none; width: auto;">Helyfoglalás</a>
             </div>
         </div>
     </nav>
@@ -809,7 +689,7 @@
                     <div class="loc-tag">📍 TÁBORUNK BÁZISA</div>
                     <div class="panel-loc-title">Aqua Sportközpont</div>
                     <div class="panel-loc-sub">9025 Győr, Olimpia utca 1.</div>
-                    <p class="panel-loc-desc">Győr legmodernebb, tiszta és kiválóan felszerelt uszodai environments. Az ideális vízhőmérséklet és a professzionális tanmedencék garantálják a gyerekek biztonságát és gyors fejlődését.</p>
+                    <p class="panel-loc-desc">Győr legmodernebb, tiszta és kiválóan felszerelt uszodai környezete. Az ideális vízhőmérséklet és a professzionális tanmedencék garantálják a gyerekek biztonságát és gyors fejlődését.</p>
                 </div>
 
                 <div class="panel-right">
@@ -900,7 +780,8 @@
                 </div>
             </div>
         </div>
-<div style="margin-top: 70px;">
+        
+        <div style="margin-top: 70px;">
                 <h3 class="section-title" style="font-size: 32px; margin-bottom: 10px;">Interaktív <span>Napi Menetrend</span></h3>
                 <p class="section-sub" style="margin-bottom: 35px;">Kattints a napokra a részletes órarend megtekintéséhez!</p>
 
@@ -1029,7 +910,7 @@
         </div>
     </section>
 
-<section class="section-space" style="background: var(--white);">
+    <section class="section-space" style="background: var(--white);">
         <div class="container">
             <h2 class="section-title">Szülők mondták <span>rólunk</span></h2>
             <p class="section-sub">Büszkék vagyunk arra a bizalomra, amit a győri szülőktől kapunk nap mint nap.</p>
@@ -1065,7 +946,7 @@
         </div>
     </section>
 
-<section class="section-space" style="background: var(--white); padding: 20px 0 40px;">
+    <section class="section-space" style="background: var(--white); padding: 20px 0 40px;">
         <div class="container" style="position: relative;">
             
             <div class="decor-avatar" style="position: absolute; top: -45px; right: -20px; width: 115px; transform: rotate(10deg); z-index: 20;">
@@ -1084,7 +965,7 @@
                         <p style="font-size: 15.5px; color: rgba(255,255,255,0.88); margin-bottom: 24px; line-height: 1.6; max-width: 600px;">
                             A táboron kívül is folytatódik a fejlődés! Évközi csoportos úszásoktatás, technika-javítás és vízbiztonság-fejlesztés vár a gyerekekre az Aqua Sportközpontban, szakképzett edzőinkkel.
                         </p>
-                        <a href="https://peterm95.github.io/dinamikus-delfinek" class="cta-btn" style="white-space: nowrap; font-size: 16px; padding: 12px 30px;">Úszásoktatás részletei →</a>
+                        <a href="https://peterm95.github.io/dinamikus-delfinek" class="cta-btn" style="font-size: 16px; padding: 12px 30px; width: auto;">Úszásoktatás részletei →</a>
                     </div>
                     
                     <div class="inline-photo-wrap" style="flex: 0 0 35%; margin: 0; display: flex; justify-content: center;">
@@ -1191,7 +1072,7 @@
 
                 </div>
 
-                <button type="submit" id="submit-camp-btn" class="cta-btn" style="width: 100%; margin-top: 25px; padding: 18px;">Hivatalos tábori jelentkezés elküldése</button>
+                <button type="submit" id="submit-camp-btn" class="cta-btn" style="width: 100%; margin-top: 25px; padding: 18px;">Tábori jelentkezés elküldése</button>
             </form>
         </div>
     </div>
@@ -1200,7 +1081,7 @@
         <div class="modal-tartalom">
             <h2>Sikeres jelentkezés! 🎉</h2>
             <p>Sikeresen regisztráltad <span id="registered-child-name" style="font-weight: bold;"></span> nevű gyermekedet a táborba! Köszönjük!</p>
-            <button id="modal-ok-btn" class="cta-btn" style="padding: 10px 25px;">Rendben</button>
+            <button id="modal-ok-btn" class="cta-btn" style="padding: 10px 25px; width: auto;">Rendben</button>
         </div>
     </div>
 </section>
@@ -1233,14 +1114,13 @@
                         <span style="font-size: 12px; color: rgba(255,255,255,0.5);">9025 Győr, Olimpia utca 1.</span><br>
                         ✉️ <a href="mailto:dinamikus.delfinek@gmail.com" style="color: #ffffff; text-decoration: none; font-weight: 600;">dinamikus.delfinek@gmail.com</a>
                     </div>
-<div>
+                    <div>
                         <a href="tel:+36203938067" class="footer-phone-link">+36 20 393 8067</a>
                     </div>
                 </div>
 
                 <div class="footer-right-col">
                     <img src="Dinamikus Delfinek logo.jpg" alt="Dinamikus Delfinek" class="footer-sig-img">
-                    
                 </div>
 
             </div>
@@ -1249,118 +1129,100 @@
         </div>
     </footer>
 
-<div id="custom-modal" style="display: none;">
-  <div class="modal-tartalom">
-    <h2>Sikeres jelentkezés! 🎉</h2>
-    <p>Sikeresen regisztráltad <span id="registered-child-name" style="font-weight: bold;"></span> nevű gyermekedet a táborba! Köszönjük!</p>
-    <button id="modal-ok-btn">Rendben</button>
-  </div>
-</div>
-
     <script>
-function switchDay(dayId) {
-            // Összes panel elrejtése és fizikai eltávolítása a térből
+        function switchDay(dayId) {
             const panels = document.querySelectorAll('.day-panel');
             panels.forEach(panel => {
                 panel.classList.remove('active');
                 panel.style.display = 'none';
             });
             
-            // Összes gomb aktív státuszának törlése
             const tabs = document.querySelectorAll('.tab-btn');
             tabs.forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            // Csak a kiválasztott panel megjelenítése
             const activePanel = document.getElementById(dayId);
             activePanel.style.display = 'block';
             
-            // Egy minimális időzítés, hogy a fade-in animáció gyönyörűen lefusson
             setTimeout(() => {
                 activePanel.classList.add('active');
             }, 20);
             
-            // Kattintott gomb aktívvá tétele
             event.currentTarget.classList.add('active');
         }
+
         document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('camp-registration-form');
-    const submitBtn = document.getElementById('submit-camp-btn');
-    const hiddenTurnusInput = document.getElementById('hidden-turnusok-input');
-    const childNameInput = document.getElementById('gyermekNeveInput');
-    
-    const customModal = document.getElementById('custom-modal');
-    const registeredChildNameSpan = document.getElementById('registered-child-name');
-    const modalOkBtn = document.getElementById('modal-ok-btn');
+            const form = document.getElementById('camp-registration-form');
+            const submitBtn = document.getElementById('submit-camp-btn');
+            const hiddenTurnusInput = document.getElementById('hidden-turnusok-input');
+            const childNameInput = document.getElementById('gyermekNeveInput');
+            
+            const customModal = document.getElementById('custom-modal');
+            const registeredChildNameSpan = document.getElementById('registered-child-name');
+            const modalOkBtn = document.getElementById('modal-ok-btn');
 
-    // IDE MÁSOLD BE A GOOGLE APPS SCRIPT WEBALKALMAZÁS LINKJÉT!
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzN_jtvLpxinx7v2Dt-4E4eRAommOACGvhB_4avv_ncvp8m_zs9iv7O641jQG_PNSCO5g/exec';
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzN_jtvLpxinx7v2Dt-4E4eRAommOACGvhB_4avv_ncvp8m_zs9iv7O641jQG_PNSCO5g/exec';
 
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Megakadályozza az oldal újrafrissülését
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
 
-            // Turnus checkboxok ellenőrzése és összefűzése
-            const checkedBoxes = document.querySelectorAll('.camp-turnus-cb:checked');
-            if(checkedBoxes.length === 0) {
-                alert('Kérjük, válasszon ki legalább egy tábori időpontot!');
-                return false;
+                    const checkedBoxes = document.querySelectorAll('.camp-turnus-cb:checked');
+                    if(checkedBoxes.length === 0) {
+                        alert('Kérjük, válasszon ki legalább egy tábori időpontot!');
+                        return false;
+                    }
+                    
+                    const selectedTurnusok = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
+                    if(hiddenTurnusInput) hiddenTurnusInput.value = selectedTurnusok;
+
+                    if(submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerText = 'Küldés folyamatban...';
+                    }
+
+                    const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
+                    const formData = new FormData(form);
+                    
+                    fetch(scriptURL, {
+                        method: 'POST',
+                        body: formData,
+                        mode: 'no-cors'
+                    })
+                    .then(() => {
+                        if(submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = 'Hivatalos tábori jelentkezés elküldése';
+                        }
+
+                        if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
+                        if(customModal) customModal.style.display = 'flex';
+                    })
+                    .catch(error => {
+                        console.error('Hiba!', error);
+                        if(submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = 'Hivatalos tábori jelentkezés elküldése';
+                        }
+                        alert('Hiba történt a jelentkezés küldése közben. Kérjük, próbálja meg újra!');
+                    });
+                });
             }
-            
-            const selectedTurnusok = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
-            if(hiddenTurnusInput) hiddenTurnusInput.value = selectedTurnusok;
 
-            // Gomb zárolása a dupla küldések ellen
-            if(submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerText = 'Küldés folyamatban...';
+            if(modalOkBtn) {
+                modalOkBtn.addEventListener('click', function() {
+                    if(customModal) customModal.style.display = 'none';
+                    if(form) form.reset();
+                    
+                    const checkedBoxes = document.querySelectorAll('.camp-turnus-cb:checked');
+                    checkedBoxes.forEach(cb => cb.checked = false);
+                    if(hiddenTurnusInput) hiddenTurnusInput.value = '';
+
+                    if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
             }
-
-            const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
-            const formData = new FormData(form);
-            
-            // Küldés Google Sheets-be
-            fetch(scriptURL, {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors'
-            })
-            .then(() => {
-                if(submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'Hivatalos tábori jelentkezés elküldése';
-                }
-
-                // Sikeres felugró ablak indítása
-                if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
-                if(customModal) customModal.style.display = 'flex';
-            })
-            .catch(error => {
-                console.error('Hiba!', error);
-                if(submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'Hivatalos tábori jelentkezés elküldése';
-                }
-                alert('Hiba történt a jelentkezés küldése közben. Kérjük, próbálja meg újra!');
-            });
         });
-    }
-
-    // Modal bezárás és ürítés
-    if(modalOkBtn) {
-        modalOkBtn.addEventListener('click', function() {
-            if(customModal) customModal.style.display = 'none';
-            if(form) form.reset();
-            
-            const checkedBoxes = document.querySelectorAll('.camp-turnus-cb:checked');
-            checkedBoxes.forEach(cb => cb.checked = false);
-            if(hiddenTurnusInput) hiddenTurnusInput.value = '';
-
-            if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-    }
-});
     </script>
 </body>
 </html>
