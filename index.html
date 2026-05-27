@@ -454,11 +454,10 @@
             z-index: 11;
         }
 
-        /* LÁBLÉC */
+/* ═══════════ LÁBLÉC (FINALIZÁLT VERTKÁLIS ELRENDEZÉSSEL) ═══════════ */
         .footer { 
             background: linear-gradient(180deg, var(--navy2) 0%, #03102c 100%); 
-            padding: 100px 0 30px; 
-            text-align: center; 
+            padding: 40px 0 30px; 
             position: relative;
         }
         
@@ -470,6 +469,7 @@
             overflow: hidden;
             line-height: 0;
             transform: translateY(-99%);
+            z-index: 10;
         }
         .footer-top-wave svg {
             position: relative;
@@ -478,38 +478,158 @@
             height: 50px;
         }
 
+        /* Dekorációs kép asztali nézetben: Teljesen a vonal FELETT */
+        .footer-wave-photo {
+            position: absolute;
+            bottom: 0px; /* Pontosan a vonal tetejére ül rá, nem lóg alá */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px; /* Szélesség (igazítsd a képedhez, ha szükséges) */
+            height: auto;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .footer-main-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 25px;
+            margin-bottom: 30px;
+            gap: 20px;
+            position: relative; /* Referenciapont az abszolút képnek */
+        }
+
+        .footer-logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .footer-brand-title {
+            font-family: 'Baloo 2', cursive;
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--white);
+        }
+
         .f-facebook-cta {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 10px 24px;
-            border-radius: 50px;
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 25px;
-            transition: all 0.2s;
-        }
-        .f-facebook-cta:hover {
-            background: #1877F2;
-            border-color: #1877F2;
-        }
-        .f-facebook-cta .fb-icon {
-            font-size: 16px;
+            gap: 8px;
             background: var(--white);
             color: var(--navy2);
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
+            padding: 10px 22px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(255,255,255,0.15);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .f-facebook-cta:hover {
+            transform: translateY(-2px);
+            background: var(--yellow-lt);
         }
 
+        .footer-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-left-col {
+            text-align: left;
+        }
+        .footer-section-title {
+            font-family: 'Baloo 2', cursive;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 12px;
+        }
+        .footer-info-text {
+            font-family: 'Nunito', sans-serif;
+            font-size: 14.5px;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.6;
+        }
+        .footer-phone-link {
+            color: var(--yellow);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 18px;
+            display: inline-block;
+            margin-top: 5px;
+            transition: color 0.2s;
+        }
+        .footer-phone-link:hover {
+            color: var(--white);
+        }
+
+        .footer-right-col {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .footer-sig-img {
+            max-width: 130px;
+            height: auto;
+            display: block;
+        }
+
+        .footer-copyright {
+            opacity: 0.35;
+            font-size: 12px;
+            display: block;
+            margin-top: 20px;
+            color: var(--white);
+            text-align: center;
+        }
+
+        /* ═══════════ MOBILOS LÁBLÉC IGAZÍTÁS (768px alatt) ═══════════ */
+        @media (max-width: 768px) {
+            .footer { padding: 50px 0 30px; }
+            
+            .footer-main-row { 
+                display: flex;
+                flex-direction: column; 
+                text-align: center; 
+                gap: 20px; 
+            }
+
+            /* Kivesszük az abszolút pozícióból mobilon */
+            .footer-wave-photo {
+                position: static;
+                transform: none;
+                margin: 0 auto;
+                display: block;
+                width: 100px;
+                /* Elrendezési sorrend: Kép legyen az 1. */
+                order: 1; 
+            }
+            
+            /* Szöveg legyen a 2. */
+            .footer-logo-brand { 
+                order: 2; 
+                flex-direction: column; 
+                gap: 6px; 
+            }
+            
+            /* Facebook gomb legyen a 3. */
+            .f-facebook-cta { 
+                order: 3; 
+            }
+
+            .footer-content-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+            .footer-left-col { text-align: center; }
+            .footer-right-col { text-align: center; align-items: center; }
+        }
         .floating-dini {
             position: fixed;
             bottom: 25px;
@@ -1034,23 +1154,44 @@
         </div>
 
         <div class="container">
-            <img src="Dinamikus Delfinek logo.jpg" alt="Dinamikus Delfinek Logó" style="max-width: 200px; height: auto; display: block; margin: 0 auto 15px;">
             
-            <p style="color: var(--sky); font-size: 15px; margin-bottom: 20px; font-weight: 600;">Kapcsolat és Kérdések – keress minket bizalommal!</p>
-
-            <div style="margin-bottom: 20px;">
-                <a class="f-facebook-cta" href="https://www.facebook.com/dinamikusdelfinek" target="_blank">
-                    <span class="fb-icon">f</span>
-                    Kövess minket a Facebookon!
-                </a>
-            </div>
-
-            <div class="f-address" style="font-size: 14px; color: rgba(255, 255, 255, 0.8); line-height: 1.8; font-weight: 500;">
-                E-mail: <strong style="color: var(--white); font-weight: 700;">dinamikus.delfinek@gmail.com</strong> · Telefon: <strong style="font-weight: 700;"><a href="tel:+36203938067" style="color: var(--white); text-decoration: none;">+36 20 393 8067</a></strong><br>
-                <span style="color: #cbd5e1;">Aqua Sportközpont · 9025 Győr, Olimpia utca 1</span><br>
+            <div class="footer-main-row">
                 
-                <span style="opacity: 0.35; font-size: 12px; display: block; margin-top: 20px; color: var(--white);">&copy; 2026 Dinamikus Delfinek SE. Minden jog fenntartva.</span>
+                <img src="BözsinéniFáninéniEsztinéni.png" alt="BözsinéniFáninéniEsztinéni" class="footer-wave-photo">
+
+                <div class="footer-logo-brand">
+                    <div class="footer-brand-title">Dinamikus Delfinek SE</div>
+                </div>
+                
+                <div>
+                    <a class="f-facebook-cta" href="https://www.facebook.com/dinamikusdelfinek" target="_blank">
+                        Kövess minket Facebookon
+                    </a>
+                </div>
             </div>
+
+            <div class="footer-content-grid">
+                
+                <div class="footer-left-col">
+                    <div class="footer-section-title">Kapcsolat</div>
+                    <div class="footer-info-text">
+                        📍 Aqua Sportközpont<br>
+                        <span style="font-size: 12px; color: rgba(255,255,255,0.5);">9025 Győr, Olimpia utca 1.</span><br>
+                        ✉️ <a href="mailto:dinamikus.delfinek@gmail.com" style="color: #ffffff; text-decoration: none; font-weight: 600;">dinamikus.delfinek@gmail.com</a>
+                    </div>
+<div>
+                        <a href="tel:+36203938067" class="footer-phone-link">+36 20 393 8067</a>
+                    </div>
+                </div>
+
+                <div class="footer-right-col">
+                    <img src="Dinamikus Delfinek logo.jpg" alt="Dinamikus Delfinek" class="footer-sig-img">
+                    
+                </div>
+
+            </div>
+
+            <span class="footer-copyright">&copy; 2026 Dinamikus Delfinek SE. Minden jog fenntartva.</span>
         </div>
     </footer>
 
@@ -1084,12 +1225,11 @@
             const registeredChildNameSpan = document.getElementById('registered-child-name');
             const modalOkBtn = document.getElementById('modal-ok-btn');
 
-            // ⚠️ IDE MÁSOLD BE AZT AZ URL-T, amit a Google Apps Script "Új telepítés" (Deploy) gombjánál kapsz!
-            // Győződj meg róla, hogy a Google-ben a "Who has access" beállítás: "Anyone" (Bárki)!
             const scriptURL = 'https://script.google.com/macros/s/AKfycbxN6bhuQN4nJTUepCNIwf2WWjXeEfqb6L38a9M9NsrKxhSsh-6-fDmfqpLzVF-ZzTR_HQ/exec';
 
             if (form) {
                 form.addEventListener('submit', function(e) {
+                    // EZ AZ A SOR, ami kötelezően megállítja az oldal frissülését!
                     e.preventDefault();
 
                     // Napok ellenőrzése és összefűzése
@@ -1110,6 +1250,7 @@
 
                     // Gyermek nevének kimentése
                     const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
+
                     const formData = new FormData(form);
                     
                     // Küldés a Google Sheets-be
@@ -1144,12 +1285,14 @@
             if(modalOkBtn) {
                 modalOkBtn.addEventListener('click', function() {
                     if(customModal) customModal.style.display = 'none';
-                    if(form) form.reset(); 
+                    if(form) form.reset(); // Kiüríti a szöveges mezőket
                     
+                    // Checkboxok kiürítése kézzel is biztos ami biztos
                     const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
                     checkedBoxes.forEach(cb => cb.checked = false);
                     if(hiddenDaysInput) hiddenDaysInput.value = '';
 
+                    // Finom görgetés vissza a formhoz
                     if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 });
             }
