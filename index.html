@@ -591,6 +591,22 @@
             color: var(--white);
             text-align: center;
         }
+        .footer-links-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .footer-privacy-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .footer-privacy-btn:hover {
+            color: var(--yellow);
+        }
 
         /* ═══════════ MOBILOS LÁBLÉC IGAZÍTÁS (768px alatt) ═══════════ */
         @media (max-width: 768px) {
@@ -1132,6 +1148,16 @@
             <label class="form-label">Megjegyzés / Különleges igény</label>
             <textarea name="megjegyzes" class="form-input" rows="3" placeholder="Pl. vízbiztonság állapota, betegségek, egyéb kérések..." style="resize: vertical; min-height: 80px;"></textarea>
         </div>
+      <div class="form-group" style="margin-top: 25px; margin-bottom: 20px;">
+    <label style="display: flex; align-items: flex-start; gap: 12px; font-weight: 600; cursor: pointer; font-size: 14px; color: #475569; line-height: 1.4;">
+        <input type="checkbox" id="privacyCheckbox" required style="transform: scale(1.2); margin-top: 3px;"> 
+        <span>
+            Elfogadom a 
+            <a href="#" onclick="openPolicyInModal('jelentkezesi-feltetelek.html'); return false;" style="color: var(--navy); text-decoration: underline; font-weight: 700;">Jelentkezési és lemondási feltételeket</a>, 
+            és hozzájárulok a megadott adatok kezeléséhez.
+        </span>
+    </label>
+</div>
 
         <button type="submit" id="submit-btn" class="cta-btn" style="width: 100%; margin-top: 10px;">Ingyenes próbaórára jelentkezem</button>
     </form>
@@ -1188,9 +1214,18 @@
                     <img src="Dinamikus Delfinek logo.jpg" alt="Dinamikus Delfinek" class="footer-sig-img">
                     
                 </div>
+                
 
             </div>
-
+<div class="footer-links-container" style="text-align: center; margin: 30px 0 15px 0; width: 100%; display: block;">
+            <a href="adatkezelesi-tajekoztato.html" target="_blank" class="footer-privacy-btn" style="display: inline-block; margin: 5px 0;">Adatkezelés</a>
+            <span style="color: rgba(255, 255, 255, 0.3); margin: 0 8px;">|</span>
+            <a href="impresszum.html" target="_blank" class="footer-privacy-btn" style="display: inline-block; margin: 5px 0;">Impresszum</a>
+            <span style="color: rgba(255, 255, 255, 0.3); margin: 0 8px;">|</span>
+            <a href="suti-tajekoztato.html" target="_blank" class="footer-privacy-btn" style="display: inline-block; margin: 5px 0;">Sütik</a>
+            <span style="color: rgba(255, 255, 255, 0.3); margin: 0 8px;">|</span>
+            <a href="aszf.html" target="_blank" class="footer-privacy-btn" style="display: inline-block; margin: 5px 0;">ÁSZF</a>
+        </div>
             <span class="footer-copyright">&copy; 2026 Dinamikus Delfinek SE. Minden jog fenntartva.</span>
         </div>
     </footer>
@@ -1297,6 +1332,75 @@
                 });
             }
         });
+        // Univerzális függvény, amivel bármilyen HTML oldalt be tudsz tölteni a felugró ablakba
+function openPolicyInModal(htmlPageUrl) {
+    const modal = document.getElementById('universal-policy-modal');
+    const titleZone = document.getElementById('policy-modal-title');
+    const bodyZone = document.getElementById('policy-modal-body');
+
+    if (!modal || !titleZone || !bodyZone) return;
+
+    // Alaphelyzetbe állítás a betöltésig
+    titleZone.innerText = "Betöltés...";
+    bodyZone.innerHTML = '<p style="text-align: center; color: #64748b; padding: 20px;">Dokumentum beolvasása...</p>';
+    modal.style.display = 'flex';
+
+    // Fájl tartalmának lekérése élőben
+    fetch(htmlPageUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Nem sikerült betölteni a fájlt.');
+            return response.text();
+        })
+        .then(htmlText => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlText, 'text/html');
+            
+            // Kinyerjük a címet a H1-ből, vagy ha nincs, kap egy alapértelmezettet
+            const pageTitle = doc.querySelector('h1') ? doc.querySelector('h1').innerText : 'Tájékoztató';
+            
+            // Megtisztítjuk a külső fájl tartalmát (levágjuk a felesleges gombokat, H1-et)
+            if(doc.querySelector('h1')) doc.querySelector('h1').remove();
+            if(doc.querySelector('.back-btn-wrap')) doc.querySelector('.back-btn-wrap').remove();
+            if(doc.querySelector('.meta-info')) doc.querySelector('.meta-info').remove();
+            
+            // Kivesszük a belső szövegdobozt, vagy a sima body-t
+            const cleanContent = doc.querySelector('.policy-container') ? doc.querySelector('.policy-container').innerHTML : doc.body.innerHTML;
+
+            // Betesszük a felugró ablakba
+            titleZone.innerText = pageTitle;
+            bodyZone.innerHTML = cleanContent;
+        })
+        .catch(error => {
+            console.error(error);
+            titleZone.innerText = "Hiba történt";
+            bodyZone.innerHTML = '<p style="color: #ef4444; text-align: center;">A dokumentum jelenleg nem érhető el. Kérjük, próbálja meg később!</p>';
+        });
+}
+
+// Ablak bezárása gombbal vagy háttérre kattintással
+document.addEventListener("DOMContentLoaded", function() {
+    const modal = document.getElementById('universal-policy-modal');
+    const closeBtn = document.getElementById('closePolicyModalBtn');
+
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => modal.style.display = 'none');
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+    }
+});
     </script>
+    <div id="universal-policy-modal" class="modal-overlay" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+    <div class="modal-content policy-modal-content" style="background: #fff; padding: 30px; border-radius: 20px; max-width: 700px; width: 90%; max-height: 85vh; display: flex; flex-direction: column;">
+        
+        <h2 id="policy-modal-title" class="modal-title" style="font-size: 22px; margin-bottom: 15px; border-bottom: 2px solid #e0f2fe; padding-bottom: 10px; color: #0a3075; font-family: 'Baloo 2', cursive;">Betöltés...</h2>
+        
+        <div id="policy-modal-body" class="policy-scroll-area" style="overflow-y: auto; flex-grow: 1; margin-bottom: 20px; padding-right: 5px; color: #334155;">
+            <p>Kérjük, várjon, a dokumentum betöltődik...</p>
+        </div>
+        
+        <button type="button" id="closePolicyModalBtn" class="cta-btn" style="width: 100%; background: #0a3075; color: #fff; border: none; padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer;">Bezárás</button>
+    </div>
+</div>
 </body>
 </html>
