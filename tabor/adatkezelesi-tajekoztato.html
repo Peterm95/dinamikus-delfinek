@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adatkezelési Tájékoztató - Dinamikus Delfinek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════ ALAPBEÁLLÍTÁSOK (FŐOLDALHOZ IGAZÍTVA) ═══════════ */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            background: #f4f9fd; 
+            color: #1e293b;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        :root {
+            --navy:    #0a3075;
+            --navy2:   #061e50;
+            --yellow:  #f5c400;
+            --sky:     #38bdf8;
+            --sky-lt:  #e0f2fe;
+            --white:   #ffffff;
+        }
+
+        h1, h2, h3, h4 { 
+            font-family: 'Baloo 2', cursive; 
+            color: var(--navy);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        h1 { font-size: 36px; font-weight: 900; text-align: center; margin-top: 10px; margin-bottom: 5px; }
+        h2 { font-size: 22px; font-weight: 800; border-bottom: 2px solid var(--sky-lt); padding-bottom: 6px; margin-top: 35px; }
+        h3 { font-size: 18px; font-weight: 700; color: var(--navy2); margin-top: 20px; }
+
+        .meta-info {
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        /* ═══════════ TARTALMI DOBOZ ═══════════ */
+        .policy-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 50px 40px;
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(10, 48, 117, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        p {
+            margin-bottom: 16px;
+            font-size: 15.5px;
+            color: #334155;
+            text-align: justify;
+        }
+
+        strong {
+            color: #0f172a;
+        }
+
+        ul {
+            margin-bottom: 20px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            font-size: 15.5px;
+            color: #334155;
+        }
+
+        /* Vissza gomb stílusa */
+        .back-btn-wrap {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: var(--navy);
+            color: var(--white);
+            font-family: 'Baloo 2', cursive; 
+            font-size: 16px; 
+            font-weight: 800;
+            padding: 12px 35px; 
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(10, 48, 117, 0.15);
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--navy2);
+            transform: translateY(-2px);
+        }
+
+        /* Mobilos nézet igazítása */
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .policy-container { padding: 30px 20px; border-radius: 20px; }
+            h1 { font-size: 28px; }
+            h2 { font-size: 20px; }
+            p, li { font-size: 14.5px; text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="policy-container">
+        <h1>ADATKEZELÉSI TÁJÉKOZTATÓ</h1>
+        <div class="meta-info">Dinamikus Delfinek Úszóiskola és Napközis Tábor<br>Hatályos: 2026. január 1-től</div>
+
+        <h2>1. Az adatkezelő adatai</h2>
+        <p><strong>Adatkezelő neve:</strong> Dinamikus Delfinek SE.</p>
+        <p><strong>Székhely:</strong> [CÍM - pl. 9000 Győr, Példa utca 1.]</p>
+        <p><strong>E-mail:</strong> dinamikus.delfinek@gmail.com</p>
+        <p><strong>Telefonszám:</strong> +36 20 393 8067</p>
+        <p><strong>Adószám:</strong> [ADÓSZÁM]</p>
+        <p>Az Adatkezelő elkötelezett a személyes adatok védelme iránt, és az adatkezelést az Európai Parlament és Tanács (EU) 2016/679 rendelete (GDPR), valamint a hatályos magyar jogszabályok szerint végzi.</p>
+
+        <h2>2. Az adatkezelés alapelvei</h2>
+        <p>Az Adatkezelő a személyes adatokat:</p>
+        <ul>
+            <li>jogszerűen,</li>
+            <li>tisztességesen,</li>
+            <li>átlátható módon,</li>
+            <li>célhoz kötötten,</li>
+            <li>adattakarékosan,</li>
+            <li>pontosan,</li>
+            <li>korlátozott tárolhatóság mellett,</li>
+            <li>megfelelő biztonsági intézkedések alkalmazásával kezeli.</li>
+        </ul>
+
+        <h2>3. Az érintettek köre</h2>
+        <p>Az adatkezelés az alábbi személyeket érintheti:</p>
+        <ul>
+            <li>úszásoktatásra jelentkező gyermekek,</li>
+            <li>táborba jelentkező gyermekek,</li>
+            <li>törvényes képviselők,</li>
+            <li>sürgősségi kapcsolattartók,</li>
+            <li>a gyermek átvételére jogosult személyek,</li>
+            <li>weboldal látogatói.</li>
+        </ul>
+
+        <h2>4. A kezelt személyes adatok köre</h2>
+        
+        <h3>4.1 Úszásoktatási jelentkezés</h3>
+        <ul>
+            <li>gyermek teljes neve</li>
+            <li>gyermek születési ideje</li>
+            <li>törvényes képviselő neve</li>
+            <li>törvényes képviselő e-mail címe</li>
+            <li>törvényes képviselő telefonszáma</li>
+            <li>törvényes képviselő lakcíme</li>
+            <li>választott időpontok</li>
+            <li>megjegyzések</li>
+            <li>különleges igények</li>
+        </ul>
+
+        <h3>4.2 Tábori jelentkezés</h3>
+        <ul>
+            <li>gyermek teljes neve</li>
+            <li>gyermek születési ideje</li>
+            <li>törvényes képviselő neve</li>
+            <li>törvényes képviselő telefonszáma</li>
+            <li>törvényes képviselő e-mail címe</li>
+            <li>törvényes képviselő lakcíme</li>
+            <li>választott tábori időpont</li>
+            <li>úszástudásra vonatkozó információk</li>
+            <li>marketing forrás</li>
+        </ul>
+
+        <h3>4.3 Tábori adatlap</h3>
+        <ul>
+            <li>gyermek neve</li>
+            <li>gyermek születési helye</li>
+            <li>gyermek születési ideje</li>
+            <li>gyermek lakcíme</li>
+            <li>becenév</li>
+            <li>TAJ szám</li>
+            <li>édesanya neve</li>
+            <li>sürgősségi kapcsolattartó adatai</li>
+            <li>átvételre jogosult személyek adatai</li>
+        </ul>
+
+        <h3>4.4 Egészségügyi adatok</h3>
+        <p>Különleges személyes adatnak minősülő adatok:</p>
+        <ul>
+            <li>gyógyszerallergiák</li>
+            <li>ételallergiák</li>
+            <li>környezeti allergiák</li>
+            <li>rendszeresen szedett gyógyszerek</li>
+            <li>krónikus betegségek</li>
+            <li>egészségügyi állapot</li>
+            <li>korábbi sérülések</li>
+            <li>korábbi műtétek</li>
+            <li>egyéb egészségügyi információk</li>
+        </ul>
+
+        <h2>5. Az adatkezelés célja és jogalapja</h2>
+        
+        <p><strong>Úszásoktatás és tábor szervezése</strong><br>
+        • Cél: jelentkezések kezelése, foglalások nyilvántartása, kapcsolattartás.<br>
+        • Jogalap: GDPR 6. cikk (1) b) pont (szerződés teljesítése).</p>
+
+        <p><strong>Kapcsolattartás</strong><br>
+        • Cél: a szolgáltatás nyújtásával kapcsolatos kommunikáció.<br>
+        • Jogalap: GDPR 6. cikk (1) b) pont.</p>
+
+        <p><strong>Számlázás és könyvelés</strong><br>
+        • Cél: számlakiállítás, számviteli kötelezettségek teljesítése.<br>
+        • Jogalap: GDPR 6. cikk (1) c) pont.<br>
+        • Megőrzési idő: 8 év.</p>
+
+        <p><strong>Egészségügyi adatok kezelése</strong><br>
+        • Cél: a gyermek biztonságának biztosítása, szükség esetén egészségügyi segítségnyújtás.<br>
+        • Jogalap: GDPR 9. cikk (2) a) pont (kifejezett hozzájárulás).<br>
+        • Az egészségügyi adatok megadása önkéntes, azonban hiányuk esetén előfordulhat, hogy a gyermek biztonságos táboroztatása nem biztosítható.</p>
+
+        <p><strong>Sürgősségi kapcsolattartás</strong><br>
+        • Cél: baleset vagy rendkívüli esemény esetén kapcsolattartás.<br>
+        • Jogalap: GDPR 6. cikk (1) f) pont (jogos érdek).</p>
+
+        <p><strong>Fotó- és videófelvételek</strong><br>
+        • Cél: a tábor dokumentálása, élmények megosztása, marketing.<br>
+        • Jogalap: GDPR 6. cikk (1) a) pont (hozzájárulás). A hozzájárulás bármikor visszavonható.</p>
+
+        <h2>6. A személyes adatok forrása</h2>
+        <p>Az adatokat közvetlenül az érintett törvényes képviselője adja meg online űrlapokon vagy személyesen.</p>
+
+        <h2>7. Az adatok megőrzésének időtartama</h2>
+        <ul>
+            <li><strong>Jelentkezési adatok:</strong> a jogviszony megszűnését követő 5 év.</li>
+            <li><strong>Számlázási adatok:</strong> 8 év.</li>
+            <li><strong>Egészségügyi adatok:</strong> a tábor lezárását követő 1 év.</li>
+            <li><strong>Fotók és videók:</strong> a hozzájárulás visszavonásáig, de legfeljebb 5 évig.</li>
+            <li><strong>Panaszkezelési adatok:</strong> 3 év.</li>
+        </ul>
+
+        <h2>8. Adatfeldolgozók</h2>
+        <p>Az Adatkezelő az alábbi szolgáltatókat veheti igénybe:</p>
+        <p><strong>Google LLC:</strong> Google Forms, Google Sheets, Google Drive, Gmail</p>
+        <p><strong>Tárhelyszolgáltató:</strong> [NÉV / PL. TARHELYPARK KFT.]</p>
+        <p><strong>Könyvelő:</strong> [KÖNYVELŐ IRODA NEVE]</p>
+        <p>A szolgáltatók kizárólag az Adatkezelő utasításai alapján járhatnak el.</p>
+
+        <h2>9. Adattovábbítás</h2>
+        <p>Az Adatkezelő a személyes adatokat harmadik személy részére nem értékesíti és marketing célból nem adja át. Jogszabályi kötelezettség esetén az adatokat hatóságok részére átadhatja.</p>
+
+        <h2>10. Nemzetközi adattovábbítás</h2>
+        <p>A Google szolgáltatások használata során bizonyos adatok az Európai Unión kívülre is továbbításra kerülhetnek. A Google megfelelő GDPR garanciákat alkalmaz.</p>
+
+        <h2>11. Adatbiztonság</h2>
+        <p>Az Adatkezelő megfelelő technikai és szervezési intézkedésekkel védi a személyes adatokat különösen:</p>
+        <ul>
+            <li>jogosulatlan hozzáférés ellen,</li>
+            <li>elvesztés ellen,</li>
+            <li>módosítás ellen,</li>
+            <li>megsemmisülés ellen.</li>
+        </ul>
+
+        <h2>12. Az érintettek jogai</h2>
+        <p>Az érintett jogosult: tájékoztatást kérni, hozzáférést kérni, helyesbítést kérni, törlést kérni, adatkezelés korlátozását kérni, tiltakozni, adathordozhatóságot kérni, hozzájárulását visszavonni.</p>
+
+        <h2>13. Panasz benyújtása</h2>
+        <p><strong>Nemzeti Adatvédelmi és Információszabadság Hatóság (NAIH)</strong><br>
+        Cím: 1055 Budapest, Falk Miksa utca 9–11.<br>
+        Telefon: +36 1 391 1400<br>
+        E-mail: ugyfelszolgalat@naih.hu<br>
+        Weboldal: <a href="https://www.naih.hu" target="_blank" style="color: var(--navy); font-weight: 700;">https://www.naih.hu</a></p>
+
+        <h2>14. Kiskorúak adatainak kezelése</h2>
+        <p>A gyermekek személyes adatainak megadása kizárólag a törvényes képviselő által történhet. Az Adatkezelő vélelmezi, hogy az űrlapokat a gyermek törvényes képviselője tölti ki.</p>
+
+        <h2>15. Automatizált döntéshozatal és profilalkotás</h2>
+        <p>Az Adatkezelő automatizált döntéshozatalt és profilalkotást nem végez.</p>
+
+        <h2>16. Záró rendelkezések</h2>
+        <p>Az Adatkezelő fenntartja a jogot a jelen tájékoztató módosítására. A mindenkor hatályos verzió a weboldalon érhető el. A jelentkezési űrlap elküldésével a törvényes képviselő kijelenti, hogy a tájékoztatót megismerte és tudomásul vette.</p>
+
+        <div class="back-btn-wrap">
+            <a href="index.html" class="back-btn">Vissza a főoldalra</a>
+        </div>
+    </div>
+
+</body>
+</html>
