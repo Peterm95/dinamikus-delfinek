@@ -1522,106 +1522,108 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('camp-registration-form');
-        const submitBtn = document.getElementById('submit-camp-btn');
-        const hiddenTurnusInput = document.getElementById('hidden-turnusok-input');
-        const childNameInput = document.getElementById('gyermekNeveInput');
-        
-        const customModal = document.getElementById('custom-modal');
-        const registeredChildNameSpan = document.getElementById('registered-child-name');
-        const modalOkBtn = document.getElementById('modal-ok-btn');
+    const form = document.getElementById('camp-registration-form');
+    const submitBtn = document.getElementById('submit-camp-btn');
+    const hiddenTurnusInput = document.getElementById('hidden-turnusok-input');
+    const childNameInput = document.getElementById('gyermekNeveInput');
+    
+    const customModal = document.getElementById('custom-modal');
+    const registeredChildNameSpan = document.getElementById('registered-child-name');
+    const modalOkBtn = document.getElementById('modal-ok-btn');
 
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzmdcb9-fbAbNkwe55XwLcLdraVJJBZ-Go-RcOq17LmD9lvsvJFyp9lD1jhTboLiv90lw/exec';
-        
-        // 🌟 IDE ÍRD BE A GOOGLE-TŐL KAPOTT WEBHELYKULCSOT (SITE KEY)
-        const RECAPTCHA_SITE_KEY = '6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq'; 
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzmdcb9-fbAbNkwe55XwLcLdraVJJBZ-Go-RcOq17LmD9lvsvJFyp9lD1jhTboLiv90lw/exec';
+    
+    // 🌟 IDE JÖN A HELYSZÍNI KULCS (SITE KEY)
+    const RECAPTCHA_SITE_KEY = '6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq'; 
 
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-                const checkedBoxes = document.querySelectorAll('.camp-turnus-cb:checked');
-                if(checkedBoxes.length === 0) {
-                    alert('Kérjük, válasszon ki legalább egy tábori időpontot!');
-                    return false;
-                }
-                
-                const selectedTurnusok = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
-                if(hiddenTurnusInput) hiddenTurnusInput.value = selectedTurnusok;
+            // 1. Turnusok ellenőrzése
+            const checkedBoxes = document.querySelectorAll('.camp-turnus-cb:checked');
+            if(checkedBoxes.length === 0) {
+                alert('Kérjük, válasszon ki legalább egy tábori időpontot!');
+                return false;
+            }
+            
+            const selectedTurnusok = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
+            if(hiddenTurnusInput) hiddenTurnusInput.value = selectedTurnusok;
 
-                if(submitBtn) {
-                    submitBtn.disabled = true;
-                    submitBtn.innerText = 'Biztonsági ellenőrzés...';
-                }
+            // Gomb vizuális letiltása a dupla kattintás ellen
+            if(submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Biztonsági ellenőrzés...';
+            }
 
-                // 🌟 reCAPTCHA Token legenerálása küldés előtt
-                grecaptcha.ready(function() {
-                    grecaptcha.execute(RECAPTCHA_SITE_KEY, {action: 'submit_camp'}).then(function(token) {
-                        
-                        // Behelyezzük a tokent a rejtett mezőbe
-                        const tokenInput = document.getElementById('camp-recaptcha-token');
-                        if (tokenInput) {
-                            tokenInput.value = token;
+            // 🌟 2. reCAPTCHA Token lekérése a Google-től közvetlenül a küldés előtt
+            grecaptcha.ready(function() {
+                grecaptcha.execute(RECAPTCHA_SITE_KEY, {action: 'submit_camp'}).then(function(token) {
+                    
+                    if(submitBtn) {
+                        submitBtn.innerText = 'Küldés folyamatban...';
+                    }
+
+                    // Új FormData objektum létrehozása (már a frissített hiddenTurnusInput értékkel)
+                    const formData = new FormData(form);
+                    
+                    // 🌟 Itt injektáljuk be a tokent! A Google Script pontosan a 'recaptcha_token' kulcsot várja.
+                    formData.append('recaptcha_token', token);
+                    
+                    const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
+
+                    // 3. Adatok küldése a Google Apps Scriptnek
+                    fetch(scriptURL, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Hálózati hiba történt a szerverrel való kommunikáció során.');
                         }
-
-                        if(submitBtn) {
-                            submitBtn.innerText = 'Küldés folyamatban...';
-                        }
-
-                        const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
-                        const formData = new FormData(form);
-                        
-                        // Ide injektáljuk a tokent a küldött adatok közé is, biztos ami biztos
-                        formData.append('recaptcha_token', token);
-                        
-                        // FONTOS: Kivettem a 'no-cors'-t, hogy lássuk ha hiba van, és a reCAPTCHA válasz átmenjen
-                        fetch(scriptURL, {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.result === 'success') {
-                                if(submitBtn) {
-                                    submitBtn.disabled = false;
-                                    submitBtn.innerText = 'Hivatalos tábori jelentkezés elküldése';
-                                }
-
-                                if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
-                                if(customModal) customModal.style.display = 'flex';
-                            } else {
-                                // Ha a Google Script botnak érzékelte, vagy más hiba történt
-                                throw new Error(data.message || 'Ismeretlen hiba a szerveren.');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Hiba!', error);
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.result === 'success') {
                             if(submitBtn) {
                                 submitBtn.disabled = false;
                                 submitBtn.innerText = 'Hivatalos tábori jelentkezés elküldése';
                             }
-                            alert('Hiba történt: ' + error.message);
-                        });
 
+                            if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
+                            if(customModal) customModal.style.display = 'flex';
+                        } else {
+                            // Ha a Google Script reCAPTCHA ellenőrzése megbukott (pl. hibás Secret Key vagy bot észlelés)
+                            throw new Error(data.message || 'Ismeretlen hiba a szerveren.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Hiba!', error);
+                        if(submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = 'Hivatalos tábori jelentkezés elküldése';
+                        }
+                        alert('Hiba történt a jelentkezés során:\n' + error.message);
                     });
+
                 });
             });
-        }
+        });
+    }
 
-        if(modalOkBtn) {
-            modalOkBtn.addEventListener('click', function() {
-                if(customModal) customModal.style.display = 'none';
-                if(form) form.reset();
-                
-                const checkedBoxes = document.querySelectorAll('.camp-turnus-cb:checked');
-                checkedBoxes.forEach(cb => cb.checked = false);
-                if(hiddenTurnusInput) hiddenTurnusInput.value = '';
+    if(modalOkBtn) {
+        modalOkBtn.addEventListener('click', function() {
+            if(customModal) customModal.style.display = 'none';
+            if(form) form.reset();
+            
+            const checkedBoxes = document.querySelectorAll('.camp-turnus-cb:checked');
+            checkedBoxes.forEach(cb => cb.checked = false);
+            if(hiddenTurnusInput) hiddenTurnusInput.value = '';
 
-                if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
-        }
-    });
-
+            if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+});
     // Univerzális függvény, amivel bármilyen HTML oldalt be tudsz tölteni a felugró ablakba
     function openPolicyInModal(htmlPageUrl) {
         const modal = document.getElementById('universal-policy-modal');
