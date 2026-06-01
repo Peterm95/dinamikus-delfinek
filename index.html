@@ -801,6 +801,9 @@
     from { transform: scale(0.8); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
 }
+        .grecaptcha-badge { 
+    visibility: hidden !important; 
+  }
     </style>
 </head>
 <body>
@@ -1377,6 +1380,11 @@
                         </div>
 
                         <button type="submit" id="submit-btn" class="cta-btn" style="width: 100%; margin-top: 10px;">Ingyenes próbaórára jelentkezem</button>
+                        <p style="font-size: 11px; color: #64748b; margin-top: 10px;">
+  Ezt az oldalt a reCAPTCHA védi, és a Google 
+  <a href="https://policies.google.com/privacy" target="_blank">Adatvédelmi irányelvei</a> és 
+  <a href="https://policies.google.com/terms" target="_blank">Általános Szerződési Feltételei</a> érvényesek rá.
+</p>
                     </form>
                 </div>
 
