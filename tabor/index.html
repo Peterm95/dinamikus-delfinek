@@ -1,6 +1,7 @@
 	<!DOCTYPE html>
 <html lang="hu">
 <head>
+	<script src="https://www.google.com/recaptcha/api.js?render=6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -1332,7 +1333,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         <div class="form-container-box">
             <form id="camp-registration-form">
                 <div class="form-ui-grid">
-                    
+                    <input type="hidden" name="recaptcha_token" class="recaptcha_token_class">
                     <div class="form-ui-group full">
                         <label class="form-ui-label">Melyik tábori időpontra jelentkeztek? * (Többet is bejelölhetsz)</label>
                         <div class="tile-selector">
@@ -1522,7 +1523,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
             const registeredChildNameSpan = document.getElementById('registered-child-name');
             const modalOkBtn = document.getElementById('modal-ok-btn');
 
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbyD0pqzw8XT4-pZ2q3DM_Emoht71Ou9JX6It9n0NJfR-sgE7554eJ0pIJ9QGQHQOb53xA/exec';
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzmdcb9-fbAbNkwe55XwLcLdraVJJBZ-Go-RcOq17LmD9lvsvJFyp9lD1jhTboLiv90lw/exec';
 
             if (form) {
                 form.addEventListener('submit', function(e) {
