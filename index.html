@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -1292,7 +1293,7 @@
                     <form id="registration-form">
                         <input type="hidden" name="jelentkezesTipusa" id="jelentkezesTipusa" value="proba">
                         <input type="hidden" name="sheetTab" id="sheetTab" value="Uj_Ufok_Probaora">
-
+                        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
                         <div class="form-group">
                             <label class="form-label">Gyermek teljes neve</label>
                             <input type="text" id="gyermekNeveInput" name="gyermekNeve" class="form-input" placeholder="Pl. Kovács Bence" required>
@@ -1558,90 +1559,111 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }
 
-        // ═══════════ŰRLAP KÜLDÉSE ÉS MODAL KEZELÉSE ═══════════
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('registration-form');
-            const submitBtn = document.getElementById('submit-btn');
-            const hiddenDaysInput = document.getElementById('selected-days-input');
-            const childNameInput = document.getElementById('gyermekNeveInput');
+// ═══════════ ŰRLAP KÜLDÉSE ÉS MODAL KEZELÉSE (reCAPTCHA v3 INTEGRÁCIÓVAL) ═══════════
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registration-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const hiddenDaysInput = document.getElementById('selected-days-input');
+    const childNameInput = document.getElementById('gyermekNeveInput');
+    
+    const customModal = document.getElementById('custom-modal');
+    const registeredChildNameSpan = document.getElementById('registered-child-name');
+    const modalOkBtn = document.getElementById('modal-ok-btn');
+
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxN6bhuQN4nJTUepCNIwf2WWjXeEfqb6L38a9M9NsrKxhSsh-6-fDmfqpLzVF-ZzTR_HQ/exec';
+    const RECAPTCHA_SITE_KEY = '6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq';
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Megállítjuk az oldal frissülését
+
+            // Mentjük az aktuális gomb feliratot, hogy hiba esetén pontosan erre állítsuk vissza
+            const originalBtnText = submitBtn ? submitBtn.innerText : 'Küldés';
+
+            // Napok ellenőrzése és összefűzése (Csak ha a 'rendes' mód aktív, vagy ha látható a szekció)
+            // Megjegyzés: Ha próbaóránál nem kötelező a nap, ezt a validációt finomíthatod az üzemmód szerint
+            const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
+            const currentMode = document.getElementById('jelentkezes-valaszto') ? document.getElementById('jelentkezes-valaszto').value : 'proba'; 
             
-            const customModal = document.getElementById('custom-modal');
-            const registeredChildNameSpan = document.getElementById('registered-child-name');
-            const modalOkBtn = document.getElementById('modal-ok-btn');
+            // Ha nem próbaóra, akkor kötelező napot választani
+            if(currentMode === 'rendes' && checkedBoxes.length === 0) {
+                alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnének!');
+                return false;
+            }
+            
+            const selectedDays = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
+            if(hiddenDaysInput) hiddenDaysInput.value = selectedDays;
 
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbxN6bhuQN4nJTUepCNIwf2WWjXeEfqb6L38a9M9NsrKxhSsh-6-fDmfqpLzVF-ZzTR_HQ/exec';
+            // Gomb letiltása a dupla küldés ellen
+            if(submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Biztonsági ellenőrzés és küldés...';
+            }
 
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    // EZ AZ A SOR, ami kötelezően megállítja az oldal frissülését!
-                    e.preventDefault();
+            // Gyermek nevének kimentése a felugró ablakhoz
+            const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
 
-                    // Napok ellenőrzése és összefűzése
-                    const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
-                    if(checkedBoxes.length === 0) {
-                        alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnének!');
-                        return false;
-                    }
+            // reCAPTCHA v3 Token lekérése a háttérben
+            grecaptcha.ready(function() {
+                grecaptcha.execute(RECAPTCHA_SITE_KEY, {action: 'submit'}).then(function(token) {
                     
-                    const selectedDays = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
-                    if(hiddenDaysInput) hiddenDaysInput.value = selectedDays;
-
-                    // Gomb letiltása, hogy ne lehessen duplán kattintani
-                    if(submitBtn) {
-                        submitBtn.disabled = true;
-                        submitBtn.innerText = 'Küldés folyamatban...';
-                    }
-
-                    // Gyermek nevének kimentése
-                    const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
-
+                    // Összerakjuk a küldendő adatokat
                     const formData = new FormData(form);
-                    
-                    // Küldés a Google Sheets-be
-                    fetch(scriptURL,{
-    method:'POST',
-    body:formData,
-    mode:'no-cors'
-})
-.then(()=>{
+                    formData.append('recaptcha_token', token); // Hozzáadjuk a biztonsági tokent
 
-    submitBtn.disabled=false;
-    submitBtn.innerText='Ingyenes próbaórára jelentkezem';
+                    // Küldés a Google Sheets backend felé (no-cors NÉLKÜL, hogy lássuk a választ!)
+                    fetch(scriptURL, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json()) // Beolvassuk a backend JSON válaszát
+                    .then(data => {
+                        if (data.result === 'success') {
+                            // Sikeres mentés és emberi felhasználó
+                            if(submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.innerText = originalBtnText;
+                            }
 
-    registeredChildNameSpan.innerText=gyermekNeve;
-    customModal.style.display='flex';
+                            if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
+                            if(customModal) customModal.style.display = 'flex';
+                        } else {
+                            // Ha a szerveroldali reCAPTCHA szerint bot, vagy más hiba történt
+                            throw new Error(data.message || 'Szerveroldali hiba történt.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Küldési hiba:', error);
+                        
+                        if(submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = originalBtnText;
+                        }
 
-})
-.catch(error=>{
+                        alert('Hiba történt a jelentkezés közben: ' + error.message);
+                    });
 
-    console.error(error);
-
-    submitBtn.disabled=false;
-    submitBtn.innerText='Ingyenes próbaórára jelentkezem';
-
-    alert('Hiba történt a jelentkezés küldése közben.');
-
-});
                 });
-            }
-
-            // OK GOMB - Ablak bezárása és form ürítése az ÚJ GYERMEKHEZ
-            if(modalOkBtn) {
-                modalOkBtn.addEventListener('click', function() {
-                    if(customModal) customModal.style.display = 'none';
-                    if(form) form.reset(); // Kiüríti a szöveges mezőket
-                    
-                    // Checkboxok kiürítése kézzel is biztos ami biztos
-                    const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
-                    checkedBoxes.forEach(cb => cb.checked = false);
-                    if(hiddenDaysInput) hiddenDaysInput.value = '';
-
-                    // Finom görgetés vissza a formhoz
-                    if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                });
-            }
+            });
         });
-        // Univerzális függvény, amivel bármilyen HTML oldalt be tudsz tölteni a felugró ablakba
+    }
+
+    // OK GOMB - Ablak bezárása és form ürítése az ÚJ GYERMEKHEZ
+    if(modalOkBtn) {
+        modalOkBtn.addEventListener('click', function() {
+            if(customModal) customModal.style.display = 'none';
+            if(form) form.reset(); // Kiüríti a szöveges mezőket
+            
+            // Checkboxok manuális takarítása
+            const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
+            checkedBoxes.forEach(cb => cb.checked = false);
+            if(hiddenDaysInput) hiddenDaysInput.value = '';
+
+            // Finom görgetés vissza az űrlap elejére
+            if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+});
 function openPolicyInModal(htmlPageUrl) {
     const modal = document.getElementById('universal-policy-modal');
     const titleZone = document.getElementById('policy-modal-title');
