@@ -728,7 +728,114 @@
         .footer-privacy-btn:hover {
             color: var(--yellow);
         }
+/* ═══════════ MIÉRT A DINAMIKUS DELFINEK SZEKCIÓ STÍLUSAI ═══════════ */
+.why-us-section {
+    background: var(--white);
+    position: relative;
+}
+.why-us-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 50px;
+}
+.stat-card {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 24px;
+    padding: 30px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+.stat-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--blue-bright);
+    box-shadow: var(--shadow-md);
+}
+.stat-number {
+    font-family: 'Baloo 2', cursive;
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--blue-royal);
+    line-height: 1.1;
+    margin-bottom: 6px;
+}
+.stat-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--navy-deep);
+    margin-bottom: 8px;
+}
+.stat-desc {
+    font-size: 14.5px;
+    color: #475569;
+    line-height: 1.5;
+}
+.features-list-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+.feature-row-card {
+    background: #f8fafc;
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+.feature-row-card:hover {
+    background: var(--white);
+    border-color: var(--blue-bright);
+    box-shadow: var(--shadow-sm);
+}
+.feature-row-icon {
+    font-size: 28px;
+    background: var(--sky-bg);
+    padding: 10px;
+    border-radius: 16px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.feature-row-body h5 {
+    font-size: 18px;
+    color: var(--navy-deep);
+    margin-bottom: 6px;
+    font-weight: 800;
+}
+.feature-row-body p {
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.5;
+}
+.quote-box {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
+    border: 2px dashed var(--yellow);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+.quote-text {
+    font-family: 'Baloo 2', cursive;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--navy-light);
+}
 
+/* Reszponzív nézet a meglévő töréspontokhoz igazítva */
+@media (max-width: 992px) {
+    .why-us-grid, .features-list-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .quote-box {
+        grid-column: span 1 !important;
+    }
+}
         /* ═══════════ MODAL MODELLING ═══════════ */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -905,11 +1012,77 @@
 
         <!-- Hullám elválasztó -->
         <div class="hero-wave-divider">
-            <svg viewBox="0 0 1440 74" preserveAspectRatio="none">
-                <path d="M0,42 C240,0 480,0 720,42 C960,84 1200,84 1440,42 L1440,74 L0,74 Z"/>
-            </svg>
-        </div>
+    <svg viewBox="0 0 1440 74" preserveAspectRatio="none">
+        <path fill="#ffffff" d="M0,42 C240,0 480,0 720,42 C960,84 1200,84 1440,42 L1440,74 L0,74 Z"/>
+    </svg>
+</div>
     </section>
+
+	<section id="miert-minket" class="section-space why-us-section">
+    <div class="container">
+        
+        <h2 class="section-title">Miért a <span>Dinamikus Delfinek?</span></h2>
+        <p class="section-sub">Mert a biztonságos oktatás és a játékos fejlődés mellett arra törekszünk, hogy a gyerekek egy igazán jó hangulatú, emlékezetes hetet töltsenek nálunk.</p>
+        
+        <div class="why-us-grid">
+            
+            <div class="stat-card">
+                <div class="stat-number">120+</div>
+                <div class="stat-title">Elégedett gyermek</div>
+                <div class="stat-desc">Évről évre egyre több család választ minket.</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">4.9 / 5</div>
+                <div class="stat-title">Szülői értékelés</div>
+                <div class="stat-desc">A szülők bizalma a legfontosabb visszajelzés számunkra.</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">2018 óta</div>
+                <div class="stat-title">Gyerekek szolgálatában</div>
+                <div class="stat-desc">Több év tapasztalat és folyamatos fejlődés.</div>
+            </div>
+            
+        </div>
+        
+        <div class="features-list-grid">
+            
+            <div class="feature-row-card">
+                <div class="feature-row-icon">🏊‍♂️</div>
+                <div class="feature-row-body">
+                    <h5>MÚSZ licences edzők</h5>
+                    <p>Képzett és tapasztalt szakemberek vezetik a foglalkozásokat, akik tudják, hogyan lehet biztonságosan és játékosan fejleszteni a gyerekeket.</p>
+                </div>
+            </div>
+            
+            <div class="feature-row-card">
+                <div class="feature-row-icon">🌊</div>
+                <div class="feature-row-body">
+                    <h5>Napi úszásoktatás</h5>
+                    <p>A tábor minden napján vízbe megyünk, így a fejlődés gyorsabb és látványosabb.</p>
+                </div>
+            </div>
+            
+            <div class="feature-row-card">
+                <div class="feature-row-icon">🐲</div>
+                <div class="feature-row-body">
+                    <h5>Különleges programok</h5>
+                    <p>Sárkányhajózás, lovaskocsikázás és sok más élmény teszi igazán emlékezetessé a hetet.</p>
+                </div>
+            </div>
+            
+            <div class="feature-row-card quote-box">
+                <div class="feature-row-body">
+                    <p style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; margin-bottom: 4px; color: var(--orange);">A legnagyobb büszkeségünk</p>
+                    <div class="quote-text">„Jövőre is jövök!”</div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+</section>
 
     <section class="section-space" style="background: #f0f9ff; padding-top: 30px;" id="idopontok">
         <div class="container">
@@ -936,7 +1109,7 @@
                             <span class="card-turnus-num" style="color: var(--orange);">Népszerű</span>
                             <span class="card-day">II. Tábori hét</span>
                             <span class="card-time" style="background: #fff7ed; color: var(--orange);">Július 13 – 17.</span>
-                            <span class="card-status-2">⚠️ Majdnem megtelt</span>
+                            <span class="card-status-2">⚠️ Már csak 4 hely maradt</span>
                         </div>
                     </div>
                 </div>
@@ -1162,7 +1335,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                 <div style="background: #f8fafc; padding: 28px; border-radius: 20px; border: 1px solid #e2e8f0; position: relative;">
                     <div style="font-size: 32px; color: var(--sky); line-height: 1; margin-bottom: 10px; font-family: 'Baloo 2';">“</div>
                     <p style="font-size: 14.5px; color: #475569; line-height: 1.6; font-style: italic; margin-bottom: 16px;">
-                        "Kislányom kezdőként ment, és a hét végére mélyvízbiztos lett. Ezt senki nem hitte el előre – mi sem. Az oktatók csodálatosan türelmesek, és látszik, hogy tényleg szeretik ezt csinálni. Két héttel a tábor után még mindig a tábori barátjával videóhívásozik."
+                        "Kislányom kezdőként ment, és a hét végére mélyvízbiztos lett. Ezt senki nem hitte el előre – mi sem. Az oktatók csodálatosan türelmesek, és látszik, hogy tényleg szeretik ezt csinálni. Szofi minden reggel alig várta, hogy induljunk."
                     </p>
                     <div style="font-family: 'Baloo 2', cursive; font-weight: 800; color: var(--navy); font-size: 16px;">Márton</div>
                     <div style="font-size: 13px; color: #94a3b8;">Szofi (7 éves) apukája</div>
@@ -1350,7 +1523,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                                 </div>
                             </label>
                             <label class="tile-option warning">
-                                <span class="tile-badge orange">Majdnem megtelt</span>
+                                <span class="tile-badge orange">Már csak 4 hely maradt</span>
                                 <input type="checkbox" class="camp-turnus-cb" value="II. Tábori hét → 2026. Július 13 – 17.">
                                 <div>
                                     <span class="tile-title">II. Tábori hét</span>
