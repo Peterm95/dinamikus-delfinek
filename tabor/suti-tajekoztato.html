@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cookie (Süti) Tájékoztató - Dinamikus Delfinek</title>
+    <title>Süti és Analitika Tájékoztató - Dinamikus Delfinek</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* ═══════════ ALAPBEÁLLÍTÁSOK (FŐOLDALHOZ IGAZÍTVA) ═══════════ */
+        /* ═══════════ ALAPBEÁLLÍTÁSOK ═══════════ */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             font-family: 'Nunito', sans-serif; 
@@ -35,6 +35,143 @@
 
         h1 { font-size: 36px; font-weight: 900; text-align: center; margin-top: 10px; margin-bottom: 5px; }
         h2 { font-size: 22px; font-weight: 800; border-bottom: 2px solid var(--sky-lt); padding-bottom: 6px; margin-top: 35px; }
+        h3 { font-size: 18px; font-weight: 700; color: var(--navy2); margin-top: 20px; margin-bottom: 8px; }
+
+        .meta-info {
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        .policy-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 50px 40px;
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(10, 48, 117, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        p {
+            margin-bottom: 16px;
+            font-size: 15.5px;
+            color: #334155;
+            text-align: justify;
+        }
+
+        strong {
+            color: #0f172a;
+        }
+
+        ul {
+            margin-bottom: 20px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            font-size: 15.5px;
+            color: #334155;
+        }
+
+        .back-btn-wrap {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: var(--navy);
+            color: var(--white);
+            font-family: 'Baloo 2', cursive; 
+            font-size: 16px; 
+            font-weight: 800;
+            padding: 12px 35px; 
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(10, 48, 117, 0.15);
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--navy2);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .policy-container { padding: 30px 20px; border-radius: 20px; }
+            h1 { font-size: 28px; }
+            h2 { font-size: 20px; }
+            p, li { font-size: 14.5px; text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="policy-container">
+        <h1>SÜTI ÉS ANALITIKA TÁJÉKOZTATÓ</h1>
+        <div class="meta-info">Dinamikus Delfinek Úszóiskola és Napközis Tábor<br>Hatályos: 2026. június 7-től</div>
+
+        <h2>1. Mi az a cookie (süti)?</h2>
+        <p>A cookie (süti) egy kis méretű adatfájl, amelyet a weboldal a látogató eszközén (számítógépén, telefonján vagy táblagépén) helyez el. A cookie-k célja a weboldal megfelelő működésének biztosítása, a technikai folyamatok támogatása, valamint a felhasználói élmény javítása.</p>
+
+        <h2>2. Ki az Adatkezelő?</h2>
+        <p><strong>Adatkezelő:</strong> Dinamikus Delfinek SE. [Kérjük, pótolja a pontos székhelyet, adószámot és nyilvántartási számot a jogi megfelelőség érdekében!]</p>
+        <p><strong>E-mail:</strong> dinamikus.delfinek@gmail.com</p>
+        <p><strong>Telefonszám:</strong> +36 20 393 8067</p>
+        <p><strong>Adatkezelési tájékoztató:</strong> <a href="adatkezelesi-tajekoztato.html" style="color: var(--navy); font-weight: 700; text-decoration: underline;">Elérhető ide kattintva</a></p>
+
+        <h2>3. Milyen adatgyűjtési és analitikai eszközöket használunk?</h2>
+        
+        <h3>3.1 Elengedhetetlenül szükséges cookie-k</h3>
+        <p>Ezek a technikai cookie-k a weboldal alapvető működéséhez (pl. űrlapok kitöltése, biztonsági funkciók) szükségesek.</p>
+        <ul>
+            <li><strong>Jogalap:</strong> GDPR 6. cikk (1) bekezdés f) pont – az Adatkezelő jogos érdeke a honlap biztonságos és stabil működtetéséhez. Ezek a cookie-k nem kapcsolhatók ki, de személyes adatot vagy követési információt nem tárolnak.</li>
+        </ul>
+
+        <h3>3.2 Anonim látogatottsági statisztikák (Umami Analytics)</h3>
+        <p>Weboldalunk a látogatottsági adatok elemzéséhez és a felhasználói élmény javításához az adatvédelmi fókuszú <strong>Umami Analytics</strong> (https://umami.is) szolgáltatást használja felhőalapú (cloud.umami.is) környezetben.</p>
+        <p>Az Umami Analytics használata során a weboldal **nem helyez el sütiket (cookie-kat)** az Ön eszközén, nem gyűjt és nem tárol személyes adatokat, nem rögzíti az IP-címeket, és nem követi Önt más weboldalakon keresztül. Minden összegyűjtött adat (pl. megtekintett oldalak száma, böngésző típusa, ország szintű lokáció) teljesen anonim és kizárólag összesített statisztikai célokat szolgál.</p>
+        <ul>
+            <li><strong>Jogalap:</strong> Mivel az adatgyűjtés teljesen anonim módon történik, és nem valósul meg személyes adatkezelés, így a GDPR hatálya alá tartozó hozzájárulás vagy süti-hozzájárulás nem szükséges a működéséhez. Az anonim adatok gyűjtésének alapja az Adatkezelő jogos érdeke a szolgáltatás fejlesztésére (GDPR 6. cikk (1) f) pont).</li>
+        </ul>
+
+        <h3>3.3 Marketing és hirdetési célú cookie-k</h3>
+        <p>Tájékoztatjuk látogatóinkat, hogy weboldalunk **nem használ** marketing vagy hirdetési célú követő cookie-kat (pl. Facebook Pixel, Google Ads remarketing). Nem gyűjtünk adatokat személyre szabott hirdetések megjelenítése céljából.</p>
+
+        <h2>4. Adatfeldolgozók köre</h2>
+        <p>Az analitikai adatok feldolgozása során az alábbi külső szolgáltatót vesszük igénybe mint adatfeldolgozót:</p>
+        <ul>
+            <li><strong>Umami Software, Inc.</strong> (Szolgáltatás: Umami Cloud statisztikai platform, Adatvédelmi irányelvek: https://umami.is/privacy)</li>
+        </ul>
+
+        <h2>5. Cookie-k törlése és blokkolása</h2>
+        <p>Bár weboldalunk nem használ követő vagy statisztikai sütiket, Önnek a böngészője beállításaiban bármikor lehetősége van a korábban más oldalakról származó cookie-k megtekintésére, törlésére vagy letiltására. Ezek a beállítások a böngészők „Beállítások”, „Biztonság” vagy „Adatvédelem” menüpontja alatt érhetők el.</p>
+
+        <h2>6. Az érintettek jogai és jogorvoslat</h2>
+        <p>Amennyiben a weboldal működésével vagy az anonim statisztikákkal kapcsolatban kérdése van, a 2. pontban megadott elérhetőségeken fordulhat hozzánk. Bármilyen adatvédelmi panasz esetén a felügyeleti hatósághoz is fordulhat:</p>
+        <p><strong>Nemzeti Adatvédelmi és Információszabadság Hatóság (NAIH)</strong><br>
+        Cím: 1055 Budapest, Falk Miksa utca 9–11.<br>
+        Telefon: +36 1 391 1400<br>
+        E-mail: ugyfelszolgalat@naih.hu<br>
+        Weboldal: <a href="https://www.naih.hu" target="_blank" style="color: var(--navy); font-weight: 700;">https://www.naih.hu</a></p>
+
+        <h2>7. A tájékoztató módosítása</h2>
+        <p>A szolgáltató fenntartja a jogot a jelen tájékoztató módosítására, amennyiben az alkalmazott technológiák vagy a jogszabályi környezet megváltozik. Az aktuális verzió minden esetben ezen az oldalon érhető el.</p>
+
+        <p style="margin-top: 30px; font-size: 13px; color: #64748b; font-style: italic;">Utolsó frissítés: 2026. június 7.</p>
+
+        <div class="back-btn-wrap">
+            <a href="index.html" class="back-btn">Vissza a főoldalra</a>
+        </div>
+    </div>
+
+</body>
+</html>        h2 { font-size: 22px; font-weight: 800; border-bottom: 2px solid var(--sky-lt); padding-bottom: 6px; margin-top: 35px; }
         h3 { font-size: 18px; font-weight: 700; color: var(--navy2); margin-top: 20px; margin-bottom: 8px; }
 
         .meta-info {
