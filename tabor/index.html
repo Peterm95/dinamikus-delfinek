@@ -729,6 +729,126 @@
         .footer-privacy-btn:hover {
             color: var(--yellow);
         }
+/* ═══════════ JELENTKEZÉS MENETE (ULTRA-MINIMALISTA V2) ═══════════ */
+.minimal-steps-section {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.minimal-steps-header {
+    margin-bottom: 30px; /* Megfelelő távolság a cím és a pontok között */
+    text-align: center;
+    width: 100%;
+}
+
+.minimal-steps-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--navy-deep);
+    margin: 0;
+}
+
+.minimal-timeline {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.minimal-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease;
+}
+
+.minimal-step.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.minimal-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    color: var(--navy-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    font-family: 'Nunito', sans-serif;
+    margin-bottom: 12px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(0);
+}
+
+.minimal-step.animated .minimal-circle {
+    transform: scale(1);
+    border-color: #0284c7;
+    background: #f0f9ff;
+}
+
+.minimal-text {
+    font-family: 'Nunito', sans-serif;
+}
+
+.minimal-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy-deep);
+    margin-bottom: 4px;
+}
+
+.minimal-desc {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+/* Letisztult szürke kiemelés az adatoknak (nincs piros, nincs extra szín) */
+.minimal-highlight {
+    font-weight: 700;
+    color: var(--navy-deep);
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 2px;
+}
+
+/* MOBIL NÉZET: Egymás alá rendeződés */
+@media (max-width: 768px) {
+    .minimal-steps-header {
+        margin-bottom: 24px;
+    }
+    .minimal-timeline {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .minimal-step {
+        flex-direction: row;
+        text-align: left;
+        gap: 15px;
+        align-items: flex-start;
+        width: 100%;
+    }
+    .minimal-circle {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+    .minimal-text {
+        padding-top: 6px;
+    }
+}
+		
 /* ═══════════ MIÉRT A DINAMIKUS DELFINEK SZEKCIÓ STÍLUSAI ═══════════ */
 .why-us-section {
     background: var(--white);
@@ -1508,7 +1628,46 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
     <div class="container">
         <h2 class="section-title">Biztosítsd a gyermeked <span>helyét még ma!</span></h2>
         <p class="section-sub">A csoportok létszáma szigorúan limitált a maximális biztonság és egyéni odafigyelés érdekében. Ne hagyd, hogy lemaradjatok!</p>
-        
+        <div class="minimal-steps-section">
+   <div class="minimal-steps-section">
+    <div class="minimal-steps-header">
+        <h3 class="minimal-steps-title">A jelentkezés menete 📋</h3>
+    </div>
+    <div class="minimal-timeline" id="minimalTimeline">
+        <div class="minimal-step" data-delay="100">
+            <div class="minimal-circle">1</div>
+            <div class="minimal-text">
+                <div class="minimal-title">Online jelentkezés</div>
+                <div class="minimal-desc">Töltsd ki az oldalon található jelentkezési űrlapot.</div>
+            </div>
+        </div>
+
+        <div class="minimal-step" data-delay="300">
+            <div class="minimal-circle">2</div>
+            <div class="minimal-text">
+                <div class="minimal-title">Előleg befizetése</div>
+                <div class="minimal-desc">Befizetés a visszaigazolás után <span class="minimal-highlight">5 napon belül</span>.<br><span class="minimal-highlight">25.000 Ft / fő / hét</span></div>
+            </div>
+        </div>
+
+        <div class="minimal-step" data-delay="500">
+            <div class="minimal-circle">3</div>
+            <div class="minimal-text">
+                <div class="minimal-title">Részletes adatlap</div>
+                <div class="minimal-desc">Egészségügyi és egyéb adatok megadása online, a tábor előtt.</div>
+            </div>
+        </div>
+
+        <div class="minimal-step" data-delay="700">
+            <div class="minimal-circle">4</div>
+            <div class="minimal-text">
+                <div class="minimal-title">Hátralék</div>
+                <div class="minimal-desc">A fennmaradó összeg befizetése legkésőbb <span class="minimal-highlight">június 5-ig</span>.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
         <div class="form-container-box">
             <form id="camp-registration-form">
 				
@@ -1864,6 +2023,31 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         <button type="button" id="closePolicyModalBtn" class="cta-btn" style="width: 100%; background: #0a3075; color: #fff; border: none; padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer;">Bezárás</button>
     </div>
 </div>
-	
+	<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const timeline = document.getElementById('minimalTimeline');
+        const steps = timeline.querySelectorAll('.minimal-step');
+
+        const animateMinimalSteps = () => {
+            steps.forEach(step => {
+                const delay = step.getAttribute('data-delay');
+                setTimeout(() => {
+                    step.classList.add('animated');
+                }, parseInt(delay));
+            });
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateMinimalSteps();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        observer.observe(timeline);
+    });
+</script>
 </body>
 </html>
