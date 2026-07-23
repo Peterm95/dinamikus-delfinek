@@ -1048,6 +1048,55 @@
         .grecaptcha-badge { 
     visibility: hidden !important; 
   }
+
+        /* --- Progress bar --- */
+.form-progress-wrap{
+    display:flex; align-items:center; justify-content:center;
+    max-width:600px; margin:0 auto 25px; padding:0 20px;
+}
+.form-progress-step{
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    opacity:.45; transition:opacity .25s ease;
+}
+.form-progress-step.active{ opacity:1; }
+.form-progress-step .step-circle{
+    width:34px; height:34px; border-radius:50%;
+    background:#e2e8f0; color:#64748b;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:14px; transition:background .25s ease, color .25s ease;
+}
+.form-progress-step.active .step-circle{ background:var(--navy,#0a3075); color:#fff; }
+.form-progress-step .step-label{ font-size:12.5px; font-weight:700; color:#475569; white-space:nowrap; }
+.form-progress-line{
+    flex:1; height:3px; background:#e2e8f0; margin:0 10px 22px; border-radius:2px; max-width:80px;
+}
+
+/* --- Step visibility --- */
+.form-step{ display:none; }
+.form-step.active{ display:block; animation:fadeStepIn .3s ease; }
+@keyframes fadeStepIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+.step-nav-btn{
+    width:100%; margin-top:10px; padding:14px; border-radius:50px;
+    font-weight:800; font-size:15px; cursor:pointer; border:none;
+}
+.step-next-btn{ background:var(--navy,#0a3075); color:#fff; }
+.step-back-btn{ background:#f1f5f9; color:#334155; margin-top:12px; }
+
+/* --- Address row (irsz + város) --- */
+.address-row{ display:flex; gap:10px; }
+.address-row .form-group{ flex:1; margin-bottom:0; }
+
+/* --- Resume banner --- */
+#resume-banner{
+    display:none; max-width:600px; margin:0 auto 18px; background:#eff6ff;
+    border:2px solid #bfdbfe; color:#1e3a8a; padding:12px 16px; border-radius:12px;
+    font-size:14px; font-weight:600; text-align:center; line-height:1.5;
+}
+#resume-banner button{
+    margin-left:8px; background:var(--navy,#0a3075); color:#fff; border:none;
+    padding:6px 14px; border-radius:20px; font-weight:700; cursor:pointer; font-size:13px;
+}
     </style>
 </head>
 <body>
@@ -1741,27 +1790,47 @@
 <section class="section-space" style="background: var(--white); padding-top: 20px;" id="jelentkezes">
     <div class="container">
         <h2 class="section-title" id="form-main-title">Jelentkezés a 2026/2027-es úszótanévre</h2>
-<p class="section-sub" id="form-sub-title">Kérjük, töltsd ki a szükséges adatokat, hogy véglegesíthessük a csoportbeosztást és a beiratkozást.</p>
-        
+        <p class="section-sub" id="form-sub-title">Kérjük, töltsd ki a szükséges adatokat, hogy véglegesíthessük a csoportbeosztást és a beiratkozást.</p>
+
         <div style="background: #fff7ed; border: 2px dashed #f97316; color: #ea580c; padding: 12px 16px; border-radius: 12px; font-size: 14.5px; font-weight: 700; margin-bottom: 25px; text-align: center; line-height: 1.4; max-width: 600px; margin-left: auto; margin-right: auto;">
             ⚠️ FIGYELEM: Jelenleg kizárólag a 2026/2027-es úszótanévre lehet jelentkezni!<br>
             Az oktatások várható kezdési időpontja: <strong>2026. szeptember 14.</strong>
         </div>
 
+        <!-- Folytatás-sáv, ha korábban elkezdett jelentkezést talál a rendszer -->
+        <div id="resume-banner">
+            👋 Úgy tűnik, korábban elkezdted a jelentkezést. Folytatod onnan, ahol abbahagytad?
+            <button type="button" id="resume-btn">Folytatás</button>
+            <button type="button" id="resume-dismiss-btn" style="background:transparent;color:#1e3a8a;text-decoration:underline;">Nem, új jelentkezés</button>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="form-progress-wrap" id="form-progress-wrap">
+            <div class="form-progress-step active" data-step="1">
+                <span class="step-circle">1</span>
+                <span class="step-label">Gyermek adatai</span>
+            </div>
+            <div class="form-progress-line"></div>
+            <div class="form-progress-step" data-step="2">
+                <span class="step-circle">2</span>
+                <span class="step-label">Kapcsolattartás</span>
+            </div>
+        </div>
+
         <div style="position: relative; max-width: 600px; margin: 0 auto;">
-            
+
             <div class="decor-avatar decor-bg-yellow" style="position: absolute; top: 20%; left: -160px; width: 110px;">
                 <img src="bozsi karakter.png" alt="Oktató" style="width: 100%; border-radius: 35px 10px 35px 10px; display: block;">
             </div>
 
-            <div class="form-box"> 
+            <div class="form-box">
 
                 <div id="custom-modal" class="modal-overlay" style="display: none;">
                     <div class="modal-content">
                         <div class="modal-icon">🎉</div>
                         <h3 class="modal-title">Köszönjük!</h3>
                         <p class="modal-text">A jelentkezést sikeresen rögzítettük. Hamarosan küldjük a visszaigazoló e-mailt!</p>
-                        <p class="modal-child-info">Várjuk <span id="registered-child-name" style="color: var(--navy); font-weight: 800;"></span>-t az első oktatási napon, 30 perccel az óra kezdete előtt. 
+                        <p class="modal-child-info">Várjuk <span id="registered-child-name" style="color: var(--navy); font-weight: 800;"></span>-t az első oktatási napon, 30 perccel az óra kezdete előtt.
             <br><br>
             <em>Az órák előreláthatóan szeptember 14-től (hétfőtől) kezdődnek.</em>
         </p>
@@ -1771,77 +1840,99 @@
 
                 <form id="registration-form">
                     <input type="hidden" name="jelentkezesTipusa" id="jelentkezesTipusa" value="rendes">
-<input type="hidden" name="sheetTab" id="sheetTab" value="Beiratkozott_Uvok">
-                    
-                    <div class="form-group">
-                        <label class="form-label">Gyermek teljes neve</label>
-                        <input type="text" id="gyermekNeveInput" name="gyermekNeve" class="form-input" placeholder="Pl. Kovács Bence" required>
+                    <input type="hidden" name="sheetTab" id="sheetTab" value="Beiratkozott_Uvok">
+
+                    <!-- ===== 1. LÉPÉS: Gyermek adatai ===== -->
+                    <div class="form-step active" id="form-step-1" data-step="1">
+
+                        <div class="form-group">
+                            <label class="form-label">Gyermek teljes neve</label>
+                            <input type="text" id="gyermekNeveInput" name="gyermekNeve" class="form-input" placeholder="Pl. Kovács Bence" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Gyermek születési ideje</label>
+                            <input type="date" name="gyermekSzuletesi" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" id="napok-label">Melyik nap(ok)on szeretne járni a gyermek?</label>
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                                <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
+                                    <input type="checkbox" class="day-checkbox" value="Hétfő" style="transform: scale(1.2);"> Hétfő (15:00 - 16:00)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
+                                    <input type="checkbox" class="day-checkbox" value="Kedd" style="transform: scale(1.2);"> Kedd (15:00 - 16:00)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
+                                    <input type="checkbox" class="day-checkbox" value="Csütörtök" style="transform: scale(1.2);"> Csütörtök (15:00 - 16:00)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
+                                    <input type="checkbox" class="day-checkbox" value="Péntek" style="transform: scale(1.2);"> Péntek (15:00 - 16:00)
+                                </label>
+                            </div>
+                            <input type="hidden" name="napok" id="selected-days-input">
+                        </div>
+
+                        <button type="button" id="next-step-btn" class="step-nav-btn step-next-btn">Tovább a kapcsolattartási adatokhoz ➔</button>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Gyermek születési ideje</label>
-                        <input type="date" name="gyermekSzuletesi" class="form-input" required>
-                    </div>
+                    <!-- ===== 2. LÉPÉS: Szülő adatai & véglegesítés ===== -->
+                    <div class="form-step" id="form-step-2" data-step="2">
 
-                    <div class="form-group">
-                        <label class="form-label">Törvényes képviselő teljes neve</label>
-                        <input type="text" name="szuloNeve" class="form-input" placeholder="Pl. Kovács Anna" required>
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label">Törvényes képviselő teljes neve</label>
+                            <input type="text" name="szuloNeve" class="form-input" placeholder="Pl. Kovács Anna" required>
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Törvényes képviselő e-mail címe</label>
-                        <input type="email" name="email" class="form-input" placeholder="minta@email.hu" required>
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label">Törvényes képviselő e-mail címe</label>
+                            <input type="email" name="email" class="form-input" placeholder="minta@email.hu" required>
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Törvényes képviselő telefonszáma</label>
-                        <input type="tel" name="telefon" class="form-input" placeholder="Pl. +36 20 123 4567" required>
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label">Törvényes képviselő telefonszáma</label>
+                            <input type="tel" name="telefon" class="form-input" placeholder="Pl. +36 20 123 4567" required>
+                        </div>
 
-                    <div id="lakcim-csoport" class="form-group">
-    <label class="form-label">Törvényes képviselő lakcíme</label>
-    <input type="text" id="lakcim-input" name="lakcim" class="form-input" placeholder="9025 Győr, Minta utca 12." required>
-</div>
+                        <div id="lakcim-csoport" class="form-group">
+                            <label class="form-label">Törvényes képviselő lakcíme</label>
+                            <div class="address-row">
+                                <div class="form-group">
+                                    <input type="text" id="irsz-input" class="form-input" placeholder="Irányítószám" inputmode="numeric" maxlength="4" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="varos-input" class="form-input" placeholder="Település" required>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top:10px;">
+                                <input type="text" id="utca-input" class="form-input" placeholder="Utca, házszám" required>
+                            </div>
+                            <!-- ezt tölti fel a JS a fenti 3 mezőből, ez megy ki a backendnek "lakcim" néven -->
+                            <input type="hidden" id="lakcim-input" name="lakcim">
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label" id="napok-label">Melyik nap(ok)on szeretne járni a gyermek?</label>
-                        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-                            <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
-                                <input type="checkbox" class="day-checkbox" value="Hétfő" style="transform: scale(1.2);"> Hétfő (15:00 - 16:00)
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
-                                <input type="checkbox" class="day-checkbox" value="Kedd" style="transform: scale(1.2);"> Kedd (15:00 - 16:00)
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
-                                <input type="checkbox" class="day-checkbox" value="Csütörtök" style="transform: scale(1.2);"> Csütörtök (15:00 - 16:00)
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 14.5px;">
-                                <input type="checkbox" class="day-checkbox" value="Péntek" style="transform: scale(1.2);"> Péntek (15:00 - 16:00)
+                        <div class="form-group">
+                            <label class="form-label">Megjegyzés / Különleges igény</label>
+                            <textarea name="megjegyzes" class="form-input" rows="3" placeholder="Pl. vízbiztonság állapota, betegségek, egyéb kérések..." style="resize: vertical; min-height: 80px;"></textarea>
+                        </div>
+
+                        <div id="legal-rendes" style="display: flex; flex-direction: column; gap: 12px; margin-top: 25px; margin-bottom: 20px;">
+                            <label style="display:flex; align-items:flex-start; gap:12px; font-weight:600; cursor:pointer; font-size:14px; color:#475569; line-height:1.4;">
+                                <input type="checkbox" id="privacy-rendes" name="nyilatkozatElfogadva" value="Elfogadva" required style="transform:scale(1.2); margin-top:3px;">
+                                <span>
+                                    Kijelentem, hogy törvényes képviselőként jelentkeztetem gyermekemet, a megadott adatok valósak, valamint megismertem és elfogadom az
+                                    <a href="#" onclick="openPolicyInModal('aszf.html'); return false;"><strong>ÁSZF-et</strong></a>
+                                    és megismertem az
+                                    <a href="#" onclick="openPolicyInModal('adatkezelesi-tajekoztato.html'); return false;"><strong>Adatkezelési Tájékoztatót</strong></a>.
+                                </span>
                             </label>
                         </div>
-                        <input type="hidden" name="napok" id="selected-days-input">
+
+                        <button type="submit" id="submit-btn" class="cta-btn" style="width: 100%; margin-top: 10px;">Jelentkezés elküldése</button>
+                        <button type="button" id="back-step-btn" class="step-nav-btn step-back-btn">← Vissza a gyermek adataihoz</button>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Megjegyzés / Különleges igény</label>
-                        <textarea name="megjegyzes" class="form-input" rows="3" placeholder="Pl. vízbiztonság állapota, betegségek, egyéb kérések..." style="resize: vertical; min-height: 80px;"></textarea>
-                    </div>
-                        
-
-                    <div id="legal-rendes" style="display: flex; flex-direction: column; gap: 12px; margin-top: 25px; margin-bottom: 20px;">
-   <label style="display:flex; align-items:flex-start; gap:12px; font-weight:600; cursor:pointer; font-size:14px; color:#475569; line-height:1.4;">
-    <input type="checkbox" id="privacy-rendes" name="nyilatkozatElfogadva" value="Elfogadva" required style="transform:scale(1.2); margin-top:3px;">
-    <span>
-        Kijelentem, hogy törvényes képviselőként jelentkeztetem gyermekemet, a megadott adatok valósak, valamint megismertem és elfogadom az
-        <a href="#" onclick="openPolicyInModal('aszf.html'); return false;"><strong>ÁSZF-et</strong></a>
-        és megismertem az
-        <a href="#" onclick="openPolicyInModal('adatkezelesi-tajekoztato.html'); return false;"><strong>Adatkezelési Tájékoztatót</strong></a>.
-    </span>
-</label>
-</div>
-
-                    <button type="submit" id="submit-btn" class="cta-btn" style="width: 100%; margin-top: 10px;">Jelentkezés elküldése</button>
-                    
                 </form>
             </div>
 
@@ -1943,7 +2034,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = document.getElementById('submit-btn');
     const hiddenDaysInput = document.getElementById('selected-days-input');
     const childNameInput = document.getElementById('gyermekNeveInput');
-    
+
     const customModal = document.getElementById('custom-modal');
     const registeredChildNameSpan = document.getElementById('registered-child-name');
     const modalOkBtn = document.getElementById('modal-ok-btn');
@@ -1951,67 +2042,177 @@ document.addEventListener('DOMContentLoaded', function() {
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxN6bhuQN4nJTUepCNIwf2WWjXeEfqb6L38a9M9NsrKxhSsh-6-fDmfqpLzVF-ZzTR_HQ/exec';
     const RECAPTCHA_SITE_KEY = '6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq';
 
+    // ============ ÚJ: LÉPCSŐS NAVIGÁCIÓ ============
+    const step1 = document.getElementById('form-step-1');
+    const step2 = document.getElementById('form-step-2');
+    const nextBtn = document.getElementById('next-step-btn');
+    const backBtn = document.getElementById('back-step-btn');
+    const progressSteps = document.querySelectorAll('.form-progress-step');
+
+    function goToStep(stepNumber) {
+        [step1, step2].forEach(s => s.classList.remove('active'));
+        (stepNumber === 1 ? step1 : step2).classList.add('active');
+        progressSteps.forEach(p => {
+            p.classList.toggle('active', Number(p.dataset.step) <= stepNumber);
+        });
+        const formBox = document.querySelector('.form-box');
+        if (formBox) formBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+            // Ugyanaz a napválasztás-validáció, csak most lépésváltás előtt fut
+            const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
+            if (checkedBoxes.length === 0) {
+                alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnétek!');
+                return;
+            }
+            if (!step1.checkValidity()) {
+                step1.querySelectorAll(':invalid').forEach(el => el.reportValidity && el.reportValidity());
+                step1.querySelector(':invalid')?.reportValidity();
+                return;
+            }
+            saveProgress();
+            goToStep(2);
+        });
+    }
+
+    if (backBtn) {
+        backBtn.addEventListener('click', function() {
+            goToStep(1);
+        });
+    }
+
+    // ============ ÚJ: MUNKAMENET-MENTÉS (AUTO-SAVE) ============
+    const STORAGE_KEY = 'delfinek_jelentkezes_progress';
+
+    function saveProgress() {
+        try {
+            const data = {
+                gyermekNeve: childNameInput?.value || '',
+                gyermekSzuletesi: form.gyermekSzuletesi.value || '',
+                napok: Array.from(document.querySelectorAll('.day-checkbox:checked')).map(cb => cb.value),
+                savedAt: Date.now()
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } catch (e) { /* csendben elnyeljük, nem kritikus funkció */ }
+    }
+
+    function clearProgress() {
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    }
+
+    function checkForSavedProgress() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            // 7 napnál régebbi mentést nem ajánlunk fel
+            if (Date.now() - data.savedAt > 7 * 24 * 60 * 60 * 1000) { clearProgress(); return; }
+            const banner = document.getElementById('resume-banner');
+            if (banner) banner.style.display = 'block';
+
+            document.getElementById('resume-btn')?.addEventListener('click', function() {
+                if (childNameInput) childNameInput.value = data.gyermekNeve || '';
+                if (form.gyermekSzuletesi) form.gyermekSzuletesi.value = data.gyermekSzuletesi || '';
+                (data.napok || []).forEach(day => {
+                    const cb = document.querySelector(`.day-checkbox[value="${day}"]`);
+                    if (cb) cb.checked = true;
+                });
+                banner.style.display = 'none';
+            });
+            document.getElementById('resume-dismiss-btn')?.addEventListener('click', function() {
+                clearProgress();
+                banner.style.display = 'none';
+            });
+        } catch (e) {}
+    }
+    checkForSavedProgress();
+
+    // ============ ÚJ: IRÁNYÍTÓSZÁM AUTOMATIKUS VÁROS-KITÖLTÉS ============
+    const irszInput = document.getElementById('irsz-input');
+    const varosInput = document.getElementById('varos-input');
+    const utcaInput = document.getElementById('utca-input');
+    const lakcimHidden = document.getElementById('lakcim-input');
+
+    if (irszInput) {
+        irszInput.addEventListener('blur', function() {
+            const irsz = irszInput.value.trim();
+            if (!/^\d{4}$/.test(irsz)) return; // magyar irányítószám 4 számjegy
+            fetch(`https://api.zippopotam.us/HU/${irsz}`)
+                .then(res => { if (!res.ok) throw new Error('nincs találat'); return res.json(); })
+                .then(data => {
+                    const place = data?.places?.[0]?.['place name'];
+                    if (place && varosInput && !varosInput.value) {
+                        varosInput.value = place;
+                    }
+                })
+                .catch(() => { /* nincs találat, a felhasználó kézzel írja be */ });
+        });
+    }
+
+    function assembleLakcim() {
+        if (!lakcimHidden) return;
+        const irsz = irszInput?.value.trim() || '';
+        const varos = varosInput?.value.trim() || '';
+        const utca = utcaInput?.value.trim() || '';
+        lakcimHidden.value = [irsz, varos].filter(Boolean).join(' ') + (utca ? ', ' + utca : '');
+    }
+
+    // ============ EREDETI: FORM KÜLDÉS (VÁLTOZATLAN LOGIKA) ============
     if (form) {
         form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Megállítjuk az oldal frissülését
+            e.preventDefault();
 
-            // Mentjük az aktuális gomb feliratot, hogy hiba esetén pontosan erre állítsuk vissza
+            assembleLakcim(); // ÚJ: a 3 mezőből összeállítjuk a "lakcim" hidden mezőt
+
             const originalBtnText = submitBtn ? submitBtn.innerText : 'Küldés';
 
-            // Napok ellenőrzése és összefűzése (Csak ha a 'rendes' mód aktív, vagy ha látható a szekció)
-            // Megjegyzés: Ha próbaóránál nem kötelező a nap, ezt a validációt finomíthatod az üzemmód szerint
             const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
+            if (checkedBoxes.length === 0) {
+                alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnétek!');
+                return false;
+            }
 
-if(checkedBoxes.length === 0) {
-    alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnétek!');
-    return false;
-}
-            
             const selectedDays = Array.from(checkedBoxes).map(cb => cb.value).join(', ');
-            if(hiddenDaysInput) hiddenDaysInput.value = selectedDays;
+            if (hiddenDaysInput) hiddenDaysInput.value = selectedDays;
 
-            // Gomb letiltása a dupla küldés ellen
-            if(submitBtn) {
+            if (submitBtn) {
                 submitBtn.disabled = true;
                 submitBtn.innerText = 'Biztonsági ellenőrzés és küldés...';
             }
 
-            // Gyermek nevének kimentése a felugró ablakhoz
             const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
 
-            // reCAPTCHA v3 Token lekérése a háttérben
             grecaptcha.ready(function() {
                 grecaptcha.execute(RECAPTCHA_SITE_KEY, {action: 'submit'}).then(function(token) {
-                    
-                    // Összerakjuk a küldendő adatokat
-                    const formData = new FormData(form);
-                    formData.append('recaptcha_token', token); // Hozzáadjuk a biztonsági tokent
 
-                    // Küldés a Google Sheets backend felé (no-cors NÉLKÜL, hogy lássuk a választ!)
+                    const formData = new FormData(form);
+                    formData.append('recaptcha_token', token);
+
                     fetch(scriptURL, {
                         method: 'POST',
                         body: formData
                     })
-                    .then(response => response.json()) // Beolvassuk a backend JSON válaszát
+                    .then(response => response.json())
                     .then(data => {
                         if (data.result === 'success') {
-                            // Sikeres mentés és emberi felhasználó
-                            if(submitBtn) {
+                            if (submitBtn) {
                                 submitBtn.disabled = false;
                                 submitBtn.innerText = originalBtnText;
                             }
+                            clearProgress(); // ÚJ: sikeres küldés után töröljük a mentett vázlatot
 
-                            if(registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
-                            if(customModal) customModal.style.display = 'flex';
+                            if (registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
+                            if (customModal) customModal.style.display = 'flex';
                         } else {
-                            // Ha a szerveroldali reCAPTCHA szerint bot, vagy más hiba történt
                             throw new Error(data.message || 'Szerveroldali hiba történt.');
                         }
                     })
                     .catch(error => {
                         console.error('Küldési hiba:', error);
-                        
-                        if(submitBtn) {
+
+                        if (submitBtn) {
                             submitBtn.disabled = false;
                             submitBtn.innerText = originalBtnText;
                         }
@@ -2025,18 +2226,18 @@ if(checkedBoxes.length === 0) {
     }
 
     // OK GOMB - Ablak bezárása és form ürítése az ÚJ GYERMEKHEZ
-    if(modalOkBtn) {
+    if (modalOkBtn) {
         modalOkBtn.addEventListener('click', function() {
-            if(customModal) customModal.style.display = 'none';
-            if(form) form.reset(); // Kiüríti a szöveges mezőket
-            
-            // Checkboxok manuális takarítása
+            if (customModal) customModal.style.display = 'none';
+            if (form) form.reset();
+
             const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
             checkedBoxes.forEach(cb => cb.checked = false);
-            if(hiddenDaysInput) hiddenDaysInput.value = '';
+            if (hiddenDaysInput) hiddenDaysInput.value = '';
 
-            // Finom görgetés vissza az űrlap elejére
-            if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            goToStep(1); // ÚJ: visszaáll az 1. lépésre az új jelentkezéshez
+
+            if (form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }
 });
