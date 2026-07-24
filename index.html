@@ -75,14 +75,27 @@
 .nav-outer { position: fixed; top: 16px; left: 0; width: 100%; z-index: 1000; padding: 0 16px; }
 .nav-shell {
     max-width: 1160px; margin: 0 auto;
-    background: rgba(6, 30, 80, 0.75);           /* <- ez a sötétkék, áttetsző */
-    backdrop-filter: blur(14px);                  /* <- ez adja a glass hatást */
+    background: rgba(6, 30, 80, 0.75);
+    backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 100px;
     box-shadow: 0 12px 34px rgba(6,30,80,0.25);
     padding: 10px 10px 10px 22px;
     display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.nav-shell.nav-at-top {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-color: transparent;
+    box-shadow: none;
+}
+@media (max-width: 768px) {
+    .nav-shell.nav-at-top .nav-controls .cta-btn {
+        display: none;
+    }
 }
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 1; min-width: 0; }
 .nav-logo-img-wrap {
@@ -103,7 +116,7 @@
 .menu-toggle span { display: block; width: 22px; height: 3px; background: var(--white); border-radius: 3px; transition: all 0.3s ease; }
 
 /* mobil lenyíló - sötétkék marad itt is */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .menu-toggle { display: flex; }
     .nav-menu {
         position: absolute; top: calc(100% + 10px); left: 0; width: 100%;
@@ -117,7 +130,7 @@
         pointer-events: none;           /* <- zárt állapotban ne legyen kattintható se */
     }
     .nav-menu.active {
-        max-height: 260px;
+        max-height: 420px;
         opacity: 1;
         box-shadow: 0 12px 34px rgba(6,30,80,0.3);  /* <- csak nyitva */
         pointer-events: auto;
@@ -984,7 +997,7 @@
                 transition: max-height 0.3s ease-out;
                 border-top: 1px solid rgba(255,255,255,0.05);
             }
-            .nav-menu.active { max-height: 250px; }
+            .nav-menu.active { max-height: 420px; }
             .nav-menu .nav-link { width: 100%; text-align: center; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
             
             .menu-toggle.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
@@ -1127,7 +1140,7 @@
 
     <nav>
         <div class="nav-outer">
-    <div class="nav-shell">
+    <div class="nav-shell nav-at-top">
         <a href="#" class="nav-logo">
             <div class="nav-logo-img-wrap">
                 <img src="Dinamikus Delfinek logoFINAL.jpg" alt="Dinamikus Delfinek Logó">
@@ -1136,10 +1149,14 @@
         </a>
 
         <div class="nav-menu" id="nav-menu-links">
-            <a href="#rolunk" class="nav-link">Rólunk</a>
-            <a href="#idopontok" class="nav-link">Edzések</a>
-            <a href="#arak" class="nav-link">Tagdíjak</a>
-        </div>
+    <a href="#rolunk" class="nav-link">Rólunk</a>
+    <a href="#csapatunk" class="nav-link">Csapatunk</a>
+    <a href="#velemenyek" class="nav-link">Vélemények</a>
+    <a href="#idopontok" class="nav-link">Edzések</a>
+    <a href="#arak" class="nav-link">Tagdíjak</a>
+    <a href="#gyik" class="nav-link">GYIK</a>
+    <a href="tabor" class="nav-link">Tábor</a>
+</div>
 
         <div class="nav-controls">
             <a href="#jelentkezes" class="cta-btn">Jelentkezés</a>
@@ -1226,7 +1243,7 @@
         </svg>
     </div>
 
-    <section class="section-space" style="background: #f4f9fd;">
+    <section class="section-space" style="background: #f4f9fd;" id="csapatunk">
     <div class="container">
         <h2 class="section-title">Szakértő csapatunk – ahol minden gyermek számít</h2>
         <p class="section-sub" style="max-width: 800px; margin-bottom: 30px;">
@@ -1511,7 +1528,7 @@
         </svg>
     </div>
 
-    <section class="section-space" style="background: var(--white);">
+    <section class="section-space" style="background: var(--white);" id="velemenyek">
         <div class="container">
             <div class="decor-avatar decor-bg-purple" style="top: 20%; left: -6%; width: 100px;">
                 <img src="fani karakter.png" alt="Oktató" style="width: 100%; border-radius: 35px 10px 35px 10px; display: block;">
@@ -1683,7 +1700,7 @@
             <path d="M0,32 C240,74 480,74 720,32 C960,-10 1200,-10 1440,32 L1440,0 L0,0 Z" fill="#f4f9fd"/>
         </svg>
     </div>
-<section class="section-space" style="background: var(--white); padding: 60px 0;">
+<section class="section-space" style="background: var(--white); padding: 60px 0;" id="gyik">
         <div class="container" style="max-width: 800px; margin: 0 auto;">
             
             <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">Gyakran ismételt kérdések</h2>
@@ -2044,6 +2061,18 @@
     <img src="Dini.jpg" alt="Dini a delfin" class="floating-dini">
 
     <script>
+        // ═══════════ NAV ÁTLÁTSZÓSÁG A HERO TETEJÉN ═══════════
+const navShellEl = document.querySelector('.nav-shell');
+function updateNavTransparency() {
+    if (!navShellEl) return;
+    if (window.scrollY < 40) {
+        navShellEl.classList.add('nav-at-top');
+    } else {
+        navShellEl.classList.remove('nav-at-top');
+    }
+}
+window.addEventListener('scroll', updateNavTransparency, { passive: true });
+updateNavTransparency();
         // Hamburgermenü működése mobilon
         const menuToggle = document.querySelector('.menu-toggle');
         const navMenu = document.querySelector('.nav-menu');
