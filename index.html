@@ -179,7 +179,7 @@
             background: linear-gradient(180deg, rgba(6, 30, 80, 0.85) 0%, rgba(13, 31, 76, 0.70) 100%), 
                         url('uszoda-hero-bg.png') center/cover no-repeat;
         }
-        }
+        
         .hero::before {
             content:''; position:absolute; inset:0;
             background-image:radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px);
@@ -1181,10 +1181,10 @@
     <svg viewBox="0 0 200 280" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
             <clipPath id="nav-logo-clip">
-                <use href="#deszka-forma"/>
+                <path d="M30,120 C30,55 65,8 100,8 C135,8 170,55 170,120 L170,225 C165,245 150,250 140,248 C128,246 112,232 100,232 C88,232 72,246 60,248 C50,250 35,245 30,225 Z"/>
             </clipPath>
         </defs>
-        <use href="#deszka-forma" fill="#ffffff"/>
+        <path d="M30,120 C30,55 65,8 100,8 C135,8 170,55 170,120 L170,225 C165,245 150,250 140,248 C128,246 112,232 100,232 C88,232 72,246 60,248 C50,250 35,245 30,225 Z" fill="#ffffff"/>
         <g clip-path="url(#nav-logo-clip)">
             <image href="Dinamikus Delfinek logoFINAL.jpg" x="20" y="28" width="160" height="224" preserveAspectRatio="xMidYMid meet"/>
         </g>
@@ -1345,7 +1345,15 @@
                                 <p>Rendszeres MÚSZ képzések és biztosított pótlási lehetőség betegség esetén.</p>
                             </div>
                         </div>
-
+<div style="max-width: 100%; background: var(--sky-lt); padding: 20px 24px; border-radius: 20px; display: flex; align-items: center; gap: 16px; margin-top: 35px; border: 1px solid rgba(56, 189, 248, 0.15);">
+                <div style="width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(10,48,117,0.08); border: 3px solid var(--sky); font-size: 24px;">
+                    💡
+                </div>
+                <div style="font-size: 14.5px; color: var(--navy3); line-height: 1.5;">
+                    <strong style="font-family: 'Baloo 2', cursive; color: var(--navy); font-size: 16px; display: block; margin-bottom: 2px;">Tudtad?</strong>
+                    A kiscsoportos oktatás azt jelenti, hogy oktatóink nem „tömegoktatást” végeznek: minden edzésen valóban látják és ismerik a gyermeketeket, figyelnek a fejlődésére, és visszajelzést adnak nektek is.
+                </div>
+            </div>
                     </div>
                 </div>
 
@@ -1405,15 +1413,6 @@
 </div>
             </div>
 
-            <div style="max-width: 100%; background: var(--sky-lt); padding: 20px 24px; border-radius: 20px; display: flex; align-items: center; gap: 16px; margin-top: 35px; border: 1px solid rgba(56, 189, 248, 0.15);">
-                <div style="width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(10,48,117,0.08); border: 3px solid var(--sky); font-size: 24px;">
-                    💡
-                </div>
-                <div style="font-size: 14.5px; color: var(--navy3); line-height: 1.5;">
-                    <strong style="font-family: 'Baloo 2', cursive; color: var(--navy); font-size: 16px; display: block; margin-bottom: 2px;">Tudtad?</strong>
-                    A kiscsoportos oktatás azt jelenti, hogy oktatóink nem „tömegoktatást” végeznek: minden edzésen valóban látják és ismerik a gyermeketeket, figyelnek a fejlődésére, és visszajelzést adnak nektek is.
-                </div>
-            </div>
         </section>
     </div>
 </section>
@@ -1572,6 +1571,12 @@
     box-shadow: 0 4px 10px rgba(10,48,117,0.12);
     flex-shrink: 0;
 }
+    .member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
 
 .member-details h4 {
     margin: 0 0 6px 0;
@@ -1611,8 +1616,7 @@
     .floating-member {
         width: 200px;
     }
-        padding: 16px;
-    }
+    
     .member-1 { left: 0; top: 0%; }
     .member-2 { right: 0; top: 25%; }
     .member-3 { left: 5%; bottom: 0%; }
