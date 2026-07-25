@@ -560,95 +560,99 @@
     max-width: 780px;
     margin: 0 auto;
 }
-
+.price-cta-wrap {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: fit-content;   /* ÚJ sor */
+}
 .price-card-v2 {
     position: relative;
-    background: var(--white);
-    border: 2px solid #e2e8f0;
-    border-radius: 24px;
-    padding: 32px 28px;
-    text-align: center;
-    box-shadow: var(--shadow-subtle);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    max-width: 500px;
+    margin: 0 auto;
+    transition: transform 0.25s ease;
 }
 
-.price-card-v2:hover {
-    transform: translateY(-4px);
-}
 
-.price-card-v2.is-popular {
-    border-color: var(--yellow);
-    background: linear-gradient(180deg, var(--white) 0%, var(--yellow-lt) 100%);
-    box-shadow: 0 25px 55px rgba(245, 196, 0, 0.15);
-}
-
-.price-ribbon-v2 {
+.price-card-board-bg {
     position: absolute;
-    top: 14px;
-    right: 14px;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    filter: drop-shadow(0 18px 38px rgba(10,48,117,0.12));
+}
+.price-card-v2.is-popular .price-card-board-bg {
+    filter: drop-shadow(0 18px 38px rgba(245,196,0,0.22));
+}
+.board-border { fill: #0a3075; }
+.board-fill { fill: var(--white); }
+.price-card-v2.is-popular .board-border { fill: var(--yellow); }
+.price-card-v2.is-popular .board-fill { fill: #fffdf0; }
+
+.price-card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 44px 44px;
+    text-align: center;
+}
+
+.price-popular-badge {
+    display: inline-block;
     background: var(--navy);
     color: var(--white);
     font-family: 'Baloo 2', cursive;
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 800;
     letter-spacing: 0.6px;
     text-transform: uppercase;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 50px;
+    margin-bottom: 16px;
 }
 
-.price-icon-v2 {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    margin: 0 auto 16px;
-    background: var(--sky-lt);
-}
-.price-card-v2.is-popular .price-icon-v2 {
-    background: var(--yellow-lt);
+.price-icon-emoji-plain {
+    font-size: 34px;
+    line-height: 1;
+    margin-bottom: 14px;
 }
 
 .price-title-v2 {
     font-family: 'Baloo 2', cursive;
     font-weight: 800;
-    font-size: 20px;
+    font-size: 21px;
     color: var(--navy);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
-
 .price-desc-v2 {
-    font-size: 13.5px;
+    font-size: 14px;
     color: #64748b;
     line-height: 1.5;
-    margin-bottom: 18px;
-    min-height: 40px;
+    margin-bottom: 14px;
 }
-
 .price-amount-v2 {
     font-family: 'Baloo 2', cursive;
     font-weight: 900;
-    font-size: 36px;
+    font-size: 34px;
     color: var(--navy);
     line-height: 1;
     margin-bottom: 4px;
 }
 .price-amount-v2 span {
     font-family: 'Nunito', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: #94a3b8;
 }
-
 .price-divider-v2 {
-    width: 40px;
+    width: 36px;
     height: 3px;
     background: var(--sky);
     border-radius: 2px;
-    margin: 18px auto;
+    margin: 14px auto;
 }
 .price-card-v2.is-popular .price-divider-v2 {
     background: var(--yellow);
@@ -671,28 +675,22 @@
 .price-features-v2 li::before {
     content: '✓';
     flex-shrink: 0;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #dcfce7;
-    color: #16a34a;
-    font-size: 11px;
+    color: #475569;
     font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .price-card-v2 .cta-btn {
     width: 100%;
     font-size: 14.5px;
-    padding: 12px 20px;
+    padding: 12px 16px;
+    margin-top: 8px;
 }
 .price-card-v2:not(.is-popular) .cta-btn {
     background: var(--navy);
     color: var(--white);
     box-shadow: 0 8px 24px rgba(10, 48, 117, 0.18);
 }
+        
 
 @media (max-width: 600px) {
     .pricing-grid {
@@ -1808,33 +1806,50 @@
             <h2 class="section-title">Kiszámítható, havidíjas rendszer</h2>
             <p class="section-sub">Nincsenek rejtett költségek. Válaszd ki a számotokra legideálisabb látogatási gyakoriságot!</p>
 
-            <div class="pricing-grid">
+           
+<div class="pricing-grid">
 
     <div class="price-card-v2">
-        <div class="price-icon-v2">🌊</div>
-        <div class="price-title-v2">Heti 1 alkalom</div>
-        <p class="price-desc-v2">Kis létszámú csoportos oktatás, heti egyszeri gyakorlással.</p>
-        <div class="price-amount-v2">14 000 Ft <span>/ hó</span></div>
-        <div class="price-divider-v2"></div>
-        <ul class="price-features-v2">
-            <li>Kis létszámú csoportos oktatás</li>
-            <li>Folyamatos technikai visszajelzés</li>
-        </ul>
-        <a href="#jelentkezes" class="cta-btn">Jelentkezem</a>
+        <svg class="price-card-board-bg" viewBox="0 0 200 340" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="board-border" transform="translate(100,170) scale(1.028) translate(-100,-170)" d="M100,4 C140,4 175,22 185,50 L185,300 C183,314 172,318 163,316 C152,314 128,308 100,308 C72,308 48,314 37,316 C28,318 17,314 15,300 L15,50 C25,22 60,4 100,4 Z"/>
+            <path class="board-fill" d="M100,4 C140,4 175,22 185,50 L185,300 C183,314 172,318 163,316 C152,314 128,308 100,308 C72,308 48,314 37,316 C28,318 17,314 15,300 L15,50 C25,22 60,4 100,4 Z"/>
+        </svg>
+        <div class="price-card-content">
+            <div class="price-icon-emoji-plain">🌊</div>
+            <div class="price-title-v2">Heti 1 alkalom</div>
+            
+            <div class="price-amount-v2">14 000 Ft <span>/ hó</span></div>
+            <div class="price-divider-v2"></div>
+            <div class="price-cta-wrap">
+                <ul class="price-features-v2">
+                    <li>Kis létszámú csoportos oktatás</li>
+                    <li>Folyamatos technikai visszajelzés</li>
+                </ul>
+                <a href="#jelentkezes" class="cta-btn">Jelentkezem</a>
+            </div>
+        </div>
     </div>
 
     <div class="price-card-v2 is-popular">
-        <span class="price-ribbon-v2">Legnépszerűbb</span>
-        <div class="price-icon-v2">🏊</div>
-        <div class="price-title-v2">Heti 2 alkalom</div>
-        <p class="price-desc-v2">Gyorsabb, intenzívebb fejlődés heti két edzéssel.</p>
-        <div class="price-amount-v2">20 000 Ft <span>/ hó</span></div>
-        <div class="price-divider-v2"></div>
-        <ul class="price-features-v2">
-            <li>Gyorsabb, intenzívebb fejlődés</li>
-            <li>Stabilabb vízbiztonság kialakítása</li>
-        </ul>
-        <a href="#jelentkezes" class="cta-btn">Jelentkezem</a>
+        <svg class="price-card-board-bg" viewBox="0 0 200 340" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="board-border" transform="translate(100,170) scale(1.028) translate(-100,-170)" d="M100,4 C140,4 175,22 185,50 L185,300 C183,314 172,318 163,316 C152,314 128,308 100,308 C72,308 48,314 37,316 C28,318 17,314 15,300 L15,50 C25,22 60,4 100,4 Z"/>
+            <path class="board-fill" d="M100,4 C140,4 175,22 185,50 L185,300 C183,314 172,318 163,316 C152,314 128,308 100,308 C72,308 48,314 37,316 C28,318 17,314 15,300 L15,50 C25,22 60,4 100,4 Z"/>
+        </svg>
+        <div class="price-card-content">
+            
+            <div class="price-icon-emoji-plain">🏊</div>
+            <div class="price-title-v2">Heti 2 alkalom</div>
+            
+            <div class="price-amount-v2">20 000 Ft <span>/ hó</span></div>
+            <div class="price-divider-v2"></div>
+            <div class="price-cta-wrap">
+                <ul class="price-features-v2">
+                    <li>Gyorsabb, intenzívebb fejlődés</li>
+                    <li>Stabilabb vízbiztonság kialakítása</li>
+                </ul>
+                <a href="#jelentkezes" class="cta-btn">Jelentkezem</a>
+            </div>
+        </div>
     </div>
 
 </div>
