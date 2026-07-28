@@ -164,6 +164,21 @@
             transform: translateY(-2px);
             box-shadow: 0 12px 32px rgba(245,196,0,.4);
         }
+        .cta-btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 4px 14px rgba(245,196,0,.35);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+        .day-option-selected {
+    background: var(--sky-lt) !important;
+    border-color: var(--sky) !important;
+    animation: dayPop 0.3s ease;
+}
+@keyframes dayPop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
 
         /* ═══════════ HERO ═══════════ */
         .hero {
@@ -206,7 +221,28 @@
             font-size: 42px; font-weight: 900; color: var(--white);
             line-height: 1.2; margin-bottom: 20px;
         }
-        .h-headline span { color: var(--yellow); }
+        .kinetic-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-bottom: 6px;
+    margin-bottom: -6px;
+}
+.kinetic-word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(115%) rotate(2deg);
+    animation: kineticReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.kinetic-word.kinetic-highlight { color: var(--yellow); }
+
+@keyframes kineticReveal {
+    to { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .kinetic-word { animation: none; opacity: 1; transform: none; }
+}
         .h-sub {
             font-size: 17px; color: rgba(255,255,255,.9);
             line-height: 1.5; margin-bottom: 30px; font-weight: 600;margin-bottom: 150px;
@@ -992,6 +1028,10 @@
         .footer-privacy-btn:hover {
             color: var(--yellow);
         }
+        .form-group:focus-within .form-label {
+    color: var(--sky);
+    transition: color 0.2s ease;
+}
 
         /* ═══════════ MOBILOS LÁBLÉC IGAZÍTÁS (768px alatt) ═══════════ */
         @media (max-width: 768px) {
@@ -1176,7 +1216,12 @@
     display:flex; align-items:center; justify-content:center;
     font-weight:800; font-size:14px; transition:background .25s ease, color .25s ease;
 }
-.form-progress-step.active .step-circle{ background:var(--navy,#0a3075); color:#fff; }
+.form-progress-step.active .step-circle{ background:var(--navy,#0a3075); color:#fff; animation: stepPop 0.35s ease; }
+@keyframes stepPop {
+    0% { transform: scale(0.7); }
+    60% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
 .form-progress-step .step-label{ font-size:12.5px; font-weight:700; color:#475569; white-space:nowrap; }
 .form-progress-line{
     flex:1; height:3px; background:#e2e8f0; margin:0 10px 22px; border-radius:2px; max-width:80px;
@@ -1232,6 +1277,37 @@
     object-fit: cover;
     display: block;
 }
+        .stats-band {
+    background: linear-gradient(135deg, var(--navy2) 0%, var(--navy) 100%);
+    padding: 40px 0;
+    position: relative;
+    z-index: 6;
+}
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    text-align: center;
+}
+.stat-number {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 900;
+    font-size: 40px;
+    color: var(--yellow);
+    line-height: 1;
+    margin-bottom: 6px;
+}
+.stat-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+@media (max-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 30px 20px; }
+    .stat-number { font-size: 32px; }
+}
     </style>
 </head>
 <body>
@@ -1273,7 +1349,13 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content-max">
-                <h1 class="h-headline">Biztonság, magabiztosság és <span>vidám percek</span></h1>
+                <h1 class="h-headline kinetic-headline">
+    <span class="kinetic-mask"><span class="kinetic-word" style="animation-delay:0.05s">Biztonság,</span></span>
+    <span class="kinetic-mask"><span class="kinetic-word" style="animation-delay:0.16s">magabiztosság</span></span>
+    <span class="kinetic-mask"><span class="kinetic-word" style="animation-delay:0.27s">és</span></span>
+    <span class="kinetic-mask"><span class="kinetic-word kinetic-highlight" style="animation-delay:0.38s">vidám</span></span>
+    <span class="kinetic-mask"><span class="kinetic-word kinetic-highlight" style="animation-delay:0.48s">percek</span></span>
+</h1>
                 <p class="h-sub">Gyermek úszásoktatás Győrben – 5 éves kortól, MÚSZ licences oktatókkal, kis csoportokban</p>
                 
                 <a href="#jelentkezes" class="cta-btn">Jelentkezés az úszótanévre</a>
@@ -1358,12 +1440,28 @@
             </div>
         </div>
     </section>
-
-    <div class="wave-divider" style="background: #f4f9fd;">
-        <svg viewBox="0 0 1440 74" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-            <path d="M0,32 C240,74 480,74 720,32 C960,-10 1200,-10 1440,32 L1440,0 L0,0 Z" fill="#ffffff"/>
-        </svg>
-    </div>
+    <section class="stats-band">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="120" data-suffix="+">0</div>
+                    <div class="stat-label">Elégedett gyermek</div>
+                </div>
+                <div class="stat-item">
+    <div class="stat-number" data-target="5" data-decimals="1" data-suffix=" ⭐">0</div>
+    <div class="stat-label">Szülői értékelés</div>
+</div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="3">0</div>
+                    <div class="stat-label">MÚSZ licences oktató</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="8" data-suffix="+">0</div>
+                    <div class="stat-label">Év tapasztalat</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="section-space" style="background: #f4f9fd;" id="csapatunk">
     <div class="container">
@@ -2683,6 +2781,70 @@ document.addEventListener("DOMContentLoaded", function() {
         new MutationObserver(function() {
             if (successModal.style.display === 'flex') track('jelentkezes_sikeres');
         }).observe(successModal, { attributes: true, attributeFilter: ['style'] });
+    }
+})();
+</script>
+    <script>
+document.querySelectorAll('.day-checkbox').forEach(function(checkbox) {
+    var label = checkbox.closest('label');
+    if (!label) return;
+    if (checkbox.checked) label.classList.add('day-option-selected');
+    checkbox.addEventListener('change', function() {
+        label.classList.toggle('day-option-selected', checkbox.checked);
+    });
+});
+</script>
+    <script>
+(function() {
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+   function formatNumber(value, decimals) {
+    return value.toLocaleString('hu-HU', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+function finalValue(el) {
+    var target = parseFloat(el.getAttribute('data-target'));
+    var decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    return formatNumber(target, decimals) + suffix;
+}
+
+function animateCount(el) {
+    if (reduceMotion) { el.textContent = finalValue(el); return; }
+
+    var target = parseFloat(el.getAttribute('data-target'));
+    var decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    var duration = 1400;
+    var startTime = null;
+
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = formatNumber(target * eased, decimals) + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = formatNumber(target, decimals) + suffix;
+    }
+    requestAnimationFrame(step);
+}
+
+    var statNumbers = document.querySelectorAll('.stat-number');
+    if (!statNumbers.length) return;
+
+    if ('IntersectionObserver' in window) {
+        var statObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    animateCount(entry.target);
+                    statObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.6 });
+
+        statNumbers.forEach(function(el) { statObserver.observe(el); });
+    } else {
+        statNumbers.forEach(function(el) { el.textContent = finalValue(el); });
     }
 })();
 </script>
