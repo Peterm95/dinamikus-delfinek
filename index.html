@@ -2549,5 +2549,142 @@ document.addEventListener("DOMContentLoaded", function() {
         <button type="button" id="closePolicyModalBtn" class="cta-btn" style="width: 100%; background: #0a3075; color: #fff; border: none; padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer;">Bezárás</button>
     </div>
 </div>
+    <!-- ═══════════ UMAMI KIEGÉSZÍTŐ ESEMÉNYKÖVETÉS (ingyenes, saját logika) ═══════════ -->
+<script>
+(function() {
+    function track(name, data) {
+        if (window.umami && typeof window.umami.track === 'function') {
+            try { window.umami.track(name, data || {}); } catch (e) {}
+        }
+    }
+
+    // ---------- 1. SZAKASZ-MEGTEKINTÉS (meddig jutnak el görgetéskor) ----------
+    var sectionIds = ['rolunk', 'csapatunk', 'velemenyek', 'idopontok', 'arak', 'gyik', 'jelentkezes'];
+    var seenSections = {};
+    var lastVisibleSection = 'hero';
+
+    if ('IntersectionObserver' in window) {
+        var sectionObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                var id = entry.target.id;
+                if (entry.isIntersecting) {
+                    lastVisibleSection = id;
+                    if (!seenSections[id]) {
+                        seenSections[id] = true;
+                        track('szakasz_megtekintve', { szakasz: id });
+                    }
+                }
+            });
+        }, { threshold: 0.35 });
+
+        sectionIds.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) sectionObserver.observe(el);
+        });
+    }
+
+    // ---------- 2. GÖRGETÉSI MÉLYSÉG ----------
+    var scrollMilestones = [25, 50, 75, 90, 100];
+    var scrollHit = {};
+    var scrollTicking = false;
+
+    function checkScrollDepth() {
+        scrollTicking = false;
+        var scrollTop = window.scrollY || document.documentElement.scrollTop;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight <= 0) return;
+        var percent = Math.round((scrollTop / docHeight) * 100);
+
+        scrollMilestones.forEach(function(m) {
+            if (percent >= m && !scrollHit[m]) {
+                scrollHit[m] = true;
+                track('gorgetes_melyseg', { szazalek: m });
+            }
+        });
+    }
+
+    window.addEventListener('scroll', function() {
+        if (!scrollTicking) {
+            window.requestAnimationFrame(checkScrollDepth);
+            scrollTicking = true;
+        }
+    }, { passive: true });
+
+    // ---------- 3. KILÉPÉSI PONT (hol jártak, amikor elmentek) ----------
+    var exitSent = false;
+    function sendExit() {
+        if (exitSent) return;
+        exitSent = true;
+        var maxScroll = 0;
+        Object.keys(scrollHit).forEach(function(m) { maxScroll = Math.max(maxScroll, Number(m)); });
+        track('kilepesi_pont', { utolso_szakasz: lastVisibleSection, max_gorgetes: maxScroll });
+    }
+    document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'hidden') sendExit();
+    });
+    window.addEventListener('pagehide', sendExit);
+
+    // ---------- 4. IDŐTÖLTÉS MÉRFÖLDKÖVEK ----------
+    [15, 30, 60, 120].forEach(function(sec) {
+        setTimeout(function() { track('idotoltes', { masodperc: sec }); }, sec * 1000);
+    });
+
+    // ---------- 5. GOMBOK / LINKEK / GYIK KATTINTÁSA (delegálással, mindenre kiterjed) ----------
+    document.addEventListener('click', function(e) {
+        var ctaBtn = e.target.closest('.cta-btn');
+        if (ctaBtn) {
+            track('gomb_kattintas', {
+                szoveg: (ctaBtn.textContent || '').trim().slice(0, 60),
+                cel: ctaBtn.getAttribute('href') || 'urlap'
+            });
+        }
+
+        var navLink = e.target.closest('.nav-link');
+        if (navLink) track('menu_kattintas', { szoveg: (navLink.textContent || '').trim() });
+
+        var faqTrigger = e.target.closest('.faq-trigger');
+        if (faqTrigger) {
+            var q = faqTrigger.querySelector('span');
+            track('gyik_kattintas', { kerdes: q ? q.textContent.trim().slice(0, 80) : '' });
+        }
+
+        var outbound = e.target.closest('a[href^="tel:"], a[href^="mailto:"], a[href*="facebook.com"]');
+        if (outbound) {
+            var href = outbound.getAttribute('href') || '';
+            var tipus = href.indexOf('tel:') === 0 ? 'telefon' : href.indexOf('mailto:') === 0 ? 'email' : 'facebook';
+            track('kilepo_link', { tipus: tipus });
+        }
+    });
+
+    // ---------- 6. JELENTKEZÉSI ŰRLAP TÖLCSÉR ----------
+    var form = document.getElementById('registration-form');
+    if (form) {
+        var formStarted = false;
+        form.addEventListener('focusin', function() {
+            if (!formStarted) { formStarted = true; track('urlap_elkezdve'); }
+        });
+
+        var nextBtn = document.getElementById('next-step-btn');
+        if (nextBtn) nextBtn.addEventListener('click', function() {
+            var checked = document.querySelectorAll('.day-checkbox:checked').length;
+            if (checked > 0) track('urlap_2_lepes', { napok_szama: checked });
+        });
+
+        var backBtn = document.getElementById('back-step-btn');
+        if (backBtn) backBtn.addEventListener('click', function() { track('urlap_vissza_lepes'); });
+
+        form.addEventListener('submit', function() { track('urlap_kuldes_kiserlet'); });
+    }
+
+    // Sikeres jelentkezés: a visszaigazoló modal megjelenését figyeljük,
+    // így nem kell hozzányúlni a meglévő fetch-logikához
+    var successModal = document.getElementById('custom-modal');
+    if (successModal && 'MutationObserver' in window) {
+        new MutationObserver(function() {
+            if (successModal.style.display === 'flex') track('jelentkezes_sikeres');
+        }).observe(successModal, { attributes: true, attributeFilter: ['style'] });
+    }
+})();
+</script>
 </body>
 </html>
