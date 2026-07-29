@@ -2403,7 +2403,35 @@ document.addEventListener('DOMContentLoaded', function() {
         if (target) target.focus({ preventScroll: true });
     }, 450);
 }
+if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+            // Napválasztás ellenőrzése
+            const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
+            if (checkedBoxes.length === 0) {
+                alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnétek!');
+                return;
+            }
 
+            // Kötelező mezők ellenőrzése az 1. lépésben
+            let step1valid = true;
+            step1.querySelectorAll('input[required], select[required], textarea[required]').forEach(function(el) {
+                if (!el.checkValidity()) {
+                    el.reportValidity();
+                    step1valid = false;
+                }
+            });
+            if (!step1valid) return;
+
+            saveProgress();
+            goToStep(2);
+        });
+    }
+
+    if (backBtn) {
+        backBtn.addEventListener('click', function() {
+            goToStep(1);
+        });
+    }
     // ============ ÚJ: MUNKAMENET-MENTÉS (AUTO-SAVE) ============
     const STORAGE_KEY = 'delfinek_jelentkezes_progress';
 
