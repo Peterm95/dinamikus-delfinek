@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
+    <link rel="preload" as="image" href="uszoda-hero-bg.webp" fetchpriority="high">
     <script defer src="https://cloud.umami.is/script.js" data-website-id="3c2f0c0b-64dd-4ccb-8f20-335e960edbe7"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render=6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -29,7 +30,9 @@
     }
     </script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400..800&display=swap" rel="stylesheet">
     <style>
         /* ═══════════ ALAPBEÁLLÍTÁSOK ═══════════ */
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -187,7 +190,7 @@
             overflow: hidden;
             /* Sötétített maszk a kép felett a kiváló olvashatóságért */
             background: linear-gradient(180deg, rgba(6, 30, 80, 0.85) 0%, rgba(13, 31, 76, 0.70) 100%), 
-                        url('uszoda-hero-bg.png') center/cover no-repeat;
+               url('uszoda-hero-bg.webp') center/cover no-repeat;
         }
         
         .hero::before {
@@ -513,6 +516,10 @@
     .visual-schedule {
         grid-template-columns: 1fr;
     }
+}
+        .faq-trigger:focus-visible {
+    outline: 3px solid var(--sky) !important;
+    outline-offset: -3px;
 }
         /* ═══════════ EDZÉSJEGYEK — KARSZALAG STÍLUS ═══════════ */
 .ticket-rail-row{
@@ -1005,7 +1012,7 @@
         }
 
         .footer-copyright {
-            opacity: 0.35;
+            opacity: 0.55;
             font-size: 12px;
             display: block;
             margin-top: 20px;
@@ -1019,7 +1026,7 @@
         .footer-privacy-btn {
             background: none;
             border: none;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.8);
             font-size: 13px;
             cursor: pointer;
             text-decoration: underline;
@@ -1523,7 +1530,7 @@
         
         <div class="member-board-content">
             <div class="member-avatar">
-                <img src="bozsi karakter.png" alt="Bözsi néni">
+                <img src="bozsi karakter.png" alt="Bözsi néni" loading="lazy">
             </div>
             <div class="member-details">
                 <h4>Bözsi néni</h4>
@@ -1540,7 +1547,7 @@
 </svg>
         <div class="member-board-content">
             <div class="member-avatar">
-                <img src="eszti karakter.png" alt="Eszti néni">
+                <img src="eszti karakter.png" alt="Eszti néni" loading="lazy">
             </div>
             <div class="member-details">
                 <h4>Eszti néni</h4>
@@ -1557,7 +1564,7 @@
 </svg>
         <div class="member-board-content">
             <div class="member-avatar">
-                <img src="fani karakter.png" alt="Fáni néni">
+                <img src="fani karakter.png" alt="Fáni néni" loading="lazy">
             </div>
             <div class="member-details">
                 <h4>Fáni néni</h4>
@@ -1789,7 +1796,7 @@
     <section class="section-space" style="background: var(--white);" id="velemenyek">
         <div class="container">
             <div class="decor-avatar decor-bg-purple" style="top: 20%; left: -6%; width: 100px;">
-                <img src="fani karakter.png" alt="Oktató" style="width: 100%; border-radius: 35px 10px 35px 10px; display: block;">
+                <img src="fani karakter.png" alt="Oktató" loading="lazy" style="width: 100%; border-radius: 35px 10px 35px 10px; display: block;">
                 <span class="decor-badge-mini" style="top: 30%; right: -20px;">💬</span>
             </div>
             <h2 class="section-title">Szülők mondták rólunk</h2>
@@ -2137,7 +2144,7 @@
         <div style="position: relative; max-width: 600px; margin: 0 auto;">
 
             <div class="decor-avatar decor-bg-yellow" style="position: absolute; top: 20%; left: -160px; width: 110px;">
-                <img src="bozsi karakter.png" alt="Oktató" style="width: 100%; border-radius: 35px 10px 35px 10px; display: block;">
+                <img src="bozsi karakter.png" alt="Oktató" loading="lazy" style="width: 100%; border-radius: 35px 10px 35px 10px; display: block;">
             </div>
 
             <div class="form-box">
@@ -2255,7 +2262,7 @@
             </div>
 
             <div class="decor-avatar decor-bg-sky" style="position: absolute; top: 45%; right: -170px; width: 120px;">
-                <img src="eszti karakter.png" alt="Oktató" style="width: 100%; border-radius: 35px 10px 35px 10px; display: block;">
+                <img src="eszti karakter.png" alt="Oktató" loading="lazy" style="width: 100%; border-radius: 35px 10px 35px 10px; display: block;">
                 <span class="decor-badge-mini" style="top: -15px; left: -15px;">😉</span>
             </div>
 
@@ -2274,7 +2281,7 @@
             
             <div class="footer-main-row">
                 
-                <img src="oktatok.png" alt="Oktatók" class="footer-wave-photo">
+                <img src="oktatok.png" alt="Oktatók" loading="lazy" class="footer-wave-photo">
 
                 <div class="footer-logo-brand">
                     <div class="footer-brand-title">Dinamikus Delfinek SE</div>
@@ -2380,45 +2387,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const progressSteps = document.querySelectorAll('.form-progress-step');
 
     function goToStep(stepNumber) {
-        [step1, step2].forEach(s => s.classList.remove('active'));
-        (stepNumber === 1 ? step1 : step2).classList.add('active');
-        progressSteps.forEach(p => {
-            p.classList.toggle('active', Number(p.dataset.step) <= stepNumber);
-        });
-        const formBox = document.querySelector('.form-box');
-        if (formBox) formBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    if (nextBtn) {
-    nextBtn.addEventListener('click', function() {
-        // Napválasztás ellenőrzése
-        const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
-        if (checkedBoxes.length === 0) {
-            alert('Kérjük, válasszon ki legalább egy napot, amikor járni szeretnétek!');
-            return;
-        }
-
-        // Kötelező mezők ellenőrzése az 1. lépésben (JAVÍTVA: divnek nincs checkValidity metódusa,
-        // ezért egyesével ellenőrizzük a mezőket)
-        let step1valid = true;
-        step1.querySelectorAll('input[required], select[required], textarea[required]').forEach(function(el) {
-            if (!el.checkValidity()) {
-                el.reportValidity();
-                step1valid = false;
-            }
-        });
-        if (!step1valid) return;
-
-        saveProgress();
-        goToStep(2);
+    [step1, step2].forEach(s => s.classList.remove('active'));
+    (stepNumber === 1 ? step1 : step2).classList.add('active');
+    progressSteps.forEach(p => {
+        p.classList.toggle('active', Number(p.dataset.step) <= stepNumber);
     });
-}
+    const formBox = document.querySelector('.form-box');
+    if (formBox) formBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    if (backBtn) {
-        backBtn.addEventListener('click', function() {
-            goToStep(1);
-        });
-    }
+    // ÚJ: fókusz átvitele az új lépés első mezőjére
+    setTimeout(function() {
+        var target = stepNumber === 1
+            ? document.getElementById('gyermekNeveInput')
+            : document.querySelector('#form-step-2 input, #form-step-2 textarea');
+        if (target) target.focus({ preventScroll: true });
+    }, 450);
+}
 
     // ============ ÚJ: MUNKAMENET-MENTÉS (AUTO-SAVE) ============
     const STORAGE_KEY = 'delfinek_jelentkezes_progress';
@@ -2847,6 +2831,38 @@ function animateCount(el) {
         statNumbers.forEach(function(el) { el.textContent = finalValue(el); });
     }
 })();
+</script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    var faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(function(item, index) {
+        var trigger = item.querySelector('.faq-trigger');
+        var content = item.querySelector('.faq-content');
+        if (!trigger || !content) return;
+
+        var contentId = 'faq-content-' + index;
+        content.id = contentId;
+        trigger.setAttribute('aria-controls', contentId);
+        trigger.setAttribute('aria-expanded', 'false');
+        content.setAttribute('aria-hidden', 'true');
+
+        // a meglévő szkript már lefutott és beállította a max-height-et,
+        // itt csak leolvassuk az eredményt és szinkronizáljuk az aria állapotot
+        trigger.addEventListener('click', function() {
+            faqItems.forEach(function(otherItem) {
+                var t = otherItem.querySelector('.faq-trigger');
+                var c = otherItem.querySelector('.faq-content');
+                if (t) t.setAttribute('aria-expanded', 'false');
+                if (c) c.setAttribute('aria-hidden', 'true');
+            });
+            var isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+            if (isOpen) {
+                trigger.setAttribute('aria-expanded', 'true');
+                content.setAttribute('aria-hidden', 'false');
+            }
+        });
+    });
+});
 </script>
 </body>
 </html>
