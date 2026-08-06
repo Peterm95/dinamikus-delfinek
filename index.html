@@ -1078,16 +1078,82 @@
             .footer-left-col { text-align: center; }
             .footer-right-col { text-align: center; align-items: center; }
         }
-        .floating-dini {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 80px;
-            height: auto;
-            z-index: 999;
-            pointer-events: none;
-            animation: floatingDolphin 3s ease-in-out infinite;
-        }
+        .dini-widget {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+.floating-dini {
+    width: 80px;
+    height: auto;
+    pointer-events: auto;
+    cursor: pointer;
+    animation: floatingDolphin 3s ease-in-out infinite;
+}
+
+.dini-bubble {
+    position: relative;
+    max-width: 230px;
+    background: var(--white);
+    border: 2px solid var(--sky-lt);
+    border-radius: 20px 20px 4px 20px;
+    padding: 14px 30px 14px 16px;
+    box-shadow: 0 12px 30px rgba(6,30,80,0.18);
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: #1e293b;
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.dini-bubble.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+.dini-bubble p { margin: 0; }
+.dini-bubble a {
+    color: var(--navy);
+    font-weight: 800;
+    text-decoration: underline;
+}
+.dini-bubble-close {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 4px;
+}
+.dini-bubble-close:hover { color: var(--navy); }
+.dini-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 26px;
+    width: 14px;
+    height: 14px;
+    background: var(--white);
+    border-right: 2px solid var(--sky-lt);
+    border-bottom: 2px solid var(--sky-lt);
+    transform: rotate(45deg);
+}
+
+@media (max-width: 768px) {
+    .dini-widget { bottom: 15px; right: 15px; }
+    .floating-dini { width: 62px; }
+    .dini-bubble { max-width: 180px; font-size: 12.5px; padding: 12px 26px 12px 14px; }
+}
 
         @keyframes floatingDolphin {
             0%   { transform: scaleX(-1) translateY(0) rotate(0deg); }
@@ -1114,7 +1180,7 @@
         @media (max-width: 768px) {
             .section-space { padding: 45px 0; }
             .menu-toggle { display: flex; }
-            .floating-dini { width: 70px; bottom: 15px; right: 15px; opacity: 0.5; }
+            
             
             /* Miért minket választanak szekció mobil elrendezése (KÖZÉPRE IGAZÍTVA) */
             .feature-card {
@@ -2409,7 +2475,15 @@
         </div>
     </footer>
 
-    <img src="Dini.jpg" alt="Dini a delfin" class="floating-dini">
+    <div class="dini-widget" id="dini-widget">
+    <div class="dini-bubble" id="dini-bubble" role="dialog" aria-label="Dini üzenete">
+        <button class="dini-bubble-close" id="dini-bubble-close" aria-label="Bezárás">×</button>
+        <p>Szia! 👋 Szeptember 14-én indul az új úszótanév.<br>
+            <a href="#jelentkezes" id="dini-bubble-link">Ide kattintva jelentkezhetsz.</a>
+        </p>
+    </div>
+    <img src="Dini.jpg" alt="Dini a delfin" class="floating-dini" id="dini-avatar">
+</div>
 
     <script>
         // ═══════════ NAV ÁTLÁTSZÓSÁG A HERO TETEJÉN ═══════════
@@ -2991,6 +3065,67 @@ document.addEventListener('DOMContentLoaded', function() {
     }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
     revealEls.forEach(function(el) { revealObserver.observe(el); });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var bubble = document.getElementById('dini-bubble');
+    var closeBtn = document.getElementById('dini-bubble-close');
+    var avatar = document.getElementById('dini-avatar');
+    var link = document.getElementById('dini-bubble-link');
+    if (!bubble) return;
+
+    var STORAGE_KEY = 'dini_buborek_zarva';
+
+    function track(name) {
+        if (window.umami && typeof window.umami.track === 'function') {
+            try { window.umami.track(name); } catch (e) {}
+        }
+    }
+
+    function showBubble() {
+        bubble.classList.add('visible');
+        track('dini_buborek_megjelenitve');
+    }
+
+    function hideBubble(remember) {
+        bubble.classList.remove('visible');
+        if (remember) {
+            try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
+        }
+    }
+
+    // Csak akkor jelenik meg, ha ebben a munkamenetben még nem zárták be
+    if (!sessionStorage.getItem(STORAGE_KEY)) {
+        setTimeout(showBubble, 4000);
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            hideBubble(true);
+            track('dini_buborek_bezarva');
+        });
+    }
+
+    if (link) {
+        link.addEventListener('click', function() {
+            hideBubble(true);
+            track('dini_buborek_kattintas');
+        });
+    }
+
+    // Dinire kattintva elő-/eltüntethető a buborék
+    if (avatar) {
+        avatar.addEventListener('click', function() {
+            if (bubble.classList.contains('visible')) {
+                hideBubble(true);
+            } else {
+                sessionStorage.removeItem(STORAGE_KEY);
+                bubble.classList.add('visible');
+            }
+        });
+    }
 });
 </script>
 </body>
