@@ -3367,13 +3367,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-    // A pop-up ablakokat kiemeljük közvetlenül a <body> aljára,
-// hogy semmi (hullám, lábléc kép, stb.) ne kerülhessen eléjük görgetéskor.
-document.addEventListener('DOMContentLoaded', function() {
-    ['custom-modal', 'universal-policy-modal'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) document.body.appendChild(el);
-    });
-});
 </body>
 </html>
