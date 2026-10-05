@@ -1368,16 +1368,47 @@ html, body { overflow-x: clip; }
 .stat-card:nth-child(3) .stat-number { color: #fff; }
 .stat-card:nth-child(3) .stat-title  { color: #fff; }
 .stat-card:nth-child(3) .stat-desc   { color: rgba(255, 255, 255, 0.85); }
-    </style>
+
+		/* ═══════════ MOBIL HERO: teljes hero látszik, mielőtt jön a lap ═══════════ */
+.hero { height: 100vh; height: 100svh; }
+
+@media (max-width: 992px) {
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100svh;
+        padding: 96px 0 118px;   /* alul hely a lapnak (36px) és Dininek */
+    }
+}
+
+/* ═══════════ DINI: a lap tetejéről a navbar aljára ragad ═══════════ */
+.dini-anchor {
+    position: fixed;
+    top: 0; left: 50%;
+    width: 80px;
+    z-index: 1001;               /* a navbar (1000) fölött */
+    pointer-events: none;
+    visibility: hidden;          /* amíg a JS el nem helyezi */
+    will-change: transform;
+}
+.dini-anchor .floating-dini {
+    position: static;
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .dini-anchor { width: 64px; }
+}
+		
+	</style>
 </head>
 <body>
 
     <nav>
         <div class="container nav-flex">
             <a href="#" class="nav-logo">
-                <div class="nav-logo-img-wrap">
-                    <img src="Dinamikus Delfinek logoFINAL.jpg" alt="Dinamikus Delfinek Logó">
-                </div>
                 <div class="nav-brand-name">Dinamikus Delfinek <span>Tábor</span></div>
             </a>
             
@@ -2051,7 +2082,9 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         </div>
     </div>
 </section>
-<img src="Dinitabor.jpg" alt="Dini a delfin" class="floating-dini">
+<div class="dini-anchor" id="diniAnchor">
+    <img src="Dinitabor.jpg" alt="Dini a delfin" class="floating-dini">
+</div>
 <footer class="footer">
 
         <div class="container">
@@ -2434,6 +2467,30 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!ticking) { requestAnimationFrame(update); ticking = true; }
     }, { passive: true });
     update();
+});
+</script>
+	<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const anchor = document.getElementById('diniAnchor');
+    const sheet  = document.getElementById('miert-minket');
+    const nav    = document.querySelector('nav');
+    if (!anchor || !sheet || !nav) return;
+
+    let ticking = false;
+    function place() {
+        const h = anchor.offsetHeight;
+        // a lap tetejétől indul, és megáll a navbar alsó vonalánál
+        const y = Math.max(sheet.getBoundingClientRect().top - 10, nav.offsetHeight);
+        anchor.style.transform = `translate3d(-50%, ${y - h / 2}px, 0)`;
+        anchor.style.visibility = 'visible';
+        ticking = false;
+    }
+    const request = () => { if (!ticking) { requestAnimationFrame(place); ticking = true; } };
+
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', request);
+    window.addEventListener('load', place);
+    place();
 });
 </script>
 </body>
