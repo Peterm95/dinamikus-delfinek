@@ -31,7 +31,7 @@
 		"logo": "https://www.dinamikusdelfinek.hu/Dinamikus%20Delfinek%20logo.jpg",
 "image": "https://www.dinamikusdelfinek.hu/tabor-megosztas.jpg",
 "areaServed": "Győr",
-"description": "Gyermek úszásoktatás és napközis úszótábor Győrben, MÚSZ licences edzőkkel."
+"description": "Gyermek úszásoktatás és napközis úszótábor Győrben, MÚSZ licences edzőkkel.",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Olimpia utca 1.",
@@ -429,6 +429,13 @@
         .panel-loc-title { font-size: 34px; font-weight: 900; line-height: 1.2; margin-bottom: 6px; }
         .panel-loc-sub { font-size: 17px; color: var(--blue-bright); font-weight: 700; margin-bottom: 20px; }
         .panel-loc-desc { font-size: 15.5px; color: rgba(255,255,255,0.82); line-height: 1.6; }
+		.base-block + .base-block { margin-top: 0; }
+.base-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.18);
+    margin: 28px 0;
+}
+.panel-left .panel-loc-title { font-size: 28px; }
 
         .panel-right { background: #f8fafc; padding: 50px; display: flex; flex-direction: column; justify-content: center; }
         .schedule-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -1282,11 +1289,22 @@
 
             <div class="unified-info-panel">
                 <div class="panel-left">
-                    <div class="loc-tag">📍 TÁBORUNK BÁZISA</div>
-                    <div class="panel-loc-title">Aqua Sportközpont</div>
-                    <div class="panel-loc-sub">9025 Győr, Olimpia utca 1.</div>
-                    <p class="panel-loc-desc">Győr legmodernebb, tiszta és kiválóan felszerelt uszodai környezete. Az ideális vízhőmérséklet és a professzionális tanmedence garantálják a gyerekek biztonságát és gyors fejlődését.</p>
-                </div>
+    <div class="loc-tag">📍 TÁBORUNK BÁZISAI</div>
+
+    <div class="base-block">
+        <div class="panel-loc-title">Aqua Sportközpont</div>
+        <div class="panel-loc-sub">9025 Győr, Olimpia utca 1.</div>
+        <p class="panel-loc-desc">Győr legmodernebb, tiszta és kiválóan felszerelt uszodai környezete. Az ideális vízhőmérséklet és a professzionális tanmedence garantálják a gyerekek biztonságát és gyors fejlődését.</p>
+    </div>
+
+    <div class="base-divider"></div>
+
+    <div class="base-block">
+        <div class="panel-loc-title">Bercsényi Miklós Technikum</div>
+        <div class="panel-loc-sub">Győr, Cinka Panna utca 2.</div>
+        <p class="panel-loc-desc">Itt várjuk reggelente a gyerekeket, és itt zajlanak a medencén kívüli programok: kézműves foglalkozások és sorjátékok egy tágas, kényelmes iskolai környezetben.</p>
+    </div>
+</div>
 
                 <div class="panel-right">
                     <div style="background: #ffffff; border: 2px dashed #cbd5e1; padding: 40px; border-radius: 24px; text-align: center; grid-column: span 2;">
