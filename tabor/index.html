@@ -364,6 +364,7 @@
         .hf-sub { font-size: 13px; color: var(--yellow); font-weight: 700; margin-top: 2px; }
 
 		.hero.is-covered { visibility: hidden; }
+.hero.is-covered .hero-slide { animation-play-state: paused; }
 		
         /* Scroll nyíl */
         .hero-scroll-hint {
@@ -2464,10 +2465,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let ticking = false;
     function update() {
-        const p = Math.min(Math.max(window.scrollY / (hero.offsetHeight * 0.8), 0), 1);
-        hero.style.setProperty('--p', p.toFixed(3));
-        ticking = false;
-    }
+    const p = Math.min(Math.max(window.scrollY / (hero.offsetHeight * 0.8), 0), 1);
+    hero.style.setProperty('--p', p.toFixed(3));
+    hero.classList.toggle('is-covered', window.scrollY > hero.offsetHeight + 40);
+    ticking = false;
+}
     window.addEventListener('scroll', () => {
         if (!ticking) { requestAnimationFrame(update); ticking = true; }
     }, { passive: true });
