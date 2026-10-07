@@ -187,19 +187,19 @@
 
         /* GOMB STÍLUSOK */
         .cta-btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, var(--yellow) 0%, #ffb700 100%);
-            color: var(--navy-deep); font-family: 'Baloo 2', cursive; font-size: 19px; font-weight: 900;
-            padding: 15px 38px; border-radius: 50px; text-decoration: none;
-            box-shadow: 0 8px 24px rgba(245, 196, 0, 0.3);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid rgba(255,255,255,0.2); cursor: pointer;
-            text-align: center;
-        }
-        .cta-btn:hover {
-            transform: scale(1.03) translateY(-2px);
-            box-shadow: 0 12px 28px rgba(245, 196, 0, 0.45);
-        }
+    display: inline-flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--yellow) 0%, #ffb700 100%);
+    color: var(--navy-deep); font-family: 'Baloo 2', cursive; font-size: 15px; font-weight: 900;
+    padding: 10px 22px; border-radius: 50px; text-decoration: none;
+    box-shadow: 0 4px 14px rgba(245, 196, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid rgba(255,255,255,0.2); cursor: pointer;
+    text-align: center; width: auto;
+}
+.cta-btn:hover {
+    transform: scale(1.03) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(245, 196, 0, 0.4);
+}
         
         .cta-btn-secondary {
             background: rgba(255, 255, 255, 0.12);
@@ -597,7 +597,24 @@
         .form-checkbox-label input { transform: scale(1.2); margin-top: 4px; accent-color: var(--blue-bright); flex-shrink: 0; }
         .form-checkbox-label a { color: var(--blue-royal); text-decoration: underline; font-weight: 700; }
 
-        /* ═══════════ INTERAKTÍV NAPI PROGRAM STÍLUSOK ═══════════ */
+       /* ═══════════ SZEKCIÓ-VÉGI CTA ═══════════ */
+/* ═══════════ SZEKCIÓ-VÉGI CTA (kompakt, mint a navban) ═══════════ */
+.section-cta {
+    text-align: center;
+    margin-top: 40px;
+}
+.form-submit-btn { display: flex; margin: 25px auto 0; }
+.section-cta-note {
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 12px;
+}
+		@media (max-width: 480px) {
+    .cta-btn.cta-btn-sm { width: 100%; }
+}
+		
+		/* ═══════════ INTERAKTÍV NAPI PROGRAM STÍLUSOK ═══════════ */
         .daily-program-section {
             background: linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 100%);
             padding-bottom: 40px;
@@ -1259,9 +1276,9 @@
             .activity-card { font-size: 14.5px; padding: 10px 14px; flex-wrap: wrap; }
             .form-container-box { padding: 25px 15px; }
             .h-badge { font-size: 13px; padding: 6px 12px; }
-            .cta-btn { width: 100%; padding: 14px 20px; font-size: 17px; }
             .tile-option { padding: 14px; gap: 10px; }
             .tile-badge { right: 10px; }
+			.hero-btn-group .cta-btn { width: 100%; }
         }
 	.grecaptcha-badge { 
     visibility: hidden !important; 
@@ -1439,7 +1456,7 @@ html, body { overflow-x: clip; }
     line-height: 1.6;
     margin-bottom: 22px;
 }
-.faq-contact-btn { display: block; width: 100%; font-size: 14px; padding: 12px 16px; margin-bottom: 10px; }
+.faq-contact-btn { margin-bottom: 10px; }
 .faq-contact-secondary {
     display: block;
     font-size: 13.5px; font-weight: 800;
@@ -1473,7 +1490,7 @@ html, body { overflow-x: clip; }
             </div>
 
             <div>
-                <a href="#jelentkezes" class="cta-btn" style="padding: 10px 22px; font-size: 15px; box-shadow: none; width: auto;">Előregisztráció</a>
+                <a href="#jelentkezes" class="cta-btn">Előregisztráció</a>
             </div>
         </div>
     </nav>
@@ -1822,8 +1839,13 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
     </div>
                     </div>
                 </div>
+				<div class="section-cta">
+                <a href="#jelentkezes" class="cta-btn cta-btn-sm" data-umami-event="cta-csomag">🔔 Előregisztrálok a 2027-es turnusokra</a>
+                <p class="section-cta-note">Ingyenes feliratkozás – elsőként kapod meg az időpontokat és az árakat.</p>
+            </div>
             </div>
         </div>
+		
     </section>
 <section class="section-space team-section" id="csapatunk">
     <div class="container">
@@ -1892,6 +1914,9 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     <div style="font-family: 'Baloo 2', cursive; font-weight: 800; color: var(--navy); font-size: 16px;">Krisztina</div>
                     <div style="font-size: 13px; color: #94a3b8;">Benedek (10 éves) anyukája</div>
                 </div>
+            </div>
+			<div class="section-cta">
+                <a href="#jelentkezes" class="cta-btn cta-btn-sm" data-umami-event="cta-velemenyek">🔔 Kérek egy értesítést a 2027-es időpontokról</a>
             </div>
         </div>
     </section>
@@ -1996,6 +2021,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                 <p class="faq-contact-desc">Írj nekünk bátran, szívesen segítünk emailben vagy Messengeren – hamar válaszolunk!</p>
                 <a href="mailto:dinamikus.delfinek@gmail.com" class="cta-btn faq-contact-btn">Email küldése</a>
                 <a href="https://www.facebook.com/dinamikusdelfinek" target="_blank" rel="noopener" class="faq-contact-secondary">Vagy írj Messengeren →</a>
+	 <a href="#jelentkezes" class="faq-contact-secondary" data-umami-event="cta-gyik">🔔 Inkább előregisztrálok</a>
             </div>
 
             </div>
@@ -2054,7 +2080,8 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                         <p style="font-size: 15.5px; color: rgba(255,255,255,0.88); margin-bottom: 24px; line-height: 1.6; max-width: 600px;">
                             A táboron kívül is folytatódik a fejlődés! Évközi csoportos úszásoktatás, technika-javítás és vízbiztonság-fejlesztés vár a gyerekekre az Aqua Sportközpontban, szakképzett edzőinkkel.
                         </p>
-                        <a href="https://www.dinamikusdelfinek.hu/" class="cta-btn" style="font-size: 16px; padding: 12px 30px; width: auto;">Úszásoktatás részletei →</a>
+                       <a href="https://www.dinamikusdelfinek.hu/" class="cta-btn">Úszásoktatás részletei →</a>
+
                     </div>
                     
                     <div class="inline-photo-wrap" style="flex: 0 0 35%; margin: 0; display: flex; justify-content: center;">
@@ -2127,8 +2154,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     </div>
 
                 </div>
-
-                <button type="submit" id="submit-notification-btn" class="cta-btn" style="width: 100%; margin-top: 25px; padding: 18px;">Értesítést kérek a jövő évi táborokról 🔔</button>
+<button type="submit" id="submit-notification-btn" class="cta-btn form-submit-btn">Értesítést kérek a jövő évi táborokról 🔔</button>
             </form>
         </div>
     </div>
@@ -2137,7 +2163,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         <div class="modal-tartalom">
             <h2>Sikeres feliratkozás! 🎉</h2>
             <p>Köszönjük az érdeklődést! Elmentettük a kapcsolattartási adataidat, így az elsők között fogsz értesülni, amint megnyitjuk a jövő évi helyeket!</p>
-            <button id="modal-ok-btn" class="cta-btn" style="padding: 10px 25px; width: auto;">Rendben</button>
+            <button id="modal-ok-btn" class="cta-btn">Rendben</button>
         </div>
     </div>
 </section>
