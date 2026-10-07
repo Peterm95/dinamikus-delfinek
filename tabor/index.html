@@ -1471,6 +1471,303 @@ html, body { overflow-x: clip; }
     .faq-layout-grid { grid-template-columns: 1fr; }
     .faq-contact-card { position: static; margin-top: 8px; }
 }
+		/* ═══════════ DELFIN BAJNOKSÁG ═══════════ */
+.champ-section {
+    position: relative;
+    color: var(--white);
+    background:
+        radial-gradient(circle at 15% 10%, rgba(0, 162, 255, 0.22) 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(255, 122, 0, 0.20) 0%, transparent 45%),
+        linear-gradient(180deg, #031640 0%, #06225e 100%);
+}
+/* lebegő fényfoltok */
+.champ-section::before, .champ-section::after {
+    content: ''; position: absolute; width: 380px; height: 380px; border-radius: 50%;
+    filter: blur(70px); opacity: 0.35; pointer-events: none;
+    animation: champBlob 14s ease-in-out infinite;
+}
+.champ-section::before { background: var(--blue-bright); top: 8%; left: -120px; }
+.champ-section::after  { background: var(--orange); bottom: 6%; right: -120px; animation-delay: -7s; }
+@keyframes champBlob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%      { transform: translate(60px, -40px) scale(1.15); }
+}
+
+/* felszálló buborékok */
+.champ-bubbles { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.champ-bubbles span {
+    position: absolute; bottom: -40px; left: var(--x);
+    width: var(--s); height: var(--s); border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: bubbleUp var(--d) linear var(--dl) infinite;
+}
+@keyframes bubbleUp {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    10%  { opacity: 1; }
+    100% { transform: translateY(-110vh) translateX(30px); opacity: 0; }
+}
+
+/* fejléc */
+.champ-head { text-align: center; max-width: 780px; margin: 0 auto 50px; }
+.champ-new {
+    display: inline-block; background: var(--yellow); color: var(--navy-deep);
+    font-family: 'Baloo 2', cursive; font-size: 13px; font-weight: 900; letter-spacing: 1.2px;
+    padding: 6px 18px; border-radius: 50px; margin-bottom: 16px;
+    animation: newPulse 2.4s ease-in-out infinite;
+}
+@keyframes newPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 196, 0, 0.55); }
+    50%      { box-shadow: 0 0 0 12px rgba(245, 196, 0, 0); }
+}
+.champ-title { font-size: clamp(40px, 6vw, 68px); font-weight: 900; line-height: 1.05; margin-bottom: 14px; }
+.champ-title span {
+    background: linear-gradient(90deg, var(--yellow), var(--orange), var(--yellow));
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: champShine 4s linear infinite;
+}
+@keyframes champShine { to { background-position: 200% center; } }
+.champ-tagline { font-family: 'Baloo 2', cursive; font-size: clamp(18px, 2.4vw, 24px); font-weight: 800; color: var(--blue-bright); margin-bottom: 16px; }
+.champ-tagline strong { color: var(--yellow); }
+.champ-lead { font-size: 17px; line-height: 1.7; color: rgba(255, 255, 255, 0.85); }
+
+/* aréna */
+.champ-arena {
+    position: relative; z-index: 5;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;
+    max-width: 900px; margin: 0 auto 30px;
+}
+.champ-team {
+    text-align: center; padding: 34px 20px; border-radius: 28px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.champ-team:hover { transform: translateY(-6px) rotate(-1deg); }
+.champ-team-a { background: linear-gradient(145deg, rgba(0, 162, 255, 0.35), rgba(0, 86, 179, 0.25)); border: 2px solid var(--blue-bright); box-shadow: 0 0 40px rgba(0, 162, 255, 0.25); }
+.champ-team-b { background: linear-gradient(145deg, rgba(255, 122, 0, 0.35), rgba(255, 85, 0, 0.22)); border: 2px solid var(--orange); box-shadow: 0 0 40px rgba(255, 122, 0, 0.25); }
+.champ-team-icon { font-size: 52px; line-height: 1; margin-bottom: 8px; display: inline-block; animation: champFloat 3.2s ease-in-out infinite; }
+.champ-team-b .champ-team-icon { animation-delay: -1.6s; }
+@keyframes champFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+.champ-team h3 { font-size: 26px; font-weight: 900; margin-bottom: 4px; }
+.champ-team p { font-size: 14.5px; color: rgba(255, 255, 255, 0.8); }
+
+.champ-vs {
+    width: 78px; height: 78px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--yellow), var(--orange));
+    color: var(--navy-deep); font-family: 'Baloo 2', cursive; font-size: 28px; font-weight: 900;
+    box-shadow: 0 0 0 0 rgba(245, 196, 0, 0.6);
+    animation: vsBeat 1.8s ease-in-out infinite;
+}
+@keyframes vsBeat {
+    0%, 100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(245, 196, 0, 0.55); }
+    50%      { transform: scale(1.12); box-shadow: 0 0 0 18px rgba(245, 196, 0, 0); }
+}
+
+/* kötélhúzás-sáv */
+.champ-tug { position: relative; max-width: 900px; height: 16px; margin: 0 auto 22px; z-index: 5; }
+.champ-tug-track { position: absolute; inset: 0; border-radius: 50px; overflow: hidden; background: linear-gradient(90deg, var(--orange), #ff9a3c); }
+.champ-tug-fill { position: absolute; inset: 0 auto 0 0; width: 50%; background: linear-gradient(90deg, var(--blue-royal), var(--blue-bright)); animation: tugFill 7s ease-in-out infinite; }
+.champ-tug-knob { position: absolute; top: 50%; left: 50%; font-size: 30px; line-height: 1; transform: translate(-50%, -50%); animation: tugKnob 7s ease-in-out infinite; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35)); }
+@keyframes tugFill { 0%, 100% { width: 50%; } 25% { width: 36%; } 50% { width: 62%; } 75% { width: 45%; } }
+@keyframes tugKnob { 0%, 100% { left: 50%; } 25% { left: 36%; } 50% { left: 62%; } 75% { left: 45%; } }
+
+.champ-balance { position: relative; z-index: 5; max-width: 720px; margin: 0 auto 60px; text-align: center; font-size: 16px; line-height: 1.7; color: rgba(255, 255, 255, 0.85); }
+.champ-balance strong { color: var(--yellow); }
+
+.champ-sub { position: relative; z-index: 5; text-align: center; font-size: 30px; font-weight: 900; margin-bottom: 28px; }
+
+/* pontgyűjtő kártyák */
+.champ-points { position: relative; z-index: 5; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 64px; }
+.champ-point {
+    background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 24px; padding: 26px 20px; text-align: center;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.champ-point:hover { background: rgba(255, 255, 255, 0.13); border-color: var(--yellow); transform: translateY(-6px); }
+.champ-point-icon { display: block; font-size: 38px; margin-bottom: 10px; }
+.champ-point h4 { font-size: 20px; font-weight: 800; color: var(--yellow); margin-bottom: 6px; }
+.champ-point p { font-size: 14px; line-height: 1.55; color: rgba(255, 255, 255, 0.8); }
+
+/* a hét íve */
+.champ-days { position: relative; z-index: 5; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 900px; margin: 0 auto 64px; }
+.champ-days::before {
+    content: ''; position: absolute; top: 34px; left: 16%; right: 16%; height: 4px; border-radius: 4px;
+    background: linear-gradient(90deg, var(--blue-bright), var(--yellow), var(--orange));
+    transform: scaleX(0); transform-origin: left; transition: transform 1.4s ease 0.4s;
+}
+.champ-days.in-view::before { transform: scaleX(1); }
+.champ-day { position: relative; text-align: center; }
+.champ-day-dot {
+    width: 68px; height: 68px; margin: 0 auto 14px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 30px;
+    background: var(--navy-light); border: 3px solid var(--blue-bright);
+}
+.champ-day h4 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.champ-day p { font-size: 14.5px; line-height: 1.55; color: rgba(255, 255, 255, 0.8); max-width: 240px; margin: 0 auto; }
+.champ-day.is-final .champ-day-dot { border-color: var(--yellow); background: linear-gradient(135deg, var(--yellow), var(--orange)); animation: finalGlow 2s ease-in-out infinite; }
+.champ-day.is-final h4 { color: var(--yellow); }
+@keyframes finalGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 196, 0, 0.6); }
+    50%      { box-shadow: 0 0 0 16px rgba(245, 196, 0, 0); }
+}
+
+/* finálé */
+.champ-final {
+    position: relative; z-index: 5; display: flex; align-items: center; gap: 40px;
+    max-width: 860px; margin: 0 auto 50px; padding: 36px 44px; border-radius: 32px;
+    background: linear-gradient(135deg, rgba(245, 196, 0, 0.18), rgba(255, 122, 0, 0.14));
+    border: 2px solid rgba(245, 196, 0, 0.5);
+}
+.champ-trophy-wrap { position: relative; width: 150px; height: 150px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.champ-rays {
+    position: absolute; inset: -20px; border-radius: 50%;
+    background: repeating-conic-gradient(rgba(245, 196, 0, 0.35) 0deg 8deg, transparent 8deg 24deg);
+    -webkit-mask-image: radial-gradient(circle, #000 25%, transparent 70%);
+    mask-image: radial-gradient(circle, #000 25%, transparent 70%);
+    animation: raysSpin 14s linear infinite;
+}
+@keyframes raysSpin { to { transform: rotate(360deg); } }
+.champ-trophy { position: relative; font-size: 82px; line-height: 1; animation: trophyBounce 2.6s ease-in-out infinite; filter: drop-shadow(0 8px 18px rgba(245, 196, 0, 0.5)); }
+@keyframes trophyBounce { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-12px) rotate(4deg); } }
+.champ-spark { position: absolute; font-size: 22px; animation: sparkle 2.2s ease-in-out infinite; }
+.champ-spark.s1 { top: 4px; left: 8px; }
+.champ-spark.s2 { top: 20px; right: 0; animation-delay: -0.8s; }
+.champ-spark.s3 { bottom: 6px; left: 20px; animation-delay: -1.5s; }
+@keyframes sparkle { 0%, 100% { transform: scale(0.4) rotate(0); opacity: 0.2; } 50% { transform: scale(1.2) rotate(25deg); opacity: 1; } }
+.champ-final-text h3 { font-size: 30px; font-weight: 900; color: var(--yellow); margin-bottom: 8px; }
+.champ-final-text p { font-size: 16px; line-height: 1.65; color: rgba(255, 255, 255, 0.9); }
+
+/* előnyök */
+.champ-perks { position: relative; z-index: 5; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 900px; margin: 0 auto; }
+.champ-perk { text-align: center; padding: 8px 14px; }
+.champ-perk span { font-size: 34px; display: block; margin-bottom: 6px; }
+.champ-perk strong { font-family: 'Baloo 2', cursive; font-size: 18px; display: block; margin-bottom: 4px; }
+.champ-perk p { font-size: 14px; line-height: 1.55; color: rgba(255, 255, 255, 0.75); }
+
+.champ-section .section-cta { position: relative; z-index: 5; }
+
+/* belépő animációk */
+.js-anim .champ-reveal {
+    opacity: 0; transform: translateY(36px) scale(0.96);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition-delay: calc(var(--i, 0) * 0.12s);
+}
+.js-anim .champ-team-a.champ-reveal { transform: translateX(-90px); }
+.js-anim .champ-team-b.champ-reveal { transform: translateX(90px); }
+.js-anim .champ-vs.champ-reveal { transform: scale(0); }
+.js-anim .champ-reveal.in-view { opacity: 1; transform: none; }
+
+/* reszponzív */
+@media (max-width: 992px) {
+    .champ-points { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    .champ-arena { grid-template-columns: 1fr; gap: 14px; }
+    .champ-vs { margin: 0 auto; width: 64px; height: 64px; font-size: 22px; }
+    .champ-days { grid-template-columns: 1fr; gap: 28px; }
+    .champ-days::before { display: none; }
+    .champ-final { flex-direction: column; text-align: center; padding: 30px 22px; gap: 24px; }
+    .champ-perks { grid-template-columns: 1fr; }
+    .champ-sub { font-size: 25px; }
+}
+@media (max-width: 480px) {
+    .champ-points { grid-template-columns: 1fr; }
+}
+/* ═══ BAJNOKSÁG: lenyíló részletek ═══ */
+.champ-balance { margin-bottom: 36px; }
+
+.champ-more { position: relative; z-index: 5; max-width: 900px; margin: 0 auto 40px; }
+.champ-more summary {
+    list-style: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    width: fit-content; margin: 0 auto;
+    padding: 13px 28px; border-radius: 50px;
+    font-family: 'Baloo 2', cursive; font-size: 17px; font-weight: 800; color: var(--white);
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.champ-more summary::-webkit-details-marker { display: none; }
+.champ-more summary:hover { background: rgba(255, 255, 255, 0.18); border-color: var(--yellow); transform: translateY(-2px); }
+.champ-more-icon {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--yellow); color: var(--navy-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; line-height: 1; transition: transform 0.3s ease;
+}
+.champ-more[open] .champ-more-icon { transform: rotate(45deg); }
+
+.champ-more-body {
+    margin-top: 26px; padding: 34px 30px; border-radius: 28px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    animation: champMoreIn 0.5s ease both;
+}
+@keyframes champMoreIn {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.champ-games { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 36px; }
+.champ-game { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-radius: 18px; background: rgba(255, 255, 255, 0.07); }
+.champ-game > span { font-size: 30px; line-height: 1; flex-shrink: 0; }
+.champ-game h4 { font-size: 18px; font-weight: 800; color: var(--yellow); margin-bottom: 2px; }
+.champ-game p { font-size: 14px; line-height: 1.5; color: rgba(255, 255, 255, 0.8); }
+
+/* a hét íve a lenyílón belül: a vonal nyitáskor "kihúzódik" */
+.champ-more-body .champ-days { margin: 0 auto; }
+.champ-more[open] .champ-days::before { animation: champLine 1.2s ease 0.3s both; }
+@keyframes champLine { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (max-width: 768px) {
+    .champ-games { grid-template-columns: 1fr; }
+    .champ-more-body { padding: 24px 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .champ-more-body, .champ-more[open] .champ-days::before { animation: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .champ-section::before, .champ-section::after, .champ-bubbles span, .champ-new, .champ-title span,
+    .champ-team-icon, .champ-vs, .champ-tug-fill, .champ-tug-knob, .champ-day.is-final .champ-day-dot,
+    .champ-rays, .champ-trophy, .champ-spark { animation: none !important; }
+    .js-anim .champ-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .champ-days::before { transform: scaleX(1); transition: none; }
+}
+		/* ═══ KÉK vs NARANCS: kompakt változat (asztali + mobil) ═══ */
+.champ-arena {
+    max-width: 440px;
+    gap: 10px;
+    margin: 0 auto 20px;
+    grid-template-columns: 1fr auto 1fr;   /* mobilon is egymás mellett */
+}
+.champ-team {
+    padding: 12px 8px;
+    border-radius: 16px;
+    box-shadow: none;
+}
+.champ-team-a { box-shadow: 0 0 18px rgba(0, 162, 255, 0.22); }
+.champ-team-b { box-shadow: 0 0 18px rgba(255, 122, 0, 0.22); }
+.champ-team:hover { transform: translateY(-3px); }
+.champ-team-icon { font-size: 24px; margin-bottom: 2px; }
+.champ-team h3 { font-size: 16px; margin-bottom: 0; }
+.champ-team p { font-size: 11.5px; line-height: 1.3; }
+.champ-vs { width: 38px; height: 38px; font-size: 15px; }
+.champ-tug { max-width: 440px; height: 10px; margin-bottom: 16px; }
+.champ-tug-knob { font-size: 20px; }
+
+@media (max-width: 768px) {
+    .champ-arena { grid-template-columns: 1fr auto 1fr; gap: 8px; max-width: 340px; }
+    .champ-tug { max-width: 340px; }
+    .champ-vs { width: 32px; height: 32px; font-size: 13px; margin: 0; }
+    .champ-team { padding: 10px 6px; }
+    .champ-team h3 { font-size: 14px; }
+    .champ-team p { display: none; }        /* mobilon csak ikon + név */
+    .champ-team-icon { font-size: 20px; }
+}
 	</style>
 </head>
 <body>
@@ -1564,7 +1861,7 @@ html, body { overflow-x: clip; }
             </div>
             
         </div>
-        <h2 class="section-title">Miért a <span>Dinamikus Delfinek?</span></h2>
+        <h2 class="section-title">Miért a <span>Dinamikus nek?</span></h2>
         <p class="section-sub">Mert a biztonságos oktatás és a játékos fejlődés mellett arra törekszünk, hogy a gyerekek egy igazán jó hangulatú, emlékezetes hetet töltsenek nálunk.</p>
         
 
@@ -1707,7 +2004,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     </div>
                     <div class="prog-body">
                         <h3 class="prog-title">Örök barátságok & emlékek</h3>
-                        <p class="prog-desc">A tábor végére egy igazi, összetartó delfin-család lesz a csapat – rengeteg nevetéssel és szép emlékekkel.</p>
+                        <p class="prog-desc">A tábor végére egy igazi, összetartó n-család lesz a csapat – rengeteg nevetéssel és szép emlékekkel.</p>
                     </div>
                 </div>
             </div>
@@ -1787,13 +2084,133 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
             </div>
     </section>
 
+
+<section class="section-space champ-section" id="bajnoksag">
+    <div class="champ-bubbles" aria-hidden="true">
+        <span style="--x:6%;--s:14px;--d:11s;--dl:0s"></span>
+        <span style="--x:16%;--s:22px;--d:14s;--dl:3s"></span>
+        <span style="--x:28%;--s:10px;--d:9s;--dl:1s"></span>
+        <span style="--x:41%;--s:18px;--d:13s;--dl:5s"></span>
+        <span style="--x:57%;--s:12px;--d:10s;--dl:2s"></span>
+        <span style="--x:70%;--s:24px;--d:15s;--dl:6s"></span>
+        <span style="--x:83%;--s:16px;--d:12s;--dl:4s"></span>
+        <span style="--x:93%;--s:11px;--d:9s;--dl:7s"></span>
+    </div>
+
+    <div class="container">
+        <div class="champ-head champ-reveal">
+            <span class="champ-new">✨ ÚJDONSÁG 2027</span>
+            <h2 class="champ-title">Delfin <span>Bajnokság</span></h2>
+            <p class="champ-tagline">Két csapat. Öt nap. Sok közös játék.</p>
+            <p class="champ-lead">
+                2027 nyarán egy egész héten át tartó közös csapatjátékkal is készülünk.
+                A gyerekek két csapatba kerülnek, és a hét folyamán különböző játékos feladatokban
+                gyűjthetnek pontokat. Lesznek sorversenyek, ügyességi játékok és vízi feladatok is.
+            </p>
+        </div>
+
+        <!-- Két csapat -->
+        <div class="champ-arena">
+            <div class="champ-team champ-team-a champ-reveal">
+                <div class="champ-team-icon">🐬</div>
+                <h3>Delfinek</h3>
+                <p>Együtt gyűjtjük a pontokat</p>
+            </div>
+
+            <div class="champ-vs champ-reveal" style="--i:2">
+                <span>VS</span>
+            </div>
+
+            <div class="champ-team champ-team-b champ-reveal">
+                <div class="champ-team-icon">🦈</div>
+                <h3>Cápák</h3>
+                <p>Együtt gyűjtjük a pontokat</p>
+            </div>
+        </div>
+
+        <!-- Kötélhúzás-sáv (csak díszítő animáció) -->
+        <div class="champ-tug champ-reveal" aria-hidden="true">
+            <div class="champ-tug-track"><div class="champ-tug-fill"></div></div>
+            <div class="champ-tug-knob">🚀</div>
+        </div>
+
+        <p class="champ-balance champ-reveal">
+            A tábor első napján két, lehetőség szerint <strong>életkor és úszástudás szerint kiegyensúlyozott</strong>
+            csapatot alakítunk ki. Így a kisebbek és a nagyobbak is együtt játszhatnak, és mindenki hozzátehet valamit a csapata eredményéhez.
+        </p>
+
+               <!-- Lenyíló részletek -->
+        <details class="champ-more champ-reveal">
+            <summary data-umami-event="champ-reszletek">
+                <span>Hogyan zajlik a bajnokság?</span>
+                <span class="champ-more-icon" aria-hidden="true">+</span>
+            </summary>
+
+            <div class="champ-more-body">
+                <div class="champ-games">
+                    <div class="champ-game">
+                        <span>🏊‍♂️</span>
+                        <div>
+                            <h4>Vízi játékok</h4>
+                            <p>Játékos feladatok, váltók és ügyességi játékok a medencében.</p>
+                        </div>
+                    </div>
+                    <div class="champ-game">
+                        <span>🏃</span>
+                        <div>
+                            <h4>Sorversenyek</h4>
+                            <p>Egyszerű, vidám csapatjátékok, ahol mindenki bekapcsolódhat.</p>
+                        </div>
+                    </div>
+                    <div class="champ-game">
+                        <span>🎯</span>
+                        <div>
+                            <h4>Ügyességi játékok</h4>
+                            <p>Akadálypályák, célba dobós és más ügyességi feladatok.</p>
+                        </div>
+                    </div>
+                    <div class="champ-game">
+                        <span>⭐</span>
+                        <div>
+                            <h4>Meglepetés játékok</h4>
+                            <p>A hét folyamán újabb játékokkal is készülünk, amiket együtt próbálhatnak ki a csapatok.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="champ-days">
+                    <div class="champ-day">
+                        <div class="champ-day-dot">🤝</div>
+                        <h4>Hétfő</h4>
+                        <p>Megalakul a két csapat, és elkezdődnek az első közös játékok.</p>
+                    </div>
+                    <div class="champ-day">
+                        <div class="champ-day-dot">🎉</div>
+                        <h4>Kedd – Csütörtök</h4>
+                        <p>Sorversenyek, vízi és ügyességi játékok. A pontokat folyamatosan gyűjtjük.</p>
+                    </div>
+                    <div class="champ-day is-final">
+                        <div class="champ-day-dot">🏆</div>
+                        <h4>Péntek</h4>
+                        <p>Az utolsó játékok után összesítjük a pontokat, és kiderül, melyik csapat végzett az élen.</p>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <div class="section-cta champ-reveal">
+            <a href="#jelentkezes" class="cta-btn" data-umami-event="cta-bajnoksag">🔔 Előregisztrálok a 2027-es táborba</a>
+        </div>
+    </div>
+</section>
+	
     <section class="section-space" style="background: #f0f9ff; padding-top: 20px;" id="csomag">
         <div class="container">
             <div class="tabor-premium-box">
                 <div class="tabor-header">
                     <span class="tabor-badge">ALL-INCLUSIVE NYÁRI CSOMAG</span>
                     <h3>Mit tartalmaz a tábori díj?</h3>
-                    <p>Nincsenek rejtett költségek. A részvételi díj mindent fedez:
+                    <p>Nincsenek rejtett költségek. A részvételi díj minden programot, étkezést és a teljes napközis felügyeletet tartalmazza.
 </p>
                 </div>
 
@@ -1804,28 +2221,42 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                                 <span class="tabor-icon">🏊‍♂️</span>
                                 <div>
                                     <h5>Intenzív úszásoktatás</h5>
-                                    <p>Napi szintű szakmai medencés foglalkozások MÚSZ licences edzőkkel.</p>
+                                    <p>Napi medencés foglalkozások MÚSZ-licences edzőkkel, a gyerekek tudásszintjéhez igazodó csoportokban.</p>
                                 </div>
                             </div>
                             <div class="tabor-include-item">
-                                <span class="tabor-icon">🍗</span>
+                                <span class="tabor-icon">🥐</span>
                                 <div>
-                                    <h5>Napi 2x Prémium étkezés</h5>
-                                    <p>Tízórai, meleg ebéd – allergiák figyelembevételével.</p>
+                                    <h5>Finom tízórai minden nap</h5>
+                                    <p>Délelőtt frissen sült péksüteményekkel várjuk a gyerekeket, hogy legyen energiájuk a délelőtti programokhoz.</p>
+                                </div>
+                            </div>
+							<div class="tabor-include-item">
+                                <span class="tabor-icon">🍲</span>
+                                <div>
+                                    <h5>Meleg, tartalmas ebéd</h5>
+                                    <p>Minden nap frissen készített, meleg ebéd, a gyerekek számára megfelelő adagokkal. Az előre jelzett ételallergiákat és étkezési igényeket figyelembe vesszük.</p>
+                                </div>
+                            </div>
+							<div class="tabor-include-item">
+                                <span class="tabor-icon">🍦</span>
+                                <div>
+                                    <h5>Fagyizás</h5>
+                                    <p>Az egyik délután közösen elmegyünk fagyizni – természetesen a tábori díj ezt is tartalmazza.</p>
                                 </div>
                             </div>
                             <div class="tabor-include-item">
                                 <span class="tabor-icon">🐴</span>
                                 <div>
-                                    <h5>Exkluzív Külső programok</h5>
-                                    <p>Sárkányhajózás + lovaskocsikázás belépőkkel együtt.</p>
+                                    <h5>Különleges külső programok</h5>
+                                    <p>Sárkányhajózás, lovaskocsikázás és lovaglás, a programokhoz kapcsolódó költségekkel együtt.</p>
                                 </div>
                             </div>
                             <div class="tabor-include-item">
                                 <span class="tabor-icon">🛡️</span>
                                 <div>
-                                    <h5>Biztonság & Felügyelet</h5>
-                                    <p>Kiscsoportos bontás, folyamatos edzői és animátori figyelem.</p>
+                                    <h5>Folyamatos felügyelet</h5>
+                                    <p>Kiscsoportos foglalkozások, folyamatos edzői és animátori jelenléttel, hogy a gyerekek biztonságban és jó hangulatban töltsék a napot.</p>
                                 </div>
                             </div>
                         </div>
@@ -2577,6 +3008,20 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('resize', request);
     window.addEventListener('load', place);
     place();
+});
+</script>
+	<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const items = document.querySelectorAll('.champ-reveal');
+    if (!items.length) return;
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+        });
+    }, { threshold: 0.2 });
+    items.forEach(el => io.observe(el));
 });
 </script>
 </body>
