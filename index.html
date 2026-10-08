@@ -1943,6 +1943,156 @@ html, body { overflow-x: clip; }
     display: block;
     pointer-events: none;
 }
+        /* ═══════════ CTA KIEMELÉSEK: körbefutó fény, ikonmozgás ═══════════ */
+@property --beam-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+}
+@keyframes ctaBeam { to { --beam-angle: 360deg; } }
+
+/* 1) Hero gomb · 2) Heti 2 alkalom gomb · 3) Űrlap küldés · 4) Nav gomb (csak üveges állapotban)
+   5) Űrlap doboz · 7) Tájékoztató doboz · 8) Hover-only gombok */
+.hero-content-max .cta-btn,
+.price-card-v2.is-popular .cta-btn,
+#submit-btn,
+.nav-shell:not(.nav-at-top) .nav-controls .cta-btn,
+.notice-glow,
+.promo-banner .cta-btn,
+.faq-contact-btn { position: relative; }
+
+.form-box { position: relative; }   /* isolation nélkül, hogy a sikermodal ne sérüljön */
+
+:is(
+    .hero-content-max .cta-btn,
+    .price-card-v2.is-popular .cta-btn,
+    #submit-btn,
+    .nav-shell:not(.nav-at-top) .nav-controls .cta-btn,
+    .form-box,
+    .notice-glow,
+    .promo-banner .cta-btn,
+    .faq-contact-btn
+)::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: conic-gradient(
+        from var(--beam-angle),
+        transparent 0%,
+        transparent 82%,
+        var(--beam-c1, rgba(255, 183, 0, 0.25)) 90%,
+        var(--beam-c2, #ff8c00) 98%,
+        transparent 100%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    animation: ctaBeam var(--beam-dur, 3.4s) linear infinite;
+    pointer-events: none;
+}
+
+/* sötét háttéren fehér fény (hero, nav, promo sáv) */
+.hero-content-max .cta-btn,
+.nav-shell .nav-controls .cta-btn,
+.promo-banner .cta-btn {
+    --beam-c1: rgba(255, 255, 255, 0.25);
+    --beam-c2: #ffffff;
+}
+/* az űrlap doboza és a tájékoztató: lassú, kék fény */
+.form-box {
+    --beam-c1: rgba(14, 165, 233, 0.25);
+    --beam-c2: #0ea5e9;
+    --beam-dur: 8s;
+}
+.notice-glow {
+    --beam-c1: rgba(56, 189, 248, 0.3);
+    --beam-c2: #38bdf8;
+    --beam-dur: 8s;
+}
+
+/* 8) másodlagos gombok: a fény csak ráhúzásra jelenik meg */
+.promo-banner .cta-btn::before,
+.faq-contact-btn::before { opacity: 0; transition: opacity 0.25s ease; }
+@media (hover: hover) {
+    .promo-banner .cta-btn:hover::before,
+    .faq-contact-btn:hover::before { opacity: 1; }
+}
+
+/* lüktető fény a három fő gombon (a sárga szín marad) */
+.hero-content-max .cta-btn,
+.price-card-v2.is-popular .cta-btn,
+#submit-btn { animation: ctaGlow 3.2s ease-in-out infinite; }
+@keyframes ctaGlow {
+    0%, 100% { box-shadow: 0 8px 24px rgba(245, 196, 0, 0.25), 0 0 0 0 rgba(245, 196, 0, 0); }
+    50%      { box-shadow: 0 10px 30px rgba(245, 196, 0, 0.45), 0 0 0 7px rgba(245, 196, 0, 0.10); }
+}
+
+/* animált ikonok */
+.hero-content-max .cta-btn::after,
+.price-card-v2.is-popular .cta-btn::after {
+    content: '→';
+    display: inline-block;
+    margin-left: 8px;
+    animation: ctaArrow 1.8s ease-in-out infinite;
+}
+.hero-content-max .cta-btn:hover::after,
+.price-card-v2.is-popular .cta-btn:hover::after { animation-duration: 0.9s; }
+@keyframes ctaArrow {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(5px); }
+}
+
+#submit-btn::after {
+    content: '🐬';
+    display: inline-block;
+    margin-left: 8px;
+    transform-origin: 50% 70%;
+    animation: ctaDolphin 3s ease-in-out infinite;
+}
+#submit-btn:disabled::after { display: none; }   /* küldés közben nincs ikon */
+@keyframes ctaDolphin {
+    0%, 100% { transform: rotate(0) translateY(0); }
+    25%      { transform: rotate(-14deg) translateY(-2px); }
+    75%      { transform: rotate(12deg) translateY(1px); }
+}
+
+/* 6) Statisztikasáv: az 5 ⭐ csillaga a számolás után beugrik, majd csillog */
+.stat-star::after {
+    content: '⭐';
+    display: inline-block;
+    margin-left: 6px;
+    opacity: 0;
+    transform: scale(0) rotate(-120deg);
+}
+.stat-item.is-visible .stat-star::after {
+    animation:
+        starIn 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.3s forwards,
+        starTwinkle 2.8s ease-in-out 2.5s infinite;
+}
+@keyframes starIn {
+    0%   { opacity: 0; transform: scale(0) rotate(-120deg); }
+    70%  { opacity: 1; transform: scale(1.5) rotate(15deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+@keyframes starTwinkle {
+    0%, 100% { transform: scale(1) rotate(0); filter: brightness(1); }
+    50%      { transform: scale(1.18) rotate(8deg); filter: brightness(1.25); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-content-max .cta-btn,
+    .price-card-v2.is-popular .cta-btn,
+    #submit-btn,
+    .hero-content-max .cta-btn::after,
+    .price-card-v2.is-popular .cta-btn::after,
+    #submit-btn::after,
+    :is(.hero-content-max .cta-btn, .price-card-v2.is-popular .cta-btn, #submit-btn,
+        .nav-shell .nav-controls .cta-btn, .form-box, .notice-glow,
+        .promo-banner .cta-btn, .faq-contact-btn)::before { animation: none !important; }
+    .stat-star::after { animation: none !important; opacity: 1; transform: none; }
+}
     </style>
 </head>
 <body>
@@ -2084,7 +2234,7 @@ html, body { overflow-x: clip; }
                     <div class="stat-label">Elégedett gyermek</div>
                 </div>
                 <div class="stat-item">
-    <div class="stat-number" data-target="5" data-decimals="1" data-suffix=" ⭐">0</div>
+    <div class="stat-number stat-star" data-target="5" data-decimals="1">0</div>
     <div class="stat-label">Szülői értékelés</div>
 </div>
                 <div class="stat-item">
@@ -2779,7 +2929,7 @@ html, body { overflow-x: clip; }
         <h2 class="section-title" id="form-main-title">Jelentkezés a 2026/2027-es úszótanévre</h2>
         <p class="section-sub" id="form-sub-title">Add meg pár percben gyermeked adatait, mi pedig lefoglaljuk a helyét a csoportban.</p>
 
-        <div style="background: var(--sky-lt); border: 2px solid var(--sky); color: var(--navy2); padding: 12px 16px; border-radius: 12px; font-size: 14.5px; font-weight: 700; margin-bottom: 25px; text-align: center; line-height: 1.4; max-width: 600px; margin-left: auto; margin-right: auto;">
+        <div class="notice-glow" style="background: var(--sky-lt); border: 2px solid var(--sky); color: var(--navy2); padding: 12px 16px; border-radius: 12px; font-size: 14.5px; font-weight: 700; margin-bottom: 25px; text-align: center; line-height: 1.4; max-width: 600px; margin-left: auto; margin-right: auto;">
     📅 Folyamatosan lehet jelentkezni a 2026/2027-es úszótanévre!<br>
     Az órák már elindultak, de szeretettel várjuk az új jelentkezőket! 🐬<br>
           A szabad helyeket a jelentkezésnél tudjátok megnézni.  
