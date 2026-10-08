@@ -1768,6 +1768,48 @@ html, body { overflow-x: clip; }
     .champ-team p { display: none; }        /* mobilon csak ikon + név */
     .champ-team-icon { font-size: 20px; }
 }
+		/* ═══ Programkártyák: finom képmozgás ═══ */
+.prog-img-holder img {
+    transform-origin: center bottom;
+    transition: transform 0.7s ease;
+}
+.prog-icon-tag { z-index: 2; }
+
+@media (hover: hover) {
+    .prog-card:hover .prog-img-holder img { transform: scale(1.1); }
+}
+@media (hover: none) {
+    .prog-img-holder img { animation: progDrift 14s ease-in-out infinite alternate; }
+}
+@keyframes progDrift {
+    from { transform: scale(1); }
+    to   { transform: scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .prog-img-holder img { animation: none !important; transition: none; }
+    .prog-card:hover .prog-img-holder img { transform: none; }
+}
+		/* ═══ Promo kép: lassú zoom ═══ */
+.inline-photo-wrap {
+    overflow: hidden;
+    border-radius: 20px;
+    width: min(100%, 260px);
+    justify-self: center;
+    box-shadow: var(--shadow-sm);
+}
+.inline-photo-wrap .inline-photo {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    max-width: 100% !important;
+    animation: promoZoom 16s ease-in-out infinite alternate;
+}
+@keyframes promoZoom {
+    from { transform: scale(1); }
+    to   { transform: scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .inline-photo-wrap .inline-photo { animation: none; }
+}
 	</style>
 </head>
 <body>
