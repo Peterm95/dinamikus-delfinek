@@ -1810,6 +1810,98 @@ html, body { overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
     .inline-photo-wrap .inline-photo { animation: none; }
 }
+		/* ═══ CTA kiemelés: körbefutó fény + animált ikon ═══ */
+@property --beam-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+}
+/* ═══ Űrlap doboz: lassú, kék körbefutó fény ═══ */
+.form-container-box {
+    position: relative;
+    isolation: isolate;
+}
+.form-container-box::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    padding: 2px;
+    border-radius: inherit;
+    background: conic-gradient(
+        from var(--beam-angle),
+        transparent 0%,
+        transparent 85%,
+        rgba(0, 162, 255, 0.3) 92%,
+        #00a2ff 99%,
+        transparent 100%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    animation: ctaBeam 7s linear infinite;
+    pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .form-container-box::before { animation: none !important; }
+}
+.cta-btn[href="#jelentkezes"],
+.form-submit-btn {
+    position: relative;
+    isolation: isolate;
+    animation: ctaGlow 3.2s ease-in-out infinite;
+}
+
+/* a körbefutó fénycsík: csak a gomb szegélyén látszik */
+.cta-btn[href="#jelentkezes"]::before,
+.form-submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(
+        from var(--beam-angle),
+        transparent 0%,
+        transparent 68%,
+        rgba(255, 255, 255, 0.15) 78%,
+        rgba(255, 255, 255, 0.95) 97%,
+        transparent 100%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    animation: ctaBeam 3.4s linear infinite;
+    pointer-events: none;
+}
+@keyframes ctaBeam { to { --beam-angle: 360deg; } }
+
+/* finom lüktető fény a gomb körül, a sárga színt megtartja */
+@keyframes ctaGlow {
+    0%, 100% { box-shadow: 0 4px 14px rgba(245, 196, 0, 0.25), 0 0 0 0 rgba(245, 196, 0, 0.0); }
+    50%      { box-shadow: 0 6px 22px rgba(245, 196, 0, 0.45), 0 0 0 7px rgba(245, 196, 0, 0.10); }
+}
+
+/* animált ikon: csengő rázkódik, majd pihen */
+.cta-icon {
+    display: inline-block;
+    margin: 0 6px;
+    transform-origin: 50% 10%;
+    animation: ctaBell 4s ease-in-out infinite;
+}
+@keyframes ctaBell {
+    0%, 40%, 100% { transform: rotate(0) scale(1); }
+    8%  { transform: rotate(-16deg) scale(1.15); }
+    16% { transform: rotate(14deg)  scale(1.15); }
+    24% { transform: rotate(-10deg) scale(1.08); }
+    32% { transform: rotate(6deg)   scale(1.04); }
+}
+.cta-btn:hover .cta-icon { animation-duration: 1.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .cta-btn[href="#jelentkezes"], .form-submit-btn,
+    .cta-btn[href="#jelentkezes"]::before, .form-submit-btn::before,
+    .cta-icon { animation: none !important; }
+}
 	</style>
 </head>
 <body>
@@ -3068,6 +3160,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }, { threshold: 0.2 });
     items.forEach(el => io.observe(el));
+});
+</script>
+	<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.cta-btn[href="#jelentkezes"], .form-submit-btn').forEach(btn => {
+        btn.innerHTML = btn.innerHTML.replace(/🔔/g, '<span class="cta-icon">🔔</span>');
+    });
 });
 </script>
 </body>
