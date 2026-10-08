@@ -946,22 +946,18 @@
             position: relative;
         }
         
-        .footer-top-wave {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            overflow: hidden;
-            line-height: 0;
-            transform: translateY(-99%);
-            z-index: 10;
-        }
-        .footer-top-wave svg {
-            position: relative;
-            display: block;
-            width: calc(100% + 1.3px);
-            height: 50px;
-        }
+        .footer { overflow: visible; }
+
+.foam-edge-footer {
+    position: absolute;
+    left: 0;
+    top: -199px;          /* az alsó 1px belelóg a footerbe, így nincs rés */
+    width: 100%;
+    height: 200px;
+    display: block;
+    pointer-events: none;
+    z-index: 10;
+}
 
         /* Dekorációs kép asztali nézetben: Teljesen a vonal FELETT */
         .footer-wave-photo {
@@ -2778,7 +2774,7 @@ html, body { overflow-x: clip; }
         </div>
     </section>
 
-<section class="section-space" style="background: var(--white); padding-top: 20px;" id="jelentkezes">
+<section class="section-space" style="background: var(--white); padding-top: 20px; padding-bottom: 120px;" id="jelentkezes">
     <div class="container">
         <h2 class="section-title" id="form-main-title">Jelentkezés a 2026/2027-es úszótanévre</h2>
         <p class="section-sub" id="form-sub-title">Add meg pár percben gyermeked adatait, mi pedig lefoglaljuk a helyét a csoportban.</p>
@@ -2963,11 +2959,7 @@ html, body { overflow-x: clip; }
 </section>
 
     <footer class="footer">
-    <div class="footer-top-wave">
-        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" fill="#061e50"></path>
-        </svg>
-    </div>
+    
 
     <div class="container">
         
@@ -3867,6 +3859,152 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { rootMargin: '100px 0px' }).observe(cv);
     } else {
         start();
+    }
+})();
+</script>
+    <script>
+(function () {
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var H = 200, BASE = 150;
+
+    // Közös görgetési sebesség mindkét hullámhoz
+    var speed = 0, lastY = window.scrollY;
+    var waves = [];
+
+    function createWave(host, className, color, flip) {
+        if (!host) return;
+
+        var cv = document.createElement('canvas');
+        cv.className = className;
+        cv.setAttribute('aria-hidden', 'true');
+        host.insertBefore(cv, host.firstChild);
+        var ctx = cv.getContext('2d');
+
+        var w = {
+            cv: cv, ctx: ctx, host: host, color: color,
+            W: 0, bubbles: [], spawnAcc: 0, running: false, visible: false
+        };
+
+        function resize() {
+            w.W = host.clientWidth;
+            var dpr = Math.min(window.devicePixelRatio || 1, 2);
+            cv.width = w.W * dpr;
+            cv.height = H * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        resize();
+        window.addEventListener('resize', function () { resize(); if (reduce) draw(w, performance.now(), 1); });
+
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver(function (entries) {
+                w.visible = entries[0].isIntersecting;
+            }, { rootMargin: '100px 0px' }).observe(cv);
+        } else {
+            w.visible = true;
+        }
+
+        waves.push(w);
+        return w;
+    }
+
+    function edge(x, t, amp) {
+        return BASE - amp * (0.55 * Math.sin(x * 0.011 + t * 1.1) +
+                             0.30 * Math.sin(x * 0.027 - t * 1.7) +
+                             0.15 * Math.sin(x * 0.061 + t * 2.6));
+    }
+
+    function layer(w, t, amp, lift, fill) {
+        var ctx = w.ctx;
+        ctx.beginPath();
+        ctx.moveTo(0, H);
+        for (var x = 0; x <= w.W + 8; x += 8) ctx.lineTo(x, edge(x, t, amp) - lift);
+        ctx.lineTo(w.W, H);
+        ctx.closePath();
+        ctx.fillStyle = fill;
+        ctx.fill();
+    }
+
+    function draw(w, now, dt) {
+        var ctx = w.ctx, W = w.W;
+        var energy = reduce ? 0.2 : Math.min(1, speed / 30);
+        var amp = 20 + 40 * energy;
+        var t = now / 1000;
+
+        ctx.clearRect(0, 0, W, H);
+
+        if (w.color === '#ffffff') {
+            layer(w, t + 1.3, amp, 22, 'rgba(255,255,255,0.16)');
+            layer(w, t + 0.6, amp, 11, 'rgba(255,255,255,0.30)');
+        } else {
+            // sötétkék footer: a hullám a footer színét hozza
+            layer(w, t + 1.3, amp, 22, 'rgba(6,30,80,0.18)');
+            layer(w, t + 0.6, amp, 11, 'rgba(6,30,80,0.35)');
+        }
+        layer(w, t, amp, 0, w.color);
+
+        if (reduce) return;
+
+        var bubbleFill = w.color === '#ffffff' ? 'rgba(255,255,255,0.15)' : 'rgba(56,189,248,0.18)';
+        var bubbleLine = w.color === '#ffffff' ? '#ffffff' : '#7dd3fc';
+
+        w.spawnAcc += (0.12 + energy * 1.6) * dt;
+        while (w.spawnAcc >= 1 && w.bubbles.length < 70) {
+            w.spawnAcc -= 1;
+            var bx = Math.random() * W;
+            w.bubbles.push({ x: bx, y: edge(bx, t, amp) - 4, r: 2 + Math.random() * 7,
+                vy: -(0.4 + Math.random() * 1.2) * (1 + energy),
+                dx: (Math.random() - 0.5) * 0.4, ph: Math.random() * 6.28, life: 1 });
+        }
+        w.spawnAcc = Math.min(w.spawnAcc, 2);
+
+        for (var j = w.bubbles.length - 1; j >= 0; j--) {
+            var b = w.bubbles[j];
+            b.y += b.vy * dt;
+            b.x += (b.dx + Math.sin(t * 2 + b.ph) * 0.25) * dt;
+            b.life -= 0.011 * dt;
+            if (b.life <= 0 || b.y < -10) { w.bubbles.splice(j, 1); continue; }
+            ctx.globalAlpha = Math.max(b.life, 0) * 0.85;
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, b.r, 0, 6.283);
+            ctx.fillStyle = bubbleFill;
+            ctx.fill();
+            ctx.lineWidth = 1.2;
+            ctx.strokeStyle = bubbleLine;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(b.x - b.r * 0.3, b.y - b.r * 0.3, b.r * 0.25, 0, 6.283);
+            ctx.fillStyle = bubbleLine;
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+    }
+
+    // Hullámok létrehozása
+    createWave(document.getElementById('rolunk'), 'foam-edge', '#ffffff');
+    createWave(document.querySelector('.footer'), 'foam-edge-footer', '#061e50');
+
+    // Egyetlen közös animációs ciklus
+    var last = performance.now();
+    function loop(now) {
+        var dt = Math.min((now - last) / 16.7, 3);
+        last = now;
+
+        var dy = Math.abs(window.scrollY - lastY);
+        lastY = window.scrollY;
+        speed += (dy - speed) * 0.15;
+
+        waves.forEach(function (w) {
+            if (w.visible || reduce) draw(w, now, dt);
+        });
+
+        if (!reduce) requestAnimationFrame(loop);
+    }
+
+    if (reduce) {
+        waves.forEach(function (w) { draw(w, performance.now(), 1); });
+    } else {
+        requestAnimationFrame(loop);
     }
 })();
 </script>
