@@ -1950,6 +1950,33 @@ html, body { overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
     .fan-card { transition: none; }
 }
+		/* ═══ Legyező: érintőképernyőn magától mozog ═══ */
+@media (hover: none) {
+    .fan-card {
+        transition: none;
+        animation: fanBreathe 5s ease-in-out infinite;
+    }
+    .fan-card:nth-child(1) { animation-name: fanBreathe1; }
+    .fan-card:nth-child(2) { animation-name: fanBreathe2; animation-delay: -1.6s; }
+    .fan-card:nth-child(3) { animation-name: fanBreathe3; animation-delay: -3.2s; }
+}
+
+@keyframes fanBreathe1 {
+    0%, 100% { transform: translate(-70%, 6%) rotate(-3deg); }
+    50%      { transform: translate(-76%, 2%) rotate(-6deg); }
+}
+@keyframes fanBreathe2 {
+    0%, 100% { transform: translate(0%, 0%) rotate(0deg); }
+    50%      { transform: translate(0%, -6%) rotate(0deg); }
+}
+@keyframes fanBreathe3 {
+    0%, 100% { transform: translate(70%, 6%) rotate(3deg); }
+    50%      { transform: translate(76%, 2%) rotate(6deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fan-card { animation: none !important; }
+}
 	</style>
 </head>
 <body>
