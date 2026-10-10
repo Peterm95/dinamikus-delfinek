@@ -1789,27 +1789,7 @@ html, body { overflow-x: clip; }
     .prog-img-holder img { animation: none !important; transition: none; }
     .prog-card:hover .prog-img-holder img { transform: none; }
 }
-		/* ═══ Promo kép: lassú zoom ═══ */
-.inline-photo-wrap {
-    overflow: hidden;
-    border-radius: 20px;
-    width: min(100%, 260px);
-    justify-self: center;
-    box-shadow: var(--shadow-sm);
-}
-.inline-photo-wrap .inline-photo {
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    max-width: 100% !important;
-    animation: promoZoom 16s ease-in-out infinite alternate;
-}
-@keyframes promoZoom {
-    from { transform: scale(1); }
-    to   { transform: scale(1.1); }
-}
-@media (prefers-reduced-motion: reduce) {
-    .inline-photo-wrap .inline-photo { animation: none; }
-}
+		
 		/* ═══ CTA kiemelés: körbefutó fény + animált ikon ═══ */
 @property --beam-angle {
     syntax: '<angle>';
@@ -1901,6 +1881,74 @@ html, body { overflow-x: clip; }
     .cta-btn[href="#jelentkezes"], .form-submit-btn,
     .cta-btn[href="#jelentkezes"]::before, .form-submit-btn::before,
     .cta-icon { animation: none !important; }
+}
+
+		/* ═══════════ TÁBOR: 3 FOTÓS, ENYHÉN ÍVELT LEGYEZŐ (arányos méretezés) ═══════════ */
+.tabor-fan-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.tabor-fan {
+    --fan-ease: linear(0, 0.01 0.8%, 0.038 1.6%, 0.154 3.4%, 0.781 9.7%, 1.01 12.5%, 1.089 13.8%, 1.153 15.2%, 1.195 16.6%, 1.219 18%, 1.224 19.7%, 1.208 21.6%, 1.172 23.6%, 1.057 28.6%, 1.007 31.2%, 0.969 34.1%, 0.951 37.1%, 0.953 40.9%, 0.998 50.4%, 1.011 56%, 0.998 74.7%, 1);
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    aspect-ratio: 4 / 3;          /* a magasság a szélességből jön, nincs fix px */
+}
+
+.fan-card {
+    --x: 0%;      /* vízszintes eltolás (a kártya saját szélességéhez képest) */
+    --y: 0%;      /* függőleges eltolás: az ív */
+    --r: 0deg;    /* forgatás */
+    --s: 0%;      /* szomszéd-eltolás hoverkor */
+    position: absolute;
+    left: 30%;
+    top: 10%;
+    width: 40%;                   /* a legyező szélességének 40%-a */
+    aspect-ratio: 3 / 4;
+    border-radius: 14px;
+    border: 4px solid var(--white);
+    background: var(--white);
+    overflow: hidden;
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.3);
+    transform-origin: 50% 100%;
+    transform: translate(calc(var(--x) + var(--s)), var(--y)) rotate(var(--r));
+    transition: transform 0.9s var(--fan-ease), box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.fan-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* nagyon enyhe ív: ±3°, a két szél picit lejjebb */
+.fan-card:nth-child(1) { --x: -70%; --y: 6%; --r: -3deg; z-index: 1; }
+.fan-card:nth-child(2) { --x: 0%;   --y: 0%; --r: 0deg;  z-index: 2; }
+.fan-card:nth-child(3) { --x: 70%;  --y: 6%; --r: 3deg;  z-index: 1; }
+
+/* hover: a kártya felemelkedik, a szomszédok félrehúzódnak */
+@media (hover: hover) {
+    .fan-card:hover {
+        --y: -8%;
+        --r: 0deg;
+        z-index: 5;
+        box-shadow: 0 20px 38px rgba(0, 0, 0, 0.38);
+    }
+    .tabor-fan:has(.fan-card:nth-child(1):hover) .fan-card:nth-child(2),
+    .tabor-fan:has(.fan-card:nth-child(1):hover) .fan-card:nth-child(3) { --s: 8%; }
+
+    .tabor-fan:has(.fan-card:nth-child(2):hover) .fan-card:nth-child(1) { --s: -8%; }
+    .tabor-fan:has(.fan-card:nth-child(2):hover) .fan-card:nth-child(3) { --s: 8%; }
+
+    .tabor-fan:has(.fan-card:nth-child(3):hover) .fan-card:nth-child(1),
+    .tabor-fan:has(.fan-card:nth-child(3):hover) .fan-card:nth-child(2) { --s: -8%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fan-card { transition: none; }
 }
 	</style>
 </head>
@@ -2653,9 +2701,13 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
 
                     </div>
                     
-                    <div class="inline-photo-wrap" style="flex: 0 0 35%; margin: 0; display: flex; justify-content: center;">
-                        <img src="tabor-uszoda.jpg" alt="Dinamikus Delfinek Úszásoktatás" class="inline-photo" style="max-width: 260px; width: 100%; height: 180px; border-radius: 20px; box-shadow: var(--shadow-sm); object-fit: cover; object-position: center;">
-                    </div>
+                    <div class="tabor-fan-wrap">
+    <div class="tabor-fan">
+        <div class="fan-card"><img src="Dinamikus-Delfinek-Uszas.jpg" alt="Dinamikus Delfinek Úszás" loading="lazy"></div>
+        <div class="fan-card"><img src="Dinamikus-Delfinek-Uszas-2.jpg" alt="Dinamikus Delfinek Úszás" loading="lazy"></div>
+        <div class="fan-card"><img src="Dinamikus-Delfinek-Uszas-3.jpg" alt="Dinamikus Delfinek Úszás" loading="lazy"></div>
+    </div>
+</div>
                     
                 </div>
             </div>
