@@ -2093,6 +2093,92 @@ html, body { overflow-x: clip; }
         .promo-banner .cta-btn, .faq-contact-btn)::before { animation: none !important; }
     .stat-star::after { animation: none !important; opacity: 1; transform: none; }
 }
+        /* ═══════════ PROMO DOBOZ: lassú, finom pulzáló fény ═══════════ */
+.promo-banner {
+    animation: promoGlow 5s ease-in-out infinite;
+}
+@keyframes promoGlow {
+    0%, 100% {
+        box-shadow:
+            0 30px 70px rgba(6, 30, 80, 0.15),
+            0 0 0 0 rgba(56, 189, 248, 0);
+    }
+    50% {
+        box-shadow:
+            0 30px 70px rgba(6, 30, 80, 0.15),
+            0 0 34px 4px rgba(56, 189, 248, 0.28);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .promo-banner { animation: none; }
+}
+        /* ═══════════ TÁBOR: 3 FOTÓS, ENYHÉN ÍVELT LEGYEZŐ ═══════════ */
+.tabor-fan {
+    --fan-ease: linear(0, 0.01 0.8%, 0.038 1.6%, 0.154 3.4%, 0.781 9.7%, 1.01 12.5%, 1.089 13.8%, 1.153 15.2%, 1.195 16.6%, 1.219 18%, 1.224 19.7%, 1.208 21.6%, 1.172 23.6%, 1.057 28.6%, 1.007 31.2%, 0.969 34.1%, 0.951 37.1%, 0.953 40.9%, 0.998 50.4%, 1.011 56%, 0.998 74.7%, 1);
+    --card-w: 128px;
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    height: 220px;
+    margin: 0 auto;
+}
+
+.fan-card {
+    --x: 0px;      /* alap vízszintes eltolás */
+    --y: 0px;      /* az ív: a szélső kártyák kicsit lejjebb ülnek */
+    --r: 0deg;     /* enyhe elforgatás */
+    --s: 0px;      /* szomszéd-eltolás hoverkor */
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: var(--card-w);
+    aspect-ratio: 3 / 4;
+    margin-left: calc(var(--card-w) / -2);
+    border-radius: 16px;
+    border: 4px solid var(--white);
+    background: var(--white);
+    overflow: hidden;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+    transform-origin: 50% 100%;
+    transform: translate(calc(var(--x) + var(--s)), var(--y)) rotate(var(--r));
+    transition: transform 0.9s var(--fan-ease), box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.fan-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* nagyon enyhe ív: 3 fok elfordulás, picit lejjebb a két szél */
+.fan-card:nth-child(1) { --x: -88px; --y: 8px; --r: -3deg; z-index: 1; }
+.fan-card:nth-child(2) { --x: 0px;   --y: 0px; --r: 0deg;  z-index: 2; }
+.fan-card:nth-child(3) { --x: 88px;  --y: 8px; --r: 3deg;  z-index: 1; }
+
+/* ráhúzás: a kártya felemelkedik, a szomszédok félrehúzódnak */
+.fan-card:hover {
+    --y: -16px;
+    --r: 0deg;
+    z-index: 5;
+    box-shadow: 0 22px 40px rgba(0, 0, 0, 0.35);
+}
+.tabor-fan:has(.fan-card:nth-child(1):hover) .fan-card:nth-child(2),
+.tabor-fan:has(.fan-card:nth-child(1):hover) .fan-card:nth-child(3) { --s: 16px; }
+
+.tabor-fan:has(.fan-card:nth-child(2):hover) .fan-card:nth-child(1) { --s: -16px; }
+.tabor-fan:has(.fan-card:nth-child(2):hover) .fan-card:nth-child(3) { --s: 16px; }
+
+.tabor-fan:has(.fan-card:nth-child(3):hover) .fan-card:nth-child(1),
+.tabor-fan:has(.fan-card:nth-child(3):hover) .fan-card:nth-child(2) { --s: -16px; }
+
+@media (max-width: 992px) {
+    .tabor-fan { height: 230px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .fan-card { transition: none; }
+}
     </style>
 </head>
 <body>
@@ -2917,9 +3003,12 @@ html, body { overflow-x: clip; }
                     </div>
                     
                     <div class="inline-photo-wrap" style="flex: 0 0 35%; margin: 0;">
-                        <img src="nyari-tabor.jpg" alt="Nyári tábor pillanatfázis" class="inline-photo" style="max-width: 260px;">
-                    </div>
-                </div>
+    <div class="tabor-fan">
+        <div class="fan-card"><img src="nyari-tabor.jpg" alt="Nyári tábor" loading="lazy"></div>
+        <div class="fan-card"><img src="nyari-tabor-2.jpg" alt="Nyári tábor" loading="lazy"></div>
+        <div class="fan-card"><img src="nyari-tabor-3.jpg" alt="Nyári tábor" loading="lazy"></div>
+    </div>
+</div>
             </div>
         </div>
     </section>
