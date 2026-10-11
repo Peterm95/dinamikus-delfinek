@@ -2248,7 +2248,7 @@ html, body { overflow-x: clip; }
     <a href="#csapatunk" class="nav-link">Csapatunk</a>
     <a href="#velemenyek" class="nav-link">Vélemények</a>
     <a href="#idopontok" class="nav-link">Edzések</a>
-    <a href="#arak" class="nav-link">Tagdíjak</a>
+    <a href="#arak" class="nav-link">Díjak</a>
     <a href="#gyik" class="nav-link">GYIK</a>
     <a href="tabor" class="nav-link">Tábor</a>
 </div>
@@ -4317,7 +4317,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var n = document.querySelectorAll('.day-checkbox:checked').length;
         var p = prices[n];
         if (!p) { box.style.display = 'none'; return; }
-        box.innerHTML = '<strong>Havi tagdíjad: ' + p.disc + ' Ft</strong> (kedvezményes éves ár). ' +
+        box.innerHTML = '<strong>Havi díjad: ' + p.disc + ' Ft</strong> (kedvezményes ár). ' +
                         'Kihagyott havi díj esetén az alapár: ' + p.base + ' Ft/hó.';
         box.style.display = 'block';
     }
