@@ -2223,6 +2223,60 @@ html, body { overflow-x: clip; }
 #policy-modal-body ul { padding-left:24px; margin-bottom:16px; }
 #policy-modal-body p { margin-bottom:12px; }
 
+/* ═══════════ ÖSSZEGZÉS (halvány kék, mindig nyitott) ═══════════ */
+.order-summary {
+    background: var(--sky-lt);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 14px; /* extra köz a következő jelölőnégyzet előtt */
+    animation: osFadeIn .4s ease;
+}
+@keyframes osFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.os-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding-bottom: 12px; margin-bottom: 6px;
+    border-bottom: 1px solid rgba(10, 48, 117, 0.12);
+}
+.os-head-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.os-icon { font-size: 22px; line-height: 1; display: inline-block; animation: osSwim 3.2s ease-in-out infinite; }
+@keyframes osSwim {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%      { transform: translateY(-2px) rotate(-6deg); }
+}
+.os-title { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 16.5px; color: var(--navy); }
+.os-total { font-family: 'Baloo 2', cursive; font-weight: 900; font-size: 22px; color: var(--navy); white-space: nowrap; }
+.os-total small { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; color: #64748b; }
+
+.os-row {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 14px;
+    padding: 7px 0; font-size: 14px; color: #475569;
+}
+.os-row strong { color: var(--navy2); font-weight: 800; text-align: right; }
+.os-gap { margin-top: 6px; padding-top: 12px; border-top: 1px dashed rgba(10, 48, 117, 0.18); }
+.os-strike { text-decoration: line-through; text-decoration-color: #94a3b8; color: #64748b !important; font-weight: 700 !important; }
+.os-discount strong { color: #15803d; }
+
+.os-condition {
+    margin: 10px 0 0;
+    font-size: 12.5px; line-height: 1.55; color: #64748b;
+}
+
+@keyframes osBump { 0% { transform: scale(1); } 40% { transform: scale(1.1); } 100% { transform: scale(1); } }
+.os-bump { animation: osBump .4s ease; }
+
+@media (max-width: 500px) {
+    .os-total { font-size: 19px; }
+    .os-title { font-size: 15px; }
+    .os-row { font-size: 13.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .order-summary, .os-icon, .os-bump { animation: none; }
+}
+
 
         
     </style>
@@ -3224,8 +3278,28 @@ html, body { overflow-x: clip; }
                         </div>
 
                         <div id="legal-rendes" style="display: flex; flex-direction: column; gap: 12px; margin-top: 25px; margin-bottom: 20px;">
-    <div id="price-summary" style="display:none; background: var(--sky-lt); border-radius: 12px; padding: 12px 16px; font-size: 14px; color: var(--navy2); line-height: 1.5;"></div>
+    <div id="order-summary" class="order-summary" style="display:none">
+    <div class="os-head">
+        <span class="os-head-left">
+            <span class="os-icon">🏊</span>
+            <span class="os-title" id="os-sub">Heti 1 alkalom</span>
+        </span>
+        <span class="os-total" id="os-total">14 000 Ft<small> / hó</small></span>
+    </div>
 
+    <div class="os-row"><span>Gyermek neve</span><strong id="os-name">–</strong></div>
+    <div class="os-row"><span>Születési idő</span><strong id="os-birth">–</strong></div>
+    <div class="os-row"><span>Napok</span><strong id="os-days">–</strong></div>
+
+    <div class="os-row os-gap"><span>Alapár</span><strong class="os-strike" id="os-base">17 000 Ft</strong></div>
+    <div class="os-row os-discount"><span>Kedvezmény</span><strong id="os-discount">−3 000 Ft</strong></div>
+
+    <p class="os-condition">
+        A kedvezmény feltétele a megszakítás nélküli havi fizetés (ÁSZF 4.3.). Fizetési kihagyás esetén az alapár érvényes, előre jelzett, igazolt szünet esetén a kedvezmény megmarad.
+    </p>
+</div>
+
+        
     <label style="display:flex; align-items:flex-start; gap:12px; font-weight:600; cursor:pointer; font-size:14px; color:#475569; line-height:1.4;">
     <input type="checkbox" id="privacy-rendes" name="nyilatkozatElfogadva" value="Elfogadva" required style="transform:scale(1.2); margin-top:3px;">
     <span>
@@ -4304,24 +4378,64 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
     <script>
 (function () {
-    var box = document.getElementById('price-summary');
-    var boxes = document.querySelectorAll('.day-checkbox');
-    if (!box || !boxes.length) return;
+    var root = document.getElementById('order-summary');
+    var form = document.getElementById('registration-form');
+    if (!root || !form) return;
 
+    var step2 = document.getElementById('form-step-2');
     var prices = {
-        1: { disc: '14 000', base: '17 000' },
-        2: { disc: '20 000', base: '26 000' }
+        1: { disc: 14000, base: 17000 },
+        2: { disc: 20000, base: 26000 }
     };
 
-    function update() {
-        var n = document.querySelectorAll('.day-checkbox:checked').length;
-        var p = prices[n];
-        if (!p) { box.style.display = 'none'; return; }
-        box.innerHTML = '<strong>Havi díjad: ' + p.disc + ' Ft</strong> (kedvezményes ár). ' +
-                        'Kihagyott havi díj esetén az alapár: ' + p.base + ' Ft/hó.';
-        box.style.display = 'block';
+    function money(n) { return n.toLocaleString('hu-HU') + ' Ft'; }
+    function fmtDate(v) {
+        if (!v) return '–';
+        var p = v.split('-');
+        return p.length === 3 ? p[0] + '. ' + p[1] + '. ' + p[2] + '.' : v;
     }
-    boxes.forEach(function (cb) { cb.addEventListener('change', update); });
+    function setText(id, txt) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = txt;
+    }
+
+    var lastTotal = '';
+
+    function update() {
+        var checked = Array.prototype.slice.call(document.querySelectorAll('.day-checkbox:checked'));
+        var p = prices[checked.length];
+        if (!p) { root.style.display = 'none'; lastTotal = ''; return; }
+        root.style.display = 'block';
+
+        var nameEl = document.getElementById('gyermekNeveInput');
+        setText('os-name', (nameEl && nameEl.value.trim()) || '–');
+        setText('os-birth', fmtDate(form.gyermekSzuletesi && form.gyermekSzuletesi.value));
+        setText('os-days', checked.map(function (cb) { return cb.value; }).join(', '));
+
+        setText('os-sub', 'Heti ' + checked.length + ' alkalom');
+        setText('os-base', money(p.base));
+        setText('os-discount', '−' + money(p.base - p.disc));
+
+        var newTotal = money(p.disc);
+        if (newTotal !== lastTotal) {
+            var totalEl = document.getElementById('os-total');
+            totalEl.innerHTML = newTotal + '<small> / hó</small>';
+            if (lastTotal) {
+                totalEl.classList.remove('os-bump');
+                void totalEl.offsetWidth;
+                totalEl.classList.add('os-bump');
+            }
+            lastTotal = newTotal;
+        }
+    }
+
+    form.addEventListener('input', update);
+    form.addEventListener('change', update);
+    form.addEventListener('reset', function () { setTimeout(update, 0); });
+
+    if (step2 && 'MutationObserver' in window) {
+        new MutationObserver(update).observe(step2, { attributes: true, attributeFilter: ['class'] });
+    }
     update();
 })();
 </script>
