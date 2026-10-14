@@ -31,6 +31,8 @@
       "url": "https://www.dinamikusdelfinek.hu/",
       "telephone": "+36203938067",
       "email": "dinamikus.delfinek@gmail.com",
+        "logo": "https://www.dinamikusdelfinek.hu/Dinamikus%20Delfinek%20logo.jpg",
+      "image": "https://www.dinamikusdelfinek.hu/delfinek-megosztas.png",
       "sameAs": ["https://www.facebook.com/dinamikusdelfinek"],
       "address": {
         "@type": "PostalAddress",
@@ -2282,7 +2284,125 @@ html, body { overflow-x: clip; }
     .order-summary, .os-icon, .os-bump { animation: none; }
 }
 
+/* ═══════════  — TOP 10 STÍLUS ═══════════ */
+.steps-row {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.step-item {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+}
+.step-big {
+    width: 130px;
+    text-align: center;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 900;
+    font-size: 190px;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 4px var(--navy);
+    user-select: none;
+}
+        .step-big {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.step-big svg {
+    height: 140px;
+    width: auto;
+    overflow: visible;
+}
+.step-big svg path {
+    fill: none;
+    stroke: var(--navy);
+    stroke-width: 4;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+.step-poster {
+    position: relative;
+    z-index: 2;
+    width: 190px;
+    min-height: 230px;
+    margin-left: -46px;
+    padding: 22px 18px;
+    border-radius: 18px;
+    background: var(--gray);
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 8px 20px rgba(10, 48, 117, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    transition: transform 0.25s ease;
+}
 
+.step-icon {
+    width: 52px; height: 52px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: var(--sky-lt);
+    border: 3px solid var(--white);
+    box-shadow: 0 4px 10px rgba(10, 48, 117, 0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+}
+.step-title {
+    font-size: 17px; font-weight: 800;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 6px;
+}
+.step-desc {
+    font-size: 13px; line-height: 1.5;
+    color: #64748b;
+}
+
+/* ── Mobil: kompakt, vízszintesen húzható sáv ── */
+@media (max-width: 768px) {
+    .steps-row {
+        justify-content: flex-start;
+        gap: 6px;
+        margin: 0 -20px;
+        padding: 6px 20px 12px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .steps-row::-webkit-scrollbar { display: none; }
+    .step-item { scroll-snap-align: start; }
+
+    .step-big {
+        width: 70px;
+        font-size: 108px;
+        -webkit-text-stroke: 3px var(--navy);
+    }
+    .step-poster {
+        width: 158px;
+        min-height: 142px;
+        margin-left: -26px;
+        padding: 12px 12px;
+        border-width: 2px;
+        border-radius: 14px;
+    }
+    .step-icon { width: 36px; height: 36px; font-size: 17px; margin-bottom: 6px; border-width: 2px; }
+    .step-title { font-size: 14px; margin-bottom: 3px; }
+    .step-desc { font-size: 11.5px; line-height: 1.4; }
+}
+    .step-big svg { height: 84px; }
+    .step-big svg path { stroke-width: 3; }
+
+
+
+
+        
         
     </style>
 </head>
@@ -2387,7 +2507,7 @@ html, body { overflow-x: clip; }
 </div>
                     <div>
                         <h3 class="feat-title">3 MÚSZ Licences Oktató</h3>
-                        <div class="feat-desc">Hivatalos és elismert szakmai háttér garantálja, hogy gyermeked a helyes úszástechnikát sajátítsa el..</div>
+                        <div class="feat-desc">Hivatalos és elismert szakmai háttér garantálja, hogy gyermeked a helyes úszástechnikát sajátítsa el.</div>
                     </div>
                 </div>
                 <div class="feature-card">
@@ -2964,6 +3084,10 @@ html, body { overflow-x: clip; }
             <path d="M0,32 C240,74 480,74 720,32 C960,-10 1200,-10 1440,32 L1440,0 L0,0 Z" fill="#f4f9fd"/>
         </svg>
     </div>
+
+    
+
+    
 <section class="section-space" style="background: var(--white); padding: 60px 0;" id="gyik">
         <div class="container" style="max-width: 1100px; margin: 0 auto;">
             
@@ -3693,7 +3817,7 @@ if (nextBtn) {
             if (form) form.reset();
 
             const checkedBoxes = document.querySelectorAll('.day-checkbox:checked');
-            checkedBoxes.forEach(cb => cb.checked = false);
+            checkedBoxes.forEach(cb => { cb.checked = false; cb.dispatchEvent(new Event('change', { bubbles: true })); });
             if (hiddenDaysInput) hiddenDaysInput.value = '';
 
             goToStep(1); // ÚJ: visszaáll az 1. lépésre az új jelentkezéshez
@@ -3915,8 +4039,21 @@ document.querySelectorAll('.day-checkbox').forEach(function(checkbox) {
     if (checkbox.checked) label.classList.add('day-option-selected');
     checkbox.addEventListener('change', function() {
         label.classList.toggle('day-option-selected', checkbox.checked);
+        updateDayLimit();
     });
 });
+
+function updateDayLimit() {
+    var count = document.querySelectorAll('.day-checkbox:checked').length;
+    document.querySelectorAll('.day-checkbox').forEach(function(cb) {
+        var l = cb.closest('label');
+        var isFull = l && l.dataset.status === 'full';
+        var limitReached = count >= 2 && !cb.checked;
+        cb.disabled = isFull || limitReached;
+        if (l) l.style.opacity = limitReached ? '0.5' : '';
+    });
+}
+updateDayLimit();
 </script>
     <script>
 (function() {
