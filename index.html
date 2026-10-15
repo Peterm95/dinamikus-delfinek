@@ -1134,6 +1134,7 @@
             .footer-right-col { text-align: center; align-items: center; }
         }
         .dini-widget {
+    pointer-events: none;
     position: fixed;
     bottom: 25px;
     right: 25px;
@@ -1168,11 +1169,13 @@
     transform: translateY(12px) scale(0.95);
     pointer-events: none;
     transition: opacity 0.3s ease, transform 0.3s ease;
+    visibility: hidden;
 }
 .dini-bubble.visible {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
+    visibility: visible;
 }
 .dini-bubble p { margin: 0; }
 .dini-bubble a {
@@ -1208,6 +1211,7 @@
 
 @media (max-width: 768px) {
     .dini-widget { bottom: 15px; right: 15px; }
+    .footer { padding: 50px 0 90px; }
     .floating-dini { width: 62px; }
     .dini-bubble { max-width: 180px; font-size: 12.5px; padding: 12px 26px 12px 14px; }
 }
@@ -1373,19 +1377,7 @@
 .address-row{ display:flex; gap:10px; }
 .address-row .form-group{ flex:1; margin-bottom:0; }
 
-/* --- Resume banner --- */
-#resume-banner{
-    display:none; max-width:600px; margin:0 auto 18px;
-    background: rgba(239, 246, 255, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border:2px solid rgba(191,219,254,0.8); color:#1e3a8a; padding:12px 16px; border-radius:12px;
-    font-size:14px; font-weight:600; text-align:center; line-height:1.5;
-}
-#resume-banner button{
-    margin-left:8px; background:var(--navy,#0a3075); color:#fff; border:none;
-    padding:6px 14px; border-radius:20px; font-weight:700; cursor:pointer; font-size:13px;
-}
+
         /* ═══════════ CSOBBANÓS VIDEÓ ═══════════ */
 .splash-video-section {
     background: var(--white);
@@ -1578,9 +1570,7 @@
     .modal-content {
         background: var(--white);
     }
-    #resume-banner {
-        background: #eff6ff;
-    }
+    
 }.testimonial-card-v2 {
     position: relative;
     background: var(--white);
@@ -3266,12 +3256,7 @@ html, body { overflow-x: clip; }
           A szabad helyeket a jelentkezésnél tudjátok megnézni.  
 </div>
 
-        <!-- Folytatás-sáv, ha korábban elkezdett jelentkezést talál a rendszer -->
-        <div id="resume-banner">
-            👋 Úgy tűnik, korábban elkezdted a jelentkezést. Folytatod onnan, ahol abbahagytad?
-            <button type="button" id="resume-btn">Folytatás</button>
-            <button type="button" id="resume-dismiss-btn" style="background:transparent;color:#1e3a8a;text-decoration:underline;">Nem, új jelentkezés</button>
-        </div>
+        
 
         <!-- Progress bar -->
         <div class="form-progress-wrap" id="form-progress-wrap">
@@ -3658,7 +3643,6 @@ if (nextBtn) {
             });
             if (!step1valid) return;
 
-            saveProgress();
             goToStep(2);
         });
     }
@@ -3668,51 +3652,7 @@ if (nextBtn) {
             goToStep(1);
         });
     }
-    // ============ ÚJ: MUNKAMENET-MENTÉS (AUTO-SAVE) ============
-    const STORAGE_KEY = 'delfinek_jelentkezes_progress';
-
-    function saveProgress() {
-        try {
-            const data = {
-                gyermekNeve: childNameInput?.value || '',
-                gyermekSzuletesi: form.gyermekSzuletesi.value || '',
-                napok: Array.from(document.querySelectorAll('.day-checkbox:checked')).map(cb => cb.value),
-                savedAt: Date.now()
-            };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        } catch (e) { /* csendben elnyeljük, nem kritikus funkció */ }
-    }
-
-    function clearProgress() {
-        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-    }
-
-    function checkForSavedProgress() {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return;
-            const data = JSON.parse(raw);
-            // 7 napnál régebbi mentést nem ajánlunk fel
-            if (Date.now() - data.savedAt > 7 * 24 * 60 * 60 * 1000) { clearProgress(); return; }
-            const banner = document.getElementById('resume-banner');
-            if (banner) banner.style.display = 'block';
-
-            document.getElementById('resume-btn')?.addEventListener('click', function() {
-                if (childNameInput) childNameInput.value = data.gyermekNeve || '';
-                if (form.gyermekSzuletesi) form.gyermekSzuletesi.value = data.gyermekSzuletesi || '';
-                (data.napok || []).forEach(day => {
-                    const cb = document.querySelector(`.day-checkbox[value="${day}"]`);
-                    if (cb) cb.checked = true;
-                });
-                banner.style.display = 'none';
-            });
-            document.getElementById('resume-dismiss-btn')?.addEventListener('click', function() {
-                clearProgress();
-                banner.style.display = 'none';
-            });
-        } catch (e) {}
-    }
-    checkForSavedProgress();
+    
 
     // ============ ÚJ: IRÁNYÍTÓSZÁM AUTOMATIKUS VÁROS-KITÖLTÉS ============
     const irszInput = document.getElementById('irsz-input');
@@ -3792,7 +3732,6 @@ if (nextBtn) {
                     .then(data => {
                         if (data.result === 'success') {
                             resetSubmit();
-                            clearProgress();
 
                             if (registeredChildNameSpan) registeredChildNameSpan.innerText = gyermekNeve;
                             if (customModal) customModal.style.display = 'flex';
