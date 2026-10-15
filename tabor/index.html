@@ -981,7 +981,31 @@
 .team-desc {
     font-size: 14.5px; color: #475569; line-height: 1.55;
 }
+		/* Funfactek az edzőkártyákon */
+.team-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 18px;
+}
+.team-fact {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    text-align: left;
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: #475569;
+    background: var(--white);
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+}
+.team-card:hover .team-fact { border-color: #cfe6f7; }
+.team-fact-icon { flex-shrink: 0; font-size: 18px; line-height: 1; }
+.team-fact strong { font-weight: 800; color: var(--navy-deep); }
 
+		
 /* "Tudtad?" kártya: ugyanaz a sárga, szaggatott stílus, mint az idézetdoboz */
 .tip-card {
     background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
@@ -2083,7 +2107,7 @@ html, body { overflow-x: clip; }
         <div class="container">
             <div class="hero-layout">
                 <div>
-                    <div class="h-badge">🔔 2027-es Nyári Tábor – Feliratkozás</div>
+                    <div class="h-badge">2027-es Nyári Tábor – Feliratkozás</div>
 <h1 class="h-headline">Úszótábor Győrben – <span>2027 nyarán</span></h1>
 <p class="h-sub">Napközis úszótábor 6–14 éveseknek: napi úszásoktatás MÚSZ licences edzőkkel, sárkányhajózás, lovaskocsikázás és napi kétszeri étkezés – a teljesen kezdőtől a haladóig.</p>
                     <div class="hero-btn-group">
@@ -2560,35 +2584,48 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         <p class="section-sub">Három MÚSZ licences szakember vezeti a tábort. Mindhárman ugyanazzal a szenvedéllyel foglalkoznak a gyerekekkel, a vízhez szoktatástól a haladó technikáig.</p>
 
         <div class="team-grid">
-            <div class="team-card">
-                <div class="team-avatar">
-                    <img src="bozsi karakter.png" alt="Bözsi néni" loading="lazy">
-                </div>
-                <h3 class="team-name">Bözsi néni</h3>
-                <span class="team-badge">Vezetőedző</span>
-                <p class="team-desc">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Sok éve foglalkozik gyerekekkel, és fontos számára, hogy a táborban mindenki biztonságban érezze magát, jól érezze magát, és közben rengeteg élménnyel térjen haza.</p>
-            </div>
-
-            <div class="team-card">
-                <div class="team-avatar">
-                    <img src="eszti karakter.png" alt="Eszti néni" loading="lazy">
-                </div>
-                <h3 class="team-name">Eszti néni</h3>
-                <span class="team-badge">Oktató</span>
-                <p class="team-desc">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Türelmes és játékos, könnyen megtalálja a közös hangot a gyerekekkel. Szereti, amikor egy félénkebb gyerek is feloldódik, és egyre bátrabban vesz részt a programokban.</p>
-            </div>
-
-            <div class="team-card">
-                <div class="team-avatar">
-                    <img src="fani karakter.png" alt="Fáni néni" loading="lazy">
-                </div>
-                <h3 class="team-name">Fáni néni</h3>
-                <span class="team-badge">Oktató</span>
-                <p class="team-desc">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Figyelmesen követi a gyerekeket a tábor során, és mindig igyekszik észrevenni, ha valakinek egy kis segítségre, biztatásra vagy éppen egy kis extra figyelemre van szüksége.</p>
-            </div>
+    <div class="team-card">
+        <div class="team-avatar">
+            <img src="bozsi karakter.png" alt="Bözsi néni" loading="lazy">
         </div>
+        <h3 class="team-name">Bözsi néni</h3>
+        <span class="team-badge">Vezetőedző</span>
+        <p class="team-desc">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Sok éve dolgozik gyerekekkel, és a tábor szervezéséért is ő felel. Neki az a legfontosabb, hogy minden gyerek biztonságban érezze magát, és jókedvvel, sok élménnyel menjen haza.</p>
+        <div class="team-facts">
+            <div class="team-fact"><span class="team-fact-icon">🏊</span><span><strong>Kedvenc úszásnem:</strong> Mellúszás</span></div>
+            <div class="team-fact"><span class="team-fact-icon">🍰</span><span><strong>Kedvenc édesség:</strong> Milka Mmmax Tejcsokoládé Choco Jelly</span></div>
+			<div class="team-fact"><span class="team-fact-icon">🎨</span><span><strong>Kedvenc szín:</strong> Fehér</span></div>
         </div>
     </div>
+
+    <div class="team-card">
+        <div class="team-avatar">
+            <img src="eszti karakter.png" alt="Eszti néni" loading="lazy">
+        </div>
+        <h3 class="team-name">Eszti néni</h3>
+        <span class="team-badge">Oktató</span>
+        <p class="team-desc">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Türelmes, nyugodt, és könnyen megtalálja a hangot a gyerekekkel. A félénkebbeknek időt hagy, nem siettet senkit, és a hét közepére általában már ők is vidáman játszanak a többiekkel.</p>
+        <div class="team-facts">
+            <div class="team-fact"><span class="team-fact-icon">🏊</span><span><strong>Kedvenc úszásnem:</strong> Gyorsúszás</span></div>
+            <div class="team-fact"><span class="team-fact-icon">🍰</span><span><strong>Kedvenc édesség:</strong> Bármi, ami süti!</span></div>
+			<div class="team-fact"><span class="team-fact-icon">🎨</span><span><strong>Kedvenc szín:</strong> Fehér</span></div>
+        </div>
+    </div>
+
+    <div class="team-card">
+        <div class="team-avatar">
+            <img src="fani karakter.png" alt="Fáni néni" loading="lazy">
+        </div>
+        <h3 class="team-name">Fáni néni</h3>
+        <span class="team-badge">Oktató</span>
+        <p class="team-desc">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Figyelmes: észreveszi, ha valakinek éppen több biztatásra vagy egy kis extra segítségre van szüksége. Örül minden apró sikernek, legyen az az első bátor merülés vagy egy jól sikerült tempó.</p>
+        <div class="team-facts">
+            <div class="team-fact"><span class="team-fact-icon">🏊</span><span><strong>Kedvenc úszásnem:</strong> Gyorsúszás</span></div>
+            <div class="team-fact"><span class="team-fact-icon">🍰</span><span><strong>Kedvenc édesség:</strong> Tejcsokoládé, kapuciner szelet</span></div>
+			<div class="team-fact"><span class="team-fact-icon">🎨</span><span><strong>Kedvenc szín:</strong> Zöld</span></div>
+        </div>
+    </div>
+</div>
 </section>
     <section class="section-space" style="background: #f0f9ff;">
         <div class="container">
