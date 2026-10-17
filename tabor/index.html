@@ -3063,17 +3063,12 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         }
 
         if(modalOkBtn) {
-            modalOkBtn.addEventListener('click', function() {
-                if(customModal) customModal.style.display = 'none';
-                if(form) form.reset();
-                
-                const checkedBoxes = document.querySelectorAll('.camp-turnus-cb:checked');
-                checkedBoxes.forEach(cb => cb.checked = false);
-                if(hiddenTurnusInput) hiddenTurnusInput.value = '';
-
-                if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
-        }
+    modalOkBtn.addEventListener('click', function() {
+        if(customModal) customModal.style.display = 'none';
+        const nf = document.getElementById('camp-notification-form');
+        if (nf) nf.reset();
+    });
+}
 
         // ==========================================
         // 2. ÚJ ELŐREGISZTRÁCIÓS / ÉRTESÍTÉSI ŰRLAP KEZELÉSE
