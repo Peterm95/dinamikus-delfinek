@@ -2051,6 +2051,168 @@ html, body { overflow-x: clip; }
     .dayflow-line::before { transition: none; transform: none; }
     .js-anim .dayflow-step, .js-anim .hl-card { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
+
+		/* ═══════════ MOBIL LAPOZÓS KÁRTYASOR (edzők + vélemények) ═══════════ */
+.review-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+.carousel-dots { display: none; }
+
+@media (max-width: 992px) {
+    .m-carousel {
+        display: flex !important;
+        grid-template-columns: none !important;
+        position: relative;
+        max-width: none !important;
+        gap: 14px;
+        margin: 0 -24px !important;          /* kilép a container paddingjéből */
+        padding: 10px 24px 18px;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0 24px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .m-carousel::-webkit-scrollbar { display: none; }
+
+    .m-carousel > * {
+        flex: 0 0 82%;
+        max-width: 340px;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+    }
+    /* kompaktabb edzőkártya, hogy kevesebb helyet vegyen el */
+    .team-card { padding: 26px 18px 22px; }
+    .team-avatar { width: 96px; height: 96px; }
+    .team-name { font-size: 22px; }
+
+    .carousel-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 4px;
+    }
+    .carousel-dots button {
+        width: 8px; height: 8px;
+        padding: 0; border: none; border-radius: 8px;
+        background: rgba(3, 22, 64, 0.2);
+        cursor: pointer;
+        transition: width .3s ease, background .3s ease;
+    }
+    .carousel-dots button.active {
+        width: 24px;
+        background: var(--blue-bright);
+    }
+}
+@media (max-width: 480px) {
+    .m-carousel {
+        margin: 0 -16px !important;
+        padding-left: 16px; padding-right: 16px;
+        scroll-padding: 0 16px;
+    }
+}
+/* Lapozós sávban a hover ne emelje ki a kártyát a helyéről */
+@media (max-width: 992px) {
+    .m-carousel { padding-bottom: 26px; }          /* hely az árnyéknak */
+
+    .m-carousel .team-card:hover {
+        transform: none;                           /* nincs felugrás */
+        box-shadow: var(--shadow-sm);
+    }
+    .m-carousel .team-card:hover .team-avatar {
+        transform: none;                           /* nincs scale/rotate sem */
+    }
+}
+
+/* Egérrel, szűk ablakban is maradjon egy finom visszajelzés */
+@media (max-width: 992px) and (hover: hover) {
+    .m-carousel .team-card:hover {
+        border-color: var(--blue-bright);
+        box-shadow: 0 10px 24px rgba(0, 162, 255, 0.18);
+    }
+}
+.perks-strip{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;max-width:760px;margin:0 auto 28px;padding:14px 18px;background:linear-gradient(135deg,var(--navy-deep),var(--navy-light));border:2px solid rgba(0,162,255,.2);border-radius:24px;color:var(--white)}
+.perks-strip strong.lbl{font-family:'Baloo 2',cursive;color:var(--yellow);font-size:15px;width:100%;text-align:center}
+.perks-strip span.p{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:7px 14px;border-radius:50px;font-size:13.5px;font-weight:700}
+/* ═══ Feliratkozás: a kék sáv a fehér doboz MÖGÖTT, egy kártyaként ═══ */
+.form-stack {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-stack .perks-strip {
+    position: relative;
+    z-index: 1;
+    max-width: none;
+    margin: 0;
+    padding: 24px 22px 56px;                       /* alul hely, amit a fehér doboz eltakar */
+    border: none;
+    border-radius: var(--radius-round) var(--radius-round) 0 0;
+    gap: 8px;
+}
+.form-stack .perks-strip strong.lbl {
+    margin-bottom: 4px;
+}
+
+.form-stack .form-container-box {
+    position: relative;
+    z-index: 2;
+    max-width: none;
+    margin: -34px 0 0;                             /* ennyivel csúszik rá a kékre */
+    box-shadow: 0 -8px 24px rgba(3, 22, 64, 0.10), var(--shadow-lg);
+}
+
+@media (max-width: 480px) {
+    .form-stack .perks-strip { padding: 20px 14px 52px; }
+    .form-stack .perks-strip span.p { font-size: 12.5px; padding: 6px 11px; }
+    .form-stack .form-container-box { margin-top: -32px; }
+}
+
+/* ═══ "További rész" – Facebook-szerű szövegvágás ═══ */
+.team-card { --card-bg: #f8fafc; }
+.team-card:hover { --card-bg: #ffffff; }
+
+.clamp-wrap { position: relative; }
+.clamp-more { display: none; }
+
+@media (max-width: 992px) {
+    .clamp-wrap:not(.is-open) .clamp-text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: var(--lines, 3);
+        overflow: hidden;
+    }
+    /* zárt állapot: a gomb az utolsó sor végére ül, balról elhalványuló háttérrel */
+    .clamp-wrap.has-more:not(.is-open) .clamp-more {
+        display: block;
+        position: absolute;
+        right: 0; bottom: 0;
+        padding: 0 0 0 38px;
+        background: linear-gradient(90deg, transparent 0, var(--card-bg, #fff) 34px);
+    }
+    /* nyitott állapot: a gomb a szöveg alá kerül */
+    .clamp-wrap.has-more.is-open .clamp-more {
+        display: block;
+        margin: 6px auto 0;
+        padding: 0;
+    }
+}
+.clamp-more {
+    border: none;
+    font-family: inherit;
+    font-weight: 800;
+    color: var(--blue-royal);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+.clamp-more:hover { color: var(--blue-bright); }
+
+
+
+		
 	</style>
 </head>
 <body>
@@ -2206,7 +2368,7 @@ html, body { overflow-x: clip; }
     <div class="base-block">
         <div class="panel-loc-title">Aqua Sportközpont</div>
         <div class="panel-loc-sub">9025 Győr, Olimpia utca 1.</div>
-        <p class="panel-loc-desc">Győr legmodernebb, tiszta és kiválóan felszerelt uszodai környezete. Az ideális vízhőmérséklet és a professzionális tanmedence garantálják a gyerekek biztonságát és gyors fejlődését.</p>
+        <p class="panel-loc-desc">Győr modern uszodája, ideális vízhőmérséklettel és tanmedencével.</p>
     </div>
 
     <div class="base-divider"></div>
@@ -2214,7 +2376,7 @@ html, body { overflow-x: clip; }
     <div class="base-block">
         <div class="panel-loc-title">Bercsényi Miklós Technikum</div>
         <div class="panel-loc-sub">Győr, Cinka Panna utca 2.</div>
-        <p class="panel-loc-desc">Itt várjuk reggelente a gyerekeket, és itt zajlanak a medencén kívüli programok: kézműves foglalkozások és sorjátékok egy tágas, kényelmes iskolai környezetben.</p>
+        <p class="panel-loc-desc">Itt várjuk reggel a gyerekeket, és itt zajlanak a medencén kívüli programok.</p>
     </div>
 </div>
 
@@ -2383,7 +2545,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
 
         </div>
 
-        <p class="dayflow-note">A program néha változhat, a jó hangulat viszont mindig marad!</p>
+        <p class="dayflow-note">⏰ 7:45–16:30: a teljes munkanapot lefedjük – a program néha változhat, a jó hangulat viszont mindig marad!</p>
     </div>
 </div>
     </section>
@@ -2438,11 +2600,6 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
             <div class="champ-tug-knob">🚀</div>
         </div>
 
-        <p class="champ-balance champ-reveal">
-            A tábor első napján két, lehetőség szerint <strong>életkor és úszástudás szerint kiegyensúlyozott</strong>
-            csapatot alakítunk ki. Így a kisebbek és a nagyobbak is együtt játszhatnak, és mindenki hozzátehet valamit a csapata eredményéhez.
-        </p>
-
                <!-- Lenyíló részletek -->
         <details class="champ-more champ-reveal">
             <summary data-umami-event="champ-reszletek">
@@ -2451,6 +2608,10 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
             </summary>
 
             <div class="champ-more-body">
+                <p class="champ-balance">
+            A tábor első napján két, lehetőség szerint <strong>életkor és úszástudás szerint kiegyensúlyozott</strong>
+            csapatot alakítunk ki. Így a kisebbek és a nagyobbak is együtt játszhatnak, és mindenki hozzátehet valamit a csapata eredményéhez.
+        </p>
                 <div class="champ-games">
                     <div class="champ-game">
                         <span>🏊‍♂️</span>
@@ -2571,7 +2732,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     </div>
                 </div>
 				<div class="section-cta">
-                <a href="#jelentkezes" class="cta-btn cta-btn-sm" data-umami-event="cta-csomag">🔔 Feliratkozás a jelentkezésre</a>
+                <a href="#jelentkezes" class="cta-btn cta-btn-sm" data-umami-event="cta-csomag">🔔 Feliratkozás a 2027-es táborra</a>
                 <p class="section-cta-note">Ingyenes feliratkozás – elsőként tudod meg a részleteket.</p>
             </div>
             </div>
@@ -2583,14 +2744,14 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         <h2 class="section-title">Ismerd meg <span>edzőinket!</span></h2>
         <p class="section-sub">Három MÚSZ licences szakember vezeti a tábort. Mindhárman ugyanazzal a szenvedéllyel foglalkoznak a gyerekekkel, a vízhez szoktatástól a haladó technikáig.</p>
 
-        <div class="team-grid">
+        <div class="team-grid m-carousel">
     <div class="team-card">
         <div class="team-avatar">
             <img src="bozsi karakter.png" alt="Bözsi néni" loading="lazy">
         </div>
         <h3 class="team-name">Bözsi néni</h3>
         <span class="team-badge">Vezetőedző</span>
-        <p class="team-desc">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Sok éve dolgozik gyerekekkel, és a tábor szervezéséért is ő felel. Neki az a legfontosabb, hogy minden gyerek biztonságban érezze magát, és jókedvvel, sok élménnyel menjen haza.</p>
+        <p class="team-desc clamp-text">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Sok éve dolgozik gyerekekkel, és a tábor szervezéséért is ő felel. Neki az a legfontosabb, hogy minden gyerek biztonságban érezze magát, és jókedvvel, sok élménnyel menjen haza.</p>
         <div class="team-facts">
             <div class="team-fact"><span class="team-fact-icon">🏊</span><span><strong>Kedvenc úszásnem:</strong> Mellúszás</span></div>
             <div class="team-fact"><span class="team-fact-icon">🍰</span><span><strong>Kedvenc édesség:</strong> Milka Mmmax Tejcsokoládé Choco Jelly</span></div>
@@ -2604,7 +2765,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         </div>
         <h3 class="team-name">Eszti néni</h3>
         <span class="team-badge">Oktató</span>
-        <p class="team-desc">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Türelmes, nyugodt, és könnyen megtalálja a hangot a gyerekekkel. A félénkebbeknek időt hagy, nem siettet senkit, és a hét közepére általában már ők is vidáman játszanak a többiekkel.</p>
+        <p class="team-desc clamp-text">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Türelmes, nyugodt, és könnyen megtalálja a hangot a gyerekekkel. A félénkebbeknek időt hagy, nem siettet senkit, és a hét közepére általában már ők is vidáman játszanak a többiekkel.</p>
         <div class="team-facts">
             <div class="team-fact"><span class="team-fact-icon">🏊</span><span><strong>Kedvenc úszásnem:</strong> Gyorsúszás</span></div>
             <div class="team-fact"><span class="team-fact-icon">🍰</span><span><strong>Kedvenc édesség:</strong> Bármi, ami süti!</span></div>
@@ -2618,7 +2779,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         </div>
         <h3 class="team-name">Fáni néni</h3>
         <span class="team-badge">Oktató</span>
-        <p class="team-desc">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Figyelmes: észreveszi, ha valakinek éppen több biztatásra vagy egy kis extra segítségre van szüksége. Örül minden apró sikernek, legyen az az első bátor merülés vagy egy jól sikerült tempó.</p>
+        <p class="team-desc clamp-text">MÚSZ-licences oktató és az Úszó Nemzet Program oktatója. Figyelmes: észreveszi, ha valakinek éppen több biztatásra vagy egy kis extra segítségre van szüksége. Örül minden apró sikernek, legyen az az első bátor merülés vagy egy jól sikerült tempó.</p>
         <div class="team-facts">
             <div class="team-fact"><span class="team-fact-icon">🏊</span><span><strong>Kedvenc úszásnem:</strong> Gyorsúszás</span></div>
             <div class="team-fact"><span class="team-fact-icon">🍰</span><span><strong>Kedvenc édesség:</strong> Tejcsokoládé, kapuciner szelet</span></div>
@@ -2631,7 +2792,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         <div class="container">
             <h2 class="section-title">Szülők mesélték – <span>mit mondtak a gyerekek hazafelé?</span></h2>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+           <div class="review-grid m-carousel">
                 <div style="background: #ffffff; padding: 28px; border-radius: 20px; border: 1px solid #e2e8f0; position: relative;">
                     <div style="font-size: 32px; color: var(--sky); line-height: 1; margin-bottom: 10px; font-family: 'Baloo 2';">“</div>
                     <p style="font-size: 14.5px; color: #475569; line-height: 1.6; font-style: italic; margin-bottom: 16px;">
@@ -2845,36 +3006,16 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
     <section class="section-space" id="jelentkezes" style="background: #f0f9ff;">
     <div class="container">
         <h2 class="section-title">Feliratkozás a <span>2027-es tábori hírekre</span></h2>
-<p class="section-sub">A 2026-os turnusok lezárultak. Add meg az e-mail-címed, és elsőként értesítünk, amikor megvannak a 2027-es időpontok és árak, valamint elindul a jelentkezés.</p>
-        <div class="minimal-steps-section">
-            <div class="minimal-timeline" id="minimalTimeline" style="max-width: 600px; margin: 0 auto 30px auto;">
-                <div class="minimal-step" data-delay="100">
-                    <div class="minimal-circle">🎉</div>
-                    <div class="minimal-text">
-                        <div class="minimal-title">Köszönjük a részvételt!</div>
-                        <div class="minimal-desc">Idén rengeteg gyermeknek adhattunk életre szóló élményeket és biztos vízbiztonságot.</div>
-                    </div>
-                </div>
+<p class="section-sub">Add meg az e-mail-címed, és elsőként értesítünk, amikor megvannak a 2027-es időpontok és árak, valamint elindul a jelentkezés.</p>
+        <div class="form-stack">
+    <div class="perks-strip">
+        <strong class="lbl">Feliratkozóként:</strong>
+        <span class="p">⏰ 48 órás előny a jelentkezésnél</span>
+        <span class="p">🎟️ Early bird kedvezmény</span>
+        <span class="p">👫 Testvérkedvezmény</span>
+    </div>
 
-                <div class="minimal-step" data-delay="300">
-                    <div class="minimal-circle">📅</div>
-                    <div class="minimal-text">
-                        <div class="minimal-title">Készülünk a folytatásra</div>
-                        <div class="minimal-desc">Amint fixálódnak a következő évi időpontok és árak, azonnal értesítjük a listán lévőket.</div>
-                    </div>
-                </div>
-
-                <div class="minimal-step" data-delay="500">
-                    <div class="minimal-circle">🚀</div>
-                    <div class="minimal-text">
-                        <div class="minimal-title">Elsőként értesítünk</div>
-                        <div class="minimal-desc">A feliratkozók <span class="minimal-highlight">elsőként kapnak értesítést</span> a 2027-es időpontokról, árakról és a jelentkezés indulásáról.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-container-box" style="max-width: 600px; margin: 0 auto;">
+    <div class="form-container-box">
             <h3 style="text-align: center; color: var(--navy); font-family: 'Baloo 2', cursive; margin-bottom: 20px; font-size: 22px;">Kérj értesítést a jövő évi táborról!</h3>
             
             <form id="camp-notification-form">
@@ -3335,6 +3476,81 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }, { threshold: 0.35, rootMargin: '0px 0px -8% 0px' });
     steps.forEach(el => io.observe(el));
+});
+</script>
+	<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.m-carousel').forEach(track => {
+        const slides = Array.from(track.children);
+        if (slides.length < 2) return;
+
+        const dots = document.createElement('div');
+        dots.className = 'carousel-dots';
+        const buttons = slides.map((_, i) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.setAttribute('aria-label', (i + 1) + '. kártya');
+            b.addEventListener('click', () => {
+                track.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft, behavior: 'smooth' });
+            });
+            dots.appendChild(b);
+            return b;
+        });
+        track.after(dots);
+
+        let ticking = false;
+        function update() {
+            const x = track.scrollLeft;
+            let best = 0, min = Infinity;
+            slides.forEach((s, i) => {
+                const d = Math.abs(s.offsetLeft - slides[0].offsetLeft - x);
+                if (d < min) { min = d; best = i; }
+            });
+            buttons.forEach((b, i) => b.classList.toggle('active', i === best));
+            ticking = false;
+        }
+        track.addEventListener('scroll', () => {
+            if (!ticking) { requestAnimationFrame(update); ticking = true; }
+        }, { passive: true });
+        update();
+    });
+});
+</script>
+	<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const wraps = [];
+    document.querySelectorAll('.clamp-text').forEach(p => {
+        const wrap = document.createElement('div');
+        wrap.className = 'clamp-wrap';
+        p.parentNode.insertBefore(wrap, p);
+        wrap.appendChild(p);
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'clamp-more';
+        btn.textContent = '… Tovább';
+        btn.setAttribute('aria-expanded', 'false');
+        const cs = getComputedStyle(p);
+        btn.style.fontSize = cs.fontSize;       // a szöveg méretét és sormagasságát veszi át,
+        btn.style.lineHeight = cs.lineHeight;   // így pont az utolsó sorra illeszkedik
+        btn.addEventListener('click', () => {
+            const open = wrap.classList.toggle('is-open');
+            btn.textContent = open ? 'Kevesebb' : '… Tovább';
+            btn.setAttribute('aria-expanded', open);
+        });
+        wrap.appendChild(btn);
+        wraps.push(wrap);
+    });
+
+    const check = () => wraps.forEach(w => {
+        if (w.classList.contains('is-open')) return;
+        const p = w.firstElementChild;
+        w.classList.toggle('has-more', p.scrollHeight > p.clientHeight + 1);
+    });
+    check();
+    window.addEventListener('resize', check);
+    window.addEventListener('load', check);
+    if (document.fonts) document.fonts.ready.then(check);
 });
 </script>
 </body>
