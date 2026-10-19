@@ -2222,8 +2222,75 @@ html, body { overflow-x: clip; }
     margin: -4px 0 10px;
 }
 
+		/* ═══════════ SZELET: eltolt, körvonalas másolat a szöveg mögött ═══════════ */
+.h-headline,
+.section-title span,
+.quote-text,
+.p-g-cost {
+    --so: #031640;          /* körvonal színe */
+    --sw: 0.001em;           /* körvonal vastagsága */
+    --sx: 0.03em;           /* vízszintes eltolás (negatív = balra) */
+    --sy: 0.00em;           /* függőleges eltolás (pozitív = lefelé) */
+    position: relative;
+    isolation: isolate;     /* a másolat a szöveg mögött marad, de nem megy az oldal háttere mögé */
+}
+.section-title span,
+.champ-title span { display: inline-block; }
+
+.h-headline::before,
+.section-title span::before,
+.quote-text::before,
+.p-g-cost::before {
+    content: attr(data-text);
+    content: attr(data-text) / "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;                              /* a rendes szöveg ELÉ kerül */
+    transform: translate(var(--sx), var(--sy));
+    color: var(--so);                        /* a körvonal színe */
+    -webkit-text-fill-color: var(--so);
+    -webkit-text-stroke: 0;
+    background: none;
+    text-shadow: none;
+    filter: url(#outline-2);
+    pointer-events: none;
+    user-select: none;
+    white-space: inherit;
+}
+
+/* vastagság a betűmérethez igazítva */
+.h-headline::before,
+.quote-text::before, .p-g-cost::before         { filter: url(#outline-1); }
+
+@media (max-width: 768px) {
+    .h-headline::before,
+}
+
+/* Színek háttérenként */
+.h-headline                     { --so: #7cc8ff; --sw: 0.025em; }
+.section-title span             { --so: #1348A6; }
+.quote-text                     { --so: #e0a800; }
+.p-g-cost                       { --so: #cbd5e1; }
 
 
+/* A számlálós kártyáknál a másolat csak a számolás után jelenik meg */
+.js-anim 
+.js-anim .why-us-grid.in-view .stat-number::before {
+    opacity: 1;
+    transition: opacity 0.5s ease 1.7s;
+}
+
+@media (max-width: 768px) {
+    .h-headline, .section-title span,
+    .champ-title span, .quote-text, .p-g-cost { --sw: 0.025em; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .js-anim
+}
+
+
+
+	
 
 
 
@@ -2233,7 +2300,22 @@ html, body { overflow-x: clip; }
 	</style>
 </head>
 <body>
-
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="outline-1" x="-5%" y="-20%" width="110%" height="140%">
+      <feMorphology in="SourceGraphic" operator="dilate" radius="1" result="d"/>
+      <feComposite in="d" in2="SourceGraphic" operator="out"/>
+    </filter>
+    <filter id="outline-2" x="-5%" y="-20%" width="110%" height="140%">
+      <feMorphology in="SourceGraphic" operator="dilate" radius="2" result="d"/>
+      <feComposite in="d" in2="SourceGraphic" operator="out"/>
+    </filter>
+    <filter id="outline-3" x="-5%" y="-20%" width="110%" height="140%">
+      <feMorphology in="SourceGraphic" operator="dilate" radius="3" result="d"/>
+      <feComposite in="d" in2="SourceGraphic" operator="out"/>
+    </filter>
+  </defs>
+</svg>
     <nav>
         <div class="container nav-flex">
             <a href="#" class="nav-logo">
@@ -3012,7 +3094,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     
                     <div class="promo-content" style="flex: 1;">
                         <span style="background: var(--blue-bright); color: var(--white); font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 12px;">Folyamatos Tagfelvétel</span>
-                        <h3 style="font-family: 'Baloo 2', cursive; font-size: 32px; color: var(--white); margin-bottom: 8px; line-height: 1.2;">Úszóiskola & Edzések Győrben!</h3>
+                        <h3 class="promo-title" style="font-family: 'Baloo 2', cursive; font-size: 32px; color: var(--white); margin-bottom: 8px; line-height: 1.2;">Úszóiskola & Edzések Győrben!</h3>
                         <p style="font-size: 15.5px; color: rgba(255,255,255,0.88); margin-bottom: 24px; line-height: 1.6; max-width: 600px;">
                             A táboron kívül is folytatódik a fejlődés! Évközi csoportos úszásoktatás, technika-javítás és vízbiztonság-fejlesztés vár a gyerekekre az Aqua Sportközpontban, szakképzett oktatóinkkal.
                         </p>
@@ -3595,6 +3677,17 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('resize', check);
     window.addEventListener('load', check);
     if (document.fonts) document.fonts.ready.then(check);
+});
+</script>
+	<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const sel = '.h-headline, .section-title span, .stat-number, .champ-title span, .quote-text, .p-g-cost';
+    document.querySelectorAll(sel).forEach(el => {
+        // az emojit (pl. ⭐) azonos szélességű szóközre cseréljük, hogy a másolat ne csússzon el
+        const txt = el.textContent.replace(/\s+/g, ' ').trim()
+                      .replace(/\p{Extended_Pictographic}/gu, '\u2003');
+        el.setAttribute('data-text', txt);
+    });
 });
 </script>
 </body>
