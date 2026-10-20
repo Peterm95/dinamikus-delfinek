@@ -9,9 +9,9 @@
     <style>
         /* ═══════════ ALAPBEÁLLÍTÁSOK (FŐOLDALHOZ IGAZÍTVA) ═══════════ */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: 'Nunito', sans-serif; 
-            background: #f4f9fd; 
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f4f9fd;
             color: #1e293b;
             line-height: 1.6;
             padding: 40px 20px;
@@ -26,8 +26,8 @@
             --white:   #ffffff;
         }
 
-        h1, h2, h3 { 
-            font-family: 'Baloo 2', cursive; 
+        h1, h2, h3 {
+            font-family: 'Baloo 2', cursive;
             color: var(--navy);
             margin-top: 30px;
             margin-bottom: 15px;
@@ -79,6 +79,40 @@
             text-align: justify;
         }
 
+        /* Kitöltendő / egyeztetendő részek (ügyvédi átnézéshez) */
+        .todo {
+            background: #fff3cd;
+            font-style: italic;
+            padding: 0 3px;
+            border-radius: 3px;
+        }
+
+        /* Kiemelt (szokatlan) feltételek doboza */
+        .notice {
+            background: #fffbe6;
+            border-left: 5px solid var(--yellow);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 18px 0 22px;
+        }
+        .notice p:last-child,
+        .notice ul:last-child { margin-bottom: 0; }
+        .notice-title {
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        /* Elállási nyilatkozat minta */
+        .sample-box {
+            background: var(--sky-lt);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 18px 0 22px;
+        }
+        .sample-box p { margin-bottom: 8px; }
+
+
         /* Vissza gomb stílusa */
         .back-btn-wrap {
             text-align: center;
@@ -89,10 +123,10 @@
             display: inline-block;
             background: var(--navy);
             color: var(--white);
-            font-family: 'Baloo 2', cursive; 
-            font-size: 16px; 
+            font-family: 'Baloo 2', cursive;
+            font-size: 16px;
             font-weight: 800;
-            padding: 12px 35px; 
+            padding: 12px 35px;
             border-radius: 50px;
             text-decoration: none;
             box-shadow: 0 8px 24px rgba(10, 48, 117, 0.15);
@@ -118,97 +152,144 @@
 
     <div class="policy-container">
         <h1>ÁLTALÁNOS SZERZŐDÉSI FELTÉTELEK (ÁSZF)</h1>
-        <div class="meta-info">„Dinamikus Delfinek” Úszó és Torna Sportegyesület<br>Hatályos: 2026. január 1-től</div>
+        <div class="meta-info">„Dinamikus Delfinek” Úszó és Torna Sportegyesület<br>Hatályos: 2026. október 11-től (a már fennálló beiratkozásokra a 14. pont szerinti értesítést követően)</div>
 
         <h2>1. Szolgáltató adatai</h2>
         <p><strong>Szolgáltató:</strong> „Dinamikus Delfinek” Úszó és Torna Sportegyesület (továbbiakban: Szolgáltató)</p>
+        <p><strong>Székhely:</strong> 9012 Győr, Újkút utca 21.</p>
+        <p><strong>Nyilvántartási szám:</strong> 08 02 0063464</p>
+        <p><strong>Adószám:</strong> 19387314108</p>
+        <p><strong>Képviselő:</strong> Magyar Tamás Péter</p>
         <p><strong>E-mail cím:</strong> dinamikus.delfinek@gmail.com</p>
         <p><strong>Telefonszám:</strong> +36 20 393 8067</p>
 
         <h2>2. A szolgáltatás tárgya</h2>
-        <p>A Szolgáltató gyermekek részére úszásoktatást, vízi foglalkozásokat, sport- és szabadidős programokat, valamint napközis táborokat szervez és bonyolít le.</p>
+        <p>A Szolgáltató gyermekek részére úszásoktatást, vízi foglalkozásokat, sport- és szabadidős programokat, valamint napközis táborokat szervez és bonyolít le. A tábori programok – a mindenkori tábori tájékoztatóban feltüntetettek szerint – vízi, sport-, szabadidős és egyéb (például lovas) foglalkozásokat is tartalmazhatnak.</p>
         <p>A szolgáltatás igénybevétele történhet:</p>
         <ul>
-            <li>éves beiratkozás keretében, havi tagdíjfizetéssel (folyamatos, teljes szezonra szóló részvétel az oktatásokon),</li>
+            <li>éves (szezonális) beiratkozás keretében, havi díjfizetéssel (folyamatos, a szezonra szóló részvétel az oktatásokon),</li>
             <li>tábori jelentkezés keretében (időszakos turnusok),</li>
             <li>egyéb eseti jelleggel szervezett sport- és szabadidős programokon.</li>
         </ul>
+        <p>A szolgáltatás igénybevétele nem keletkeztet egyesületi tagsági jogviszonyt a Szolgáltatónál. A szerződést kötő törvényes képviselő fogyasztónak minősül, a gyermek a szolgáltatás igénybe vevője.</p>
 
-        <h2>3. A szerződés létrejötte</h2> <p>A szolgáltatási szerződés a weboldalon található jelentkezési űrlap teljes körű kitöltésével, annak a Szolgáltató általi elektronikus visszaigazolásával, valamint a vonatkozó részvételi vagy tagsági díj (illetve előleg) hiánytalan megfizetésével jön létre.</p> <p>A jelentkezés beküldése önmagában nem garantál szabad helyet; a helyfoglalás és a részvételi jog kizárólag a vonatkozó díj készpénzben történő megfizetésével vagy a Szolgáltató bankszámlájára történő beérkezésével válik véglegessé.</p> <p>A rendszeres úszásoktatásra történő jelentkezés <strong>éves (szezonális) beiratkozásnak</strong> minősül, amelynek részletes szabályait a jelen ÁSZF 4. pontja tartalmazza.</p>
-        <h2>4. Éves beiratkozás és a havi tagdíj rendszere</h2>
-        <p>A Szolgáltató rendszeres úszásoktatási szolgáltatása <strong>éves (szezonális) beiratkozás</strong> keretében vehető igénybe. A beiratkozás a teljes oktatási évre (szezonra) szól; a tagdíj megfizetése a szülők kényelme érdekében havi részletekben történik.</p>
-        <p><strong>A havi tagdíjfizetés főbb szabályai:</strong></p>
-        <ul>
-            <li>a havi részlet minden esetben az adott naptári hónapra szól, de a fizetési kötelezettség az éves beiratkozásból ered,</li>
-            <li>a havi részletfizetés kizárólag a fizetés ütemezésére vonatkozik: az éves beiratkozásból eredő kötelezettség a teljes szezonra fennáll, függetlenül attól, hogy a gyermek ténylegesen hány alkalommal vesz részt a foglalkozásokon,</li>
-            <li>a foglalkozásokon való részvétel elengedhetetlen feltétele az aktuális havi tagdíj határidőre történő megfizetése.</li>
-        </ul>
-        <p>A tagsági rendszer nem alkalmi (alkalom alapú) belépésen vagy jegyváltáson alapul, hanem egy folyamatos, kiszámítható, a teljes szezonra szóló részvételi jogviszonyt jelent a rögzített csoportokban.</p>
-        <p><strong>Fizetés-kihagyás (pl. betegségre hivatkozás) esetén alkalmazandó szabály:</strong> amennyiben a törvényes képviselő egy adott hónapra vonatkozóan – akár betegségre, akár egyéb okra hivatkozva – nem kívánja igénybe venni a szolgáltatást, és emiatt az adott havi tagdíj befizetése kimarad, ez a folyamatos havi fizetési rend megszakadásának minősül. A fizetés kihagyása nem mentesíti a törvényes képviselőt az éves beiratkozásból eredő fizetési kötelezettség alól, és nem minősül a 7. pont szerinti lemondásnak. A fizetés kihagyásának időpontjától kezdve a Szolgáltató jogosult a szezon <strong>valamennyi hátralévő havi tagdíját +2000 Ft-tal megemelni</strong>: azaz nem csak a részvétel újraindításakor esedékes egyetlen havi részlet, hanem a kihagyást követő teljes hátralévő szezon minden egyes havi tagdíja a megemelt, +2000 Ft-tal növelt összegben esedékes.</p>
+        <h2>3. A szerződés létrejötte</h2>
+        <p>A szolgáltatási szerződés a weboldalon található jelentkezési űrlap teljes körű kitöltésével, az ÁSZF elfogadását szolgáló jelölőnégyzet bejelölésével és a jelentkezésnek a Szolgáltató általi elektronikus visszaigazolásával jön létre. A jelentkezési űrlap beküldése fizetési kötelezettséggel jár. A Szolgáltató a visszaigazoló e-mailhez csatolja a jelen ÁSZF-et, így az tartós adathordozón is rendelkezésre áll.</p>
+        <p>A jelentkezési űrlapon egyetlen elfogadó nyilatkozat szerepel. Ennek bejelölésével a törvényes képviselő (a) elfogadja a jelen ÁSZF-et és tudomásul veszi az Adatkezelési Tájékoztatót, (b) kifejezetten tudomásul veszi és elfogadja a 4.3. pontban kiemelt feltételt (a kedvezmény megszűnése), valamint (c) kifejezetten kéri, hogy a Szolgáltató a szolgáltatás nyújtását a 13. pont szerinti elállási határidő lejárta előtt megkezdje, és tudomásul veszi az ezzel kapcsolatos, 13. pont szerinti arányos díjfizetési kötelezettséget.</p>
+        <p><strong>Éves beiratkozás esetén</strong> a visszaigazolás megjelöli a részvétel kezdő hónapját. A díjfizetési kötelezettség a kezdő hónaptól áll fenn; a jelentkezés és a kezdő hónap közötti időszakra díj nem fizetendő. A részvétel feltétele a kezdő hónap havi díjának a 6. pont szerinti határidőre történő megfizetése.</p>
+        <p><strong>Tábori jelentkezés esetén</strong> a jelentkezés beküldése önmagában nem garantál szabad helyet; a helyfoglalás és a részvételi jog kizárólag a vonatkozó díj (előleg) készpénzben történő megfizetésével vagy a Szolgáltató bankszámlájára történő beérkezésével válik véglegessé.</p>
+        <p>A rendszeres úszásoktatásra történő jelentkezés <strong>éves (szezonális) beiratkozásnak</strong> minősül, amelynek részletes szabályait a jelen ÁSZF 4. pontja tartalmazza.</p>
+
+        <h2>4. Éves beiratkozás, kedvezményes ár és alapár</h2>
+
+        <p><strong>4.1. Az éves beiratkozás jellege.</strong> A rendszeres úszásoktatás <strong>éves (szezonális) beiratkozás</strong> keretében vehető igénybe, rögzített csoportokban. Az „éves” megnevezés nem jelent kötelező minimális időtartamot: a részvétel szezonális, havi fizetésű, a törvényes képviselő által a 7. pont szerint bármikor, indoklás nélkül lemondható. A díj fizetése a szülők kényelme érdekében havonta történik. A rendszer nem alkalmi belépésen vagy jegyváltáson alapul, hanem folyamatos részvételi jogviszonyt jelent.</p>
+
+        <p><strong>4.2. A jogviszony kezdete és a kezdő hónap.</strong> Az éves beiratkozásból eredő jogviszony a visszaigazolásban megjelölt <strong>kezdő hónaptól</strong> áll fenn. A kezdő hónap a jelentkezést követő naptári hónap; a hónap első 10. napjáig beérkezett jelentkezés esetén a Szolgáltató szabad kapacitás esetén az aktuális hónapot is felajánlhatja kezdő hónapként. Későbbi kezdést a törvényes képviselő a jelentkezéskor kérhet, ezt a Szolgáltató szabad kapacitás esetén visszaigazolja. A kezdő hónap havi díja minden esetben a <strong>teljes havi díj</strong>; a Szolgáltató arányos (alkalmankénti) elszámolást nem alkalmaz, kivéve a 13. pont szerinti elállás esetét. A jelentkezés és a kezdő hónap közötti időszak nem minősül fizetés-kihagyásnak, arra díj nem terhelhető és alapár nem alkalmazható. A szezon közben csatlakozó gyermek a kezdő hónaptól a kedvezményes áron fizet.</p>
+
+        <p><strong>4.3. Kedvezményes ár és alapár.</strong> A jelentkezéskor és a weboldalon feltüntetett havi díj (1 alkalom/hét: <strong>14 000 Ft/hó</strong>; 2 alkalom/hét: <strong>20 000 Ft/hó</strong>) <strong>kedvezményes ár</strong>, amely a megszakítás nélküli, folyamatos havi fizetés mellett jár. A kedvezmény nélküli <strong>alapár</strong>: 1 alkalom/hét: <strong>17 000 Ft/hó</strong>; 2 alkalom/hét: <strong>26 000 Ft/hó</strong>. A díjak a hatálybalépés napján érvényes összegek; a díjak módosítására a 14. pont szerinti szabályok irányadók.</p>
+
+        <div class="notice">
+            <p class="notice-title">Kiemelt feltétel – a kedvezmény megszűnése</p>
+            <p>A kedvezményes ár megszűnésének szabályai:</p>
+            <ul>
+                <li>amennyiben a törvényes képviselő a jogviszony kezdete után egy adott havi díjat a 6. pont szerinti határidőig (póthatáridővel együtt) nem fizet meg, és a szünetet a 4.4. pont szerint nem jelezte előre, a kedvezmény megszűnik. Ha a gyermek az adott hónapban nem vett részt a foglalkozásokon, arra a hónapra díj nem esedékes; ha részt vett, az adott hónap díja az alapár. A részvétel a további hónapokban – szabad kapacitás esetén – alapáron folytatható,</li>
+                <li>az alapár nem visszamenőleges, a már megfizetett díjakat nem érinti,</li>
+                <li>a kedvezmény megszűnése nem minősül lemondásnak,</li>
+                <li>a nem fizetett és nem látogatott hónapokra a Szolgáltató díjkövetelést nem érvényesít; a nem fizetés következménye – a ténylegesen igénybe vett hónapok alapáron számított díján túl – kizárólag a kedvezmény megszűnése.</li>
+            </ul>
+        </div>
+        <p>A jelentkezési űrlap elfogadó nyilatkozata a fenti feltételt kiemelten, külön mondatban tartalmazza; a jelölőnégyzet bejelölésével a törvényes képviselő ennek tartalmát kifejezetten tudomásul veszi és elfogadja.</p>
+
+        <p><strong>4.4. Előre jelzett szünet.</strong> Ha a törvényes képviselő a szünetet az érintett hónap első hetéig e-mailben jelzi, és azt igazolja (pl. orvosi igazolással), a Szolgáltató a gyermek helyét és a kedvezményt a szünet idejére megtartja; a szünet hónapjára havi díj nem fizetendő, a szünet végén a részvétel a kedvezményes áron folytatódik. Az előre jelzett szünet egy alkalommal legfeljebb 1 hónapra vehető igénybe. Előzetes jelzés nélküli fizetés-kihagyás esetén a Szolgáltató a gyermek helyét más jelentkezőnek átadhatja; a részvétel újraindítása szabad kapacitás esetén, alapáron lehetséges.</p>
+
+        <p><strong>4.5. Egyedi méltányosság.</strong> A Szolgáltató indokolt esetben egyedi mérlegelés alapján eltérhet a fenti szabályoktól. Az orvosi igazolás benyújtása önmagában nem jelent automatikus mentességet.</p>
 
         <h2>5. Hiányzás és pótlás feltételei</h2>
-        <p>Betegség vagy egyéb előre jelzett, igazolt hiányzás esetén – amennyiben a havi tagdíj fizetése folyamatosan, megszakítás nélkül fennáll – a Szolgáltató lehetőséget biztosít pótló alkalom igénybevételére az alábbi feltételek szerint:</p>
+        <p>A gyermek hiányzását a törvényes képviselő lehetőség szerint legalább 2 órával a foglalkozás megkezdése előtt jelzi a Szolgáltató felé (e-mailben vagy telefonon). Igazolt vagy időben jelzett hiányzás esetén – amennyiben a havi díj fizetése folyamatosan, megszakítás nélkül fennáll – a Szolgáltató lehetőséget biztosít pótló alkalom igénybevételére az alábbi feltételek szerint:</p>
         <ul>
             <li>a pótlás kizárólag a Szolgáltató által felajánlott, szabad kapacitással rendelkező alternatív időpontokban vehető igénybe,</li>
             <li>az elmaradt vagy le nem járt alkalmak készpénzre, illetve következő havi díjcsökkentésre nem válthatók át,</li>
             <li>a pótlást a Szolgáltató a medenceidők és a csoportlétszámok maximális korlátai (kapacitása) függvényében tudja garantálni.</li>
         </ul>
-        <p>Amennyiben a hiányzás egy teljes hónapot érint és emiatt az adott havi tagdíj befizetése is kimarad, a 4. pontban meghatározott fizetés-kihagyási szabály (és az ott rögzített, a hátralévő szezon egészére vonatkozó +2000 Ft-os díjemelés) alkalmazandó a pótlási szabályok helyett.</p>
+        <p>Amennyiben a hiányzás egy teljes hónapot érint és emiatt az adott havi díj befizetése is kimarad, a 4. pontban meghatározott kedvezmény-megszűnési szabály alkalmazandó a pótlási szabályok helyett, kivéve, ha a szünetet a 4.4. pont szerint előre jelezték és igazolták.</p>
+        <p><strong>A Szolgáltató oldalán felmerülő ok miatt elmaradt alkalom.</strong> A Szolgáltató oldalán felmerülő okból elmaradt alkalmat a Szolgáltató pótolja; ha a pótlás nem lehetséges, az elmaradt alkalom arányos díját a következő havi díjból jóváírja, illetve a jogviszony megszűnése esetén visszatéríti. Szolgáltatói oldali oknak minősül az is, ha az alkalmat a Szolgáltatótól független körülmény (különösen a medence zárva tartása, műszaki hiba, hatósági korlátozás vagy tiltás, vis maior) miatt nem lehet megtartani. Ez nem érinti a Szolgáltatónak a jogszabály szerinti felelősségét.</p>
+        <p><strong>Úszótanév, tanszünetek és munkaszüneti napok.</strong> A rendszeres úszásoktatás az úszótanévben zajlik; az úszótanév a weboldalon közzétett időponttól kezdődik, és az adott tanév utolsó hetéig tart. Az úszótanéven kívüli időszakra havi díj nem fizetendő. A havi díj átalánydíj, amely nem függ az adott hónapba eső foglalkozások pontos számától. A tanszünetek (például az őszi, téli, tavaszi és nyári szünet) idején, valamint a munkaszüneti napokon a rendszeres úszásoktatás nem kerül megtartásra; a tanszüneteket és a munkaszüneti napokat tartalmazó tanévrendet a Szolgáltató nyomtatott tájékoztatón adja át a törvényes képviselőnek az úszótanév elején; a tanév közben csatlakozók számára a nyomtatott tájékoztatót az első foglalkozás alkalmával adja át a Szolgáltató.. Az ezekre az időszakokra és napokra eső alkalmak nem minősülnek a Szolgáltató oldalán felmerülő okból elmaradt alkalomnak, ezért azok nem pótolhatók, és díjjóváírásra vagy visszatérítésre sem jogosítanak.</p>
+        <p><strong>Tanév közben lemondott alkalmak.</strong> A Szolgáltató a tanév során további alkalmakat is lemondhat. A lemondásról a Szolgáltató a törvényes képviselőt előzetesen, e-mailben vagy a Szolgáltató által működtetett szülői üzenetküldő, illetve közösségi csoportban tájékoztatja. Az így elmaradó alkalmakra – ha azok nem tartoznak az előző bekezdés szerinti, a tanévrendben szereplő tanszünetek és munkaszüneti napok körébe – az 5. pont szerinti pótlás, illetve jóváírás jár.</p>
 
         <h2>6. Díjak és fizetési feltételek</h2>
-        <p>A mindenkori szolgáltatások és táborok aktuális díjai a weboldalon, illetve a hivatalos jelentkezési felületeken kerülnek egyértelműen feltüntetésre.</p>
+        <p>A mindenkori szolgáltatások és táborok aktuális díjai a weboldalon, illetve a hivatalos jelentkezési felületeken kerülnek egyértelműen feltüntetésre. A díjak magyar forintban értendők. A fizetés a Szolgáltató által a visszaigazolásban vagy a jelentkezési felületen megadott módon (banki átutalással vagy készpénzben) történik.</p>
         <p><strong>A díjak megfizetésének rendje:</strong></p>
         <ul>
-            <li><strong>Éves beiratkozás (havi tagdíj) esetén:</strong> a tagdíj havonta, előre, minden hónap legelső hetében (az adott hónap megkezdése előtt vagy elején) esedékes. Amennyiben egy havi részlet fizetése a 4. pontban leírtak szerint kimarad, a kihagyás időpontjától a szezon végéig esedékes valamennyi havi tagdíj +2000 Ft-tal megemelt összegben válik esedékessé.</li>
+            <li><strong>Éves beiratkozás (havi díj) esetén:</strong> a díj havonta, előre, minden hónap legelső hetében esedékes. Ha egy havi részlet fizetése kimarad, a kedvezmény a 4.3. pont szerint megszűnik; a kihagyott hónap díjára a 4.3. pont rendelkezései irányadók.</li>
             <li><strong>Tábor esetén:</strong> az előleg, valamint a fennmaradó teljes részvételi díj a tábori jelentkezési felületen és a jelentkezés visszaigazolásában feltüntetett, az adott szezonra vonatkozó egyedi határidőkig fizetendő.</li>
         </ul>
-        <p>A fizetési határidők elmulasztása esetén a Szolgáltató jogosult a gyermek részvételét a foglalkozásokon vagy a táborban azonnali hatállyal felfüggeszteni, és a helyet más jelentkezőnek átadni.</p>
+        <p>A fizetési határidő elmulasztása esetén a Szolgáltató e-mailben vagy telefonon felszólítja a törvényes képviselőt, és legalább 5 napos póthatáridőt biztosít a teljesítésre. A póthatáridő eredménytelen elteltét követően a Szolgáltató jogosult a gyermek részvételét a foglalkozásokon vagy a táborban felfüggeszteni, és a helyet más jelentkezőnek átadni. Tábor esetén a Szolgáltató a tábori jelentkezésnél megadott határidő elmulasztása esetén a helyet a póthatáridő nélkül is átadhatja, ha a jelentkezési felületen ez a következmény egyértelműen fel volt tüntetve.</p>
 
         <h2>7. Lemondás és a jogviszony megszűnése</h2>
+        <p>A kezdő hónapot megelőzően az éves beiratkozás díjmentesen, írásban (e-mailben) lemondható; ilyenkor díjfizetési kötelezettség nem keletkezik.</p>
         <p>Az éves beiratkozás a törvényes képviselő által bármikor indoklás nélkül lemondható a jövőre nézve.</p>
-        <p>A lemondás a következő naptári hónaptól lép hatályba, amennyiben az erről szóló nyilatkozat a Szolgáltatóhoz írásban (e-mailben) az adott hónap utolsó napjáig beérkezik. A már megkezdett hónap díja sem részben, sem egészben nem téríthető vissza.</p>
-        <p>Egy vagy több hónap kihagyása – például betegségre hivatkozva – önmagában nem minősül lemondásnak, és nem szünteti meg az éves beiratkozásból eredő jogviszonyt; erre az esetre a 4. pontban rögzített fizetés-kihagyási szabály (és a hátralévő szezon egészére vonatkozó +2000 Ft-os díjemelés) az irányadó. Végleges lemondás kizárólag a jelen pontban meghatározott írásbeli nyilatkozattal érvényesíthető.</p>
+        <p>A lemondás a következő naptári hónaptól lép hatályba, amennyiben az erről szóló nyilatkozat a Szolgáltatóhoz írásban (e-mailben) az adott hónap utolsó napjáig beérkezik. A már megkezdett hónap díja sem részben, sem egészben nem téríthető vissza, kivéve az 5. pont szerinti jóváírást, valamint a 13. pont szerinti elállás és a 8. pont szerinti díjmentes kilépés esetét.</p>
+        <p>Egy vagy több hónap kihagyása önmagában nem minősül lemondásnak; erre az esetre a 4. pontban rögzített kedvezmény-megszűnési szabály az irányadó. Végleges lemondás kizárólag a jelen pontban meghatározott írásbeli nyilatkozattal érvényesíthető, lemondás esetén további díjfizetési kötelezettség nem keletkezik.</p>
         <p>Táborok esetében a lemondási és visszatérítési szabályokat a különálló <em>Jelentkezési és Lemondási Feltételek</em> dokumentum szabályozza.</p>
 
         <h2>8. A szolgáltatás módosítása</h2>
-        <p>A Szolgáltató kifejezetten fenntartja a jogot a tervezett programok, az edzésidőpontok és a helyszínek egyoldalú módosítására, különösen az alábbi esetekben:</p>
+        <p>A Szolgáltató a tervezett programok, az edzésidőpontok és a helyszínek egyoldalú módosítására kizárólag az alábbi esetekben jogosult:</p>
         <ul>
             <li>kedvezőtlen vagy veszélyes időjárási körülmények (pl. szabadtéri programoknál),</li>
-            <li>előre nem látható szervezési, létesítmény-üzemeltetési vagy műszaki okok,</li>
-            <li>a gyermekek testi épségét és biztonságát érintő szempontok fennállásakor.</li>
+            <li>előre nem látható szervezési, létesítmény-üzemeltetési vagy műszaki okok (pl. a medence zárva tartása, meghibásodás, hatósági korlátozás),</li>
+            <li>a gyermekek testi épségét és biztonságát érintő szempontok fennállásakor,</li>
+            <li>egyes alkalmak tanév közbeni lemondása az 5. pont szerinti előzetes tájékoztatással, pótlással, illetve jóváírással.</li>
         </ul>
-        <p>Az ilyen okokból történő minimális és indokolt módosítás nem minősül a Szolgáltató részéről szerződésszegésnek.</p>
+        <p>A Szolgáltató a módosításról a lehető leghamarabb, e-mailben vagy telefonon tájékoztatja a törvényes képviselőt. A módosítás a havi díj összegét nem érinti; a módosítás miatt elmaradt alkalmakra az 5. pont szerinti pótlás, illetve jóváírás jár.</p>
+        <p>Amennyiben a módosítás tartósan és jelentősen érinti a foglalkozások időpontját vagy helyszínét úgy, hogy a gyermek részvétele a törvényes képviselő számára ésszerűen nem biztosítható, a törvényes képviselő a módosításról szóló értesítéstől számított 8 napon belül, írásban díjmentesen kiléphet; ilyenkor a ki nem használt alkalmak arányos díja visszajár.</p>
 
         <h2>9. Felelősségvállalás</h2>
-        <p>A Szolgáltató valamennyi oktatást, edzést és tábori programot a tőle elvárható legnagyobb gondossággal, a gyermekek maximális biztonságát szem előtt tartva szervezi és vezeti.</p>
-        <p>A sport-, vízi és lovas tevékenységek természetüknél fogva magukban hordozhatnak bizonyos, teljes mértékben ki nem zárható fizikai kockázatokat, amelyeket a törvényes képviselő a jelentkezéssel kifejezetten tudomásul vesz. A Szolgáltató nem vállal felelősséget a gyermek nem rendeltetésszerű, fegyelmezetlen vagy a házirendbe ütköző magatartásából eredő sérülésekért és károkért.</p>
+        <p>A Szolgáltató valamennyi oktatást, edzést és tábori programot a tőle elvárható legnagyobb gondossággal, a gyermekek maximális biztonságát szem előtt tartva szervezi és vezeti, és a foglalkozások alatt gondoskodik a gyermekek megfelelő felügyeletéről.</p>
+        <p>A sport-, vízi és lovas tevékenységek természetüknél fogva magukban hordozhatnak bizonyos, teljes mértékben ki nem zárható fizikai kockázatokat, amelyeket a törvényes képviselő a jelentkezéssel kifejezetten tudomásul vesz. A Szolgáltató felügyeleti és gondossági kötelezettségének teljesítése mellett nem felel a gyermek nem rendeltetésszerű, fegyelmezetlen vagy a házirendbe ütköző magatartásából eredő sérülésekért és károkért.</p>
+        <p>A jelen ÁSZF egyetlen rendelkezése sem zárja ki és nem korlátozza a Szolgáltatónak az emberi életben, testi épségben vagy egészségben okozott kárért, valamint a szándékosan vagy súlyos gondatlansággal okozott kárért fennálló, jogszabály szerinti felelősségét.</p>
 
         <h2>10. Szülői kötelezettségek</h2>
-        <p>A gyermek törvényes képviselője a szerződés fennállása alatt szigorúan köteles:</p>
+        <p>A gyermek törvényes képviselője a szerződés fennállása alatt köteles:</p>
         <ul>
-            <li>a jelentkezés során teljes mértékben valós, pontos és aktuális személyes adatokat megadni,</li>
-            <li>a gyermek biztonságát érintő minden lényeges egészségügyi információt, betegséget vagy érzékenységet maradéktalanul közölni,</li>
+            <li>a jelentkezés során valós, pontos és aktuális személyes adatokat megadni,</li>
+            <li>a gyermek biztonságát érintő minden lényeges egészségügyi információt, betegséget vagy érzékenységet közölni,</li>
             <li>a gyermek fizikai vagy mentális állapotában bekövetkező bármilyen releváns változásról haladéktalanul, még a következő foglalkozás előtt tájékoztatni a Szolgáltatót.</li>
         </ul>
 
         <h2>11. Adatkezelés</h2>
         <p>A jelentkezők és a gyermekek személyes adatainak kezelésére, nyilvántartására és védelmére a Szolgáltató különálló <em>Adatkezelési Tájékoztatója</em> vonatkozik, amely a weboldalon és a jelentkezési felületeken folyamatosan elérhető és megtekinthető.</p>
 
-        <h2>12. Panaszkezelés és jogorvoslat</h2>
-<p>A Szolgáltató a hozzá beérkezett panaszokat a hatályos jogszabályoknak megfelelően kivizsgálja. Írásbeli panasz esetén a Szolgáltató a panasz beérkezését követő 30 napon belül köteles érdemi, indokolással ellátott írásbeli választ küldeni a Felhasználónak. Amennyiben a fogyasztónak minősülő Felhasználó panaszát elutasítják, úgy a lakóhelye vagy tartózkodási helye szerinti Békéltető Testülethez fordulhat jogvitájának békés rendezése érdekében.</p>
-<p><strong>A Szolgáltató székhelye szerint illetékes békéltető testület:</strong><br>
-Győr-Moson-Sopron Vármegyei Békéltető Testület<br>
-Cím: 9021 Győr, Szent István út 10.a<br>
-E-mail: bekelteto.testulet@gymsmkik.hu</p>
+        <h2>12. Szolgáltatással kapcsolatos kifogás, panaszkezelés és jogorvoslat</h2>
+        <p><strong>Kifogás a szolgáltatás miatt.</strong> Ha a szolgáltatás nem felel meg a jelentkezéskor ismertetettnek (például elmarad egy alkalom, a foglalkozás nem a meghirdetett időben vagy helyen zajlik, vagy egy meghirdetett tábori program elmarad), a törvényes képviselő ezt a felfedezést követően haladéktalanul jelezze a Szolgáltatónak. A hiba felfedezésétől számított két hónapon belül közölt kifogás késedelem nélkülinek minősül. A Szolgáltató a hibát elsősorban pótlással orvosolja (5. pont); ha ez nem lehetséges, az érintett alkalom arányos díját jóváírja vagy visszatéríti. Ez nem érinti a fogyasztót a Ptk. alapján megillető további jogokat.</p>
+        <p><strong>Panasz.</strong> A panasz a Szolgáltatónál az 1. pontban megadott e-mail címen tehető meg. A Szolgáltató a panaszt kivizsgálja és a beérkezéstől számított 30 napon belül érdemi, indokolt írásbeli választ ad.</p>
+        <p><strong>Békéltető testület.</strong> Ha a fogyasztónak minősülő törvényes képviselő a panasz elutasításával nem ért egyet, jogvitája rendezésére a lakóhelye vagy tartózkodási helye szerint illetékes, illetve a Szolgáltató székhelye szerint illetékes békéltető testülethez fordulhat. A Szolgáltató székhelye szerint illetékes testület:</p>
+        <p>Győr-Moson-Sopron Vármegyei Békéltető Testület<br>
+        Cím: 9021 Győr, Szent István út 10/a.<br>
+        E-mail: bekelteto.testulet@gymsmkik.hu</p>
 
         <h2>13. Elállási jog online jelentkezés esetén</h2>
-<p>A fogyasztónak minősülő szülőt a távollevők között kötött szerződésekről szóló 45/2014. (II. 26.) Korm. rendelet alapján 14 napon belül indokolás nélküli elállási jog illeti meg. Az elállási határidő a szerződés megkötésének napjától (a jelentkezés visszaigazolásától) számít. A szolgáltatás nyújtására irányuló szerződés esetében a fogyasztó nem gyakorolhatja elállási jogát a szolgáltatás egészének teljesítését követően, ha a Szolgáltató a teljesítést a fogyasztó kifejezett, előzetes beleegyezésével kezdte meg, és a fogyasztó tudomásul vette, hogy a szolgáltatás egészének teljesítését követően felmondási jogát elveszíti.</p>
-        
-        <h2>14. Záró rendelkezések</h2>
-        <p>A jelen Általános Szerződési Feltételek (ÁSZF) elfogadásával a törvényes képviselő hivatalosan kijelenti, hogy a benne foglalt szabályokat és kötelezettségeket teljes körűen megismerte, megértette és azokat magára, valamint a képviselt gyermekre nézve kötelező érvényűnek ismeri el.</p>
-        <p>A Szolgáltató jogosult a jelen ÁSZF rendelkezéseit a jogszabályi háttér vagy a szolgáltatások változása esetén egyoldalúan módosítani, amelyet a hatálybalépéssel egyidejűleg a weboldalán nyilvánosan közzétesz.</p>
+        <p>A fogyasztónak minősülő szülőt a távollevők között kötött szerződésekről szóló 45/2014. (II. 26.) Korm. rendelet alapján 14 napon belül indokolás nélküli elállási jog illeti meg. Az elállási határidő a szerződés megkötésének napjától (a jelentkezés visszaigazolásától) számít.</p>
+        <p><strong>Az elállási jog gyakorlása:</strong> az elállási szándékot egyértelmű nyilatkozattal (például e-mailben, a Szolgáltató 1. pontban megadott e-mail címére) kell közölni; a törvényes képviselő az alábbi nyilatkozatmintát is használhatja, de ez nem kötelező. A határidő megtartottnak minősül, ha a nyilatkozatot a 14 napos határidő lejárta előtt elküldi.</p>
+        <div class="sample-box">
+            <p><strong>Elállási nyilatkozat (minta)</strong></p>
+            <p>Címzett: „Dinamikus Delfinek” Úszó és Torna Sportegyesület, dinamikus.delfinek@gmail.com</p>
+            <p>Alulírott kijelentem, hogy gyakorlom elállási jogomat a következő szolgáltatás nyújtására irányuló szerződés tekintetében: <em>[szolgáltatás megnevezése, pl. úszásoktatás – 1 alkalom/hét]</em>.</p>
+            <p>A szerződéskötés (visszaigazolás) időpontja: <em>[dátum]</em></p>
+            <p>A fogyasztó (törvényes képviselő) neve és címe: <em>[név, cím]</em></p>
+            <p>A gyermek neve: <em>[név]</em></p>
+            <p>Dátum: <em>[dátum]</em></p>
+        </div>
+        <p><strong>Kifejezett kérés a teljesítés megkezdésére:</strong> ha a törvényes képviselő a jelentkezési űrlap elfogadó nyilatkozatának bejelölésével kifejezetten kéri, hogy a Szolgáltató a szolgáltatás nyújtását az elállási határidő lejárta előtt megkezdje, az elállási jog gyakorlása esetén a törvényes képviselő köteles az elállás közlésének időpontjáig már teljesített szolgáltatás arányos díját megfizetni. A teljes teljesítést követően a fogyasztó csak akkor veszíti el az elállási jogát, ha a teljesítés megkezdéséhez kifejezetten hozzájárult, és tudomásul vette, hogy a teljes teljesítést követően elállási jogát elveszíti. Ennek a kérésnek és tudomásulvételnek a szövegét az elfogadó nyilatkozat külön, kiemelt mondatban tartalmazza.</p>
+        <p><strong>Visszatérítés:</strong> elállás esetén a Szolgáltató a már megfizetett díjat – az arányos díj levonásával – az elállási nyilatkozat kézhezvételétől számított 14 napon belül visszatéríti.</p>
+        <p><strong>Az arányos díj számítása:</strong> az adott havi díj osztva az adott hónapban tartandó foglalkozások számával, szorozva az elállás közléséig megtartott foglalkozások számával.</p>
+        <p><strong>Tábori és más időponthoz kötött programok:</strong> a tábori turnusokra és más, meghatározott időpontra vagy időtartamra szóló szabadidős programokra irányuló szerződés esetén a fogyasztót a fenti rendelet szerint elállási jog nem illeti meg. Ilyen esetben a lemondásra és a visszatérítésre a különálló <em>Jelentkezési és Lemondási Feltételek</em> szabályai vonatkoznak. Erről a Szolgáltató a jelentkezés előtt, a tábori jelentkezési felületen is tájékoztatást ad.</p>
 
-        <p style="margin-top: 40px; font-size: 13px; color: #64748b; font-style: italic;">Utolsó frissítés: 2026. január 1.</p>
+        <h2>14. Záró rendelkezések</h2>
+        <p>A jelen Általános Szerződési Feltételek (ÁSZF) elfogadásával a törvényes képviselő kijelenti, hogy a benne foglalt szabályokat és kötelezettségeket – különösen a 4.3. pontban kiemelt feltételt – megismerte, megértette és azokat magára, valamint a képviselt gyermekre nézve kötelező érvényűnek ismeri el.</p>
+        <p>A Szolgáltató az ÁSZF-et és a díjakat kizárólag az alábbi okból módosíthatja: (a) jogszabályváltozás; (b) a szolgáltatás nyújtásához szükséges költségek (pl. medencebérleti díj, oktatói díjak) igazolható, jelentős emelkedése; díjemelés tanévenként legfeljebb egy alkalommal. A módosításról a törvényes képviselőt legalább 30 nappal a hatálybalépés előtt e-mailben értesíti; ha nem fogadja el, a hatálybalépésig írásban díjmentesen lemondhatja a beiratkozást.</p>
+        <p>A jelen ÁSZF-ben nem szabályozott kérdésekben a magyar jog, különösen a Ptk. és a fogyasztókkal kötött szerződésekre vonatkozó jogszabályok rendelkezései az irányadók.</p>
+
+        <p style="margin-top: 40px; font-size: 13px; color: #64748b; font-style: italic;">Utolsó frissítés: 2026. október 11.</p>
 
         <div class="back-btn-wrap">
             <a href="index.html" class="back-btn">Vissza a főoldalra</a>
