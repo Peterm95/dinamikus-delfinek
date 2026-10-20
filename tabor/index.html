@@ -2949,9 +2949,9 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
     </section>
 
 	
-    <section class="section-space" style="background: #f0f9ff;">
-        <div class="container">
-            <h2 class="section-title">Szülők mesélték – <span>mit mondtak a gyerekek hazafelé?</span></h2>
+    <section class="section-space" style="background: #f0f9ff;" id="velemenyek">
+    <div class="container">
+        <h2 class="section-title">Szülők mesélték – <span>mit mondtak a gyerekek hazafelé?</span></h2>
 
            <div class="review-grid m-carousel">
                 <div style="background: #ffffff; padding: 28px; border-radius: 20px; border: 1px solid #e2e8f0; position: relative;">
@@ -2989,8 +2989,8 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
 
 	
 
-	<section class="section-space" style="background: var(--white); padding: 60px 0;">
-        <div class="container" style="max-width: 800px; margin: 0 auto;">
+	<section class="section-space" style="background: var(--white); padding: 60px 0;" id="gyik">
+    <div class="container" style="max-width: 800px; margin: 0 auto;">
             
             <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">Gyakran ismételt kérdések</h2>
             
@@ -3142,7 +3142,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
         });
     </script>
 
-    <section class="section-space" style="background: var(--white); padding: 20px 0 40px;">
+    <section class="section-space" style="background: var(--white); padding: 20px 0 40px;" id="uszoiskola">
         <div class="container" style="position: relative;">
             
             <div class="decor-avatar" style="position: absolute; top: -45px; right: -20px; width: 115px; transform: rotate(10deg); z-index: 20;">
@@ -3449,6 +3449,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                         })
                         .then(data => {
                             if (data.result === 'success') {
+								if (window.dtrack) dtrack('feliratkozas-sikeres', { hetek: formData.getAll('hetek').join(', ') || 'nincs megadva' });
                                 if(submitNotificationBtn) {
                                     submitNotificationBtn.disabled = false;
                                     submitNotificationBtn.innerText = '🔔 Feliratkozás';
@@ -3466,9 +3467,10 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                         })
                         .catch(error => {
                             console.error('Hiba!', error);
+							if (window.dtrack) dtrack('feliratkozas-hiba', { uzenet: String(error.message).slice(0, 100) });
                             if(submitNotificationBtn) {
                                 submitNotificationBtn.disabled = false;
-                                submitNotificationBtn.innerText = '🔔 Értesítést kérek';
+                                submitNotificationBtn.innerText = '🔔 Feliratkozás';
                             }
                             alert('Hiba történt a feliratkozás során:\n' + error.message);
                         });
@@ -3776,6 +3778,157 @@ document.addEventListener("DOMContentLoaded", () => {
         el.setAttribute('data-text', txt);
     });
 });
+</script>
+	<script>
+(function () {
+    const track = (name, data) => {
+        try { if (window.umami && window.umami.track) window.umami.track(name, data); } catch (e) {}
+    };
+    window.dtrack = track;
+    const clean = (s, n = 60) => (s || '').replace(/\s+/g, ' ').trim().slice(0, n);
+
+    /* ───────── 1. KATTINTÁSOK (delegált, egy helyen) ───────── */
+    // [selector, eseménynév, extra adatok] – a sorrend számít, az első találat nyer
+    const clickMap = [
+        ['nav .cta-btn',                          'cta-feliratkozas',        { hely: 'navbar' }],
+        ['.hero-btn-group a[href="#jelentkezes"]','cta-feliratkozas',        { hely: 'hero' }],
+        ['.hero-btn-group a[href="#programok"]',  'hero-igy-telik-egy-het'],
+        ['.nav-link',                             'nav-link'],
+        ['.faq-contact-btn',                      'kapcsolat-email',         { hely: 'gyik' }],
+        ['.faq-contact-secondary[href*="facebook"]','kapcsolat-messenger'],
+        ['.promo-banner a.cta-btn',               'uszoiskola-reszletek'],
+        ['.f-facebook-cta',                       'facebook-lablec'],
+        ['.footer a[href^="tel:"]',               'telefon-kattintas'],
+        ['.footer a[href^="mailto:"]',            'email-kattintas',         { hely: 'lablec' }],
+        ['.footer-privacy-btn',                   'lablec-link'],
+        ['.footer-copyright a',                   'google-policy-link'],
+        ['a[onclick*="openPolicyInModal"]',       'policy-megnyitas'],
+        ['#submit-notification-btn',              'urlap-kuldes-gomb'],
+        ['#modal-ok-btn',                         'sikermodal-bezar'],
+        ['#closePolicyModalBtn',                  'policy-modal-bezar'],
+        ['.clamp-more',                           'edzo-tovabb'],
+        ['.carousel-dots button',                 'karusszel-pont'],
+        ['.fan-card',                             'uszoiskola-galeria-kep'],
+        ['.team-card',                            'edzo-kartya'],
+        ['.prog-card',                            'program-kartya'],
+        ['.df-step',                              'napirend-lepes'],
+        ['.champ-team',                           'bajnoksag-csapat']
+    ];
+
+    document.addEventListener('click', (e) => {
+        for (const [sel, name, extra] of clickMap) {
+            const el = e.target.closest(sel);
+            if (!el) continue;
+            if (el.closest('[data-umami-event]')) return;      // már követi az Umami, nem duplázunk
+
+            const data = Object.assign({}, extra);
+            if (el.matches('.nav-link'))            data.cel = el.getAttribute('href');
+            else if (el.matches('.footer-privacy-btn')) data.oldal = clean(el.textContent);
+            else if (el.matches('[onclick*="openPolicyInModal"]')) {
+                const m = (el.getAttribute('onclick') || '').match(/'([^']+)'/);
+                data.dokumentum = m ? m[1] : 'ismeretlen';
+            }
+            else if (el.matches('.team-card'))      data.oktato = clean(el.querySelector('.team-name')?.textContent);
+            else if (el.matches('.prog-card'))      data.program = clean(el.querySelector('.prog-title')?.textContent);
+            else if (el.matches('.df-step'))        data.lepes = clean(el.querySelector('.df-title')?.textContent);
+            else if (el.matches('.champ-team'))     data.csapat = clean(el.querySelector('h3')?.textContent);
+            else if (el.matches('.fan-card'))       data.kep = [...el.parentNode.children].indexOf(el) + 1;
+            else if (el.matches('.carousel-dots button')) data.kartya = el.getAttribute('aria-label');
+            else if (el.matches('.faq-trigger')) {
+                // csak megnyitáskor számoljuk (a saját kezelője már lefutott)
+                const c = el.nextElementSibling;
+                const open = c && c.style.maxHeight && c.style.maxHeight !== '0px';
+                if (!open) return;
+                track('gyik-megnyitas', { kerdes: clean(el.querySelector('span')?.textContent, 80) });
+                return;
+            }
+            track(name, data);
+            return;
+        }
+    });
+
+    /* ───────── 2. GÖRGETÉSI MÉLYSÉG ───────── */
+    const depthDone = new Set();
+    let scrollTick = false;
+    function checkDepth() {
+        const doc = document.documentElement;
+        const max = doc.scrollHeight - window.innerHeight;
+        if (max <= 0) { scrollTick = false; return; }
+        const pct = (window.scrollY / max) * 100;
+        [25, 50, 75, 100].forEach(step => {
+            if (pct >= step - (step === 100 ? 2 : 0) && !depthDone.has(step)) {
+                depthDone.add(step);
+                track('gorgetes-melyseg', { szazalek: step });
+            }
+        });
+        scrollTick = false;
+    }
+    window.addEventListener('scroll', () => {
+        if (!scrollTick) { requestAnimationFrame(checkDepth); scrollTick = true; }
+    }, { passive: true });
+
+    /* ───────── 3. SZEKCIÓ MEGTEKINTÉS ───────── */
+    const sectionNames = {
+        'miert-minket': 'Miért minket',
+        'programok':    'Programok',
+        'bajnoksag':    'Delfin Bajnokság',
+        'napirend':     'Egy nap a táborban',
+        'csomag':       'Mit tartalmaz a díj',
+        'csapatunk':    'Oktatók',
+        'idopontok':    'Helyszínek és időpontok',
+        'velemenyek':   'Vélemények',
+        'gyik':         'GYIK',
+        'uszoiskola':   'Úszóiskola banner',
+        'jelentkezes':  'Feliratkozó űrlap'
+    };
+    if ('IntersectionObserver' in window) {
+        const secIO = new IntersectionObserver((entries) => {
+            entries.forEach(en => {
+                if (!en.isIntersecting) return;
+                const id = en.target.id;
+                track('szekcio-megtekintes', { szekcio: sectionNames[id] || id });
+                secIO.unobserve(en.target);
+            });
+        }, { threshold: 0.3 });
+        Object.keys(sectionNames).forEach(id => {
+            const el = document.getElementById(id);
+            if (el) secIO.observe(el);
+        });
+    }
+
+    /* ───────── 4. ŰRLAP: kezdés, hétválasztás, hozzájárulás ───────── */
+    const nf = document.getElementById('camp-notification-form');
+    if (nf) {
+        let started = false;
+        nf.addEventListener('focusin', () => {
+            if (started) return;
+            started = true;
+            track('urlap-kezdes');
+        });
+        nf.addEventListener('change', (e) => {
+            const t = e.target;
+            if (t.name === 'hetek')
+                track('urlap-het-valasztas', { het: t.value, bejelolve: t.checked });
+            if (t.id === 'privacyCheckbox' && t.checked)
+                track('urlap-adatkezeles-elfogadva');
+        });
+        nf.addEventListener('submit', () => track('urlap-kuldes-probalkozas'));
+    }
+
+    /* ───────── 5. ELKÖTELEZETTSÉG: oldalon töltött idő ───────── */
+    [30, 60, 120, 300].forEach(sec => {
+        setTimeout(() => {
+            if (document.visibilityState === 'visible') track('oldalon-toltott-ido', { masodperc: sec });
+        }, sec * 1000);
+    });
+
+    /* ───────── 6. BAJNOKSÁG LENYÍLÓ: nyitás/zárás állapota ───────── */
+    document.querySelectorAll('.champ-more').forEach(d => {
+        d.addEventListener('toggle', () => {
+            if (d.open) track('bajnoksag-megnyitva');
+        });
+    });
+})();
 </script>
 </body>
 </html>
