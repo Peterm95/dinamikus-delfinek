@@ -1339,6 +1339,34 @@ html, body { overflow-x: clip; }
 @media (max-width: 768px) {
     .dini-anchor { width: 64px; }
 }
+
+		/* Dini: rejtve, amíg a gyerekek el nem tűnnek, aztán kipattan */
+.dini-anchor .floating-dini {
+    opacity: 0;
+    transform: scale(0.4);
+    transform-origin: 50% 100%;
+    transition: opacity .35s ease, transform .6s cubic-bezier(.175, .885, .32, 1.275);
+}
+.dini-anchor.is-shown .floating-dini {
+    opacity: 1;
+    transform: none;
+}
+
+/* Gyerekek: a lap tetején ülnek, a navbar ALATT (z-index < 1000) */
+.kids-anchor {
+    position: fixed;
+    top: 0; left: 50%;
+    width: min(420px, 78vw);
+    z-index: 999;
+    pointer-events: none;
+    visibility: hidden;          /* amíg a JS el nem helyezi */
+    will-change: transform, opacity;
+}
+.kids-anchor img { display: block; width: 100%; height: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+    .dini-anchor .floating-dini { transition: none; }
+}
 		
 	.faq-contact-card {
     position: sticky;
@@ -3189,6 +3217,12 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
 <div class="dini-anchor" id="diniAnchor">
     <img src="Dinitabor.jpg" alt="Dini a delfin" class="floating-dini">
 </div>
+	<div class="kids-anchor" id="kidsAnchor">
+    <picture>
+        <source srcset="gyerekek-ules.webp" type="image/webp">
+        <img src="gyerekek-ules.png" alt="Táborozó gyerekek a lap szélén ülve">
+    </picture>
+</div>
 <footer class="footer">
 
         <div class="container">
@@ -3551,18 +3585,33 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 	<script>
 document.addEventListener("DOMContentLoaded", () => {
-    const anchor = document.getElementById('diniAnchor');
-    const sheet  = document.getElementById('miert-minket');
-    const nav    = document.querySelector('nav');
-    if (!anchor || !sheet || !nav) return;
+    const dini  = document.getElementById('diniAnchor');
+    const kids  = document.getElementById('kidsAnchor');
+    const sheet = document.getElementById('miert-minket');
+    const nav   = document.querySelector('nav');
+    if (!dini || !kids || !sheet || !nav) return;
+
+    const SIT  = 6;    // ennyivel lógnak a lap fölé "beülve" (px)
+    const FADE = 80;   // ennyi px úton halványulnak el a navbar alsó vonala előtt
 
     let ticking = false;
     function place() {
-        const h = anchor.offsetHeight;
-        // a lap tetejétől indul, és megáll a navbar alsó vonalánál
-        const y = Math.max(sheet.getBoundingClientRect().top - 10, nav.offsetHeight);
-        anchor.style.transform = `translate3d(-50%, ${y - h / 2}px, 0)`;
-        anchor.style.visibility = 'visible';
+        const navH = nav.offsetHeight;
+        const top  = sheet.getBoundingClientRect().top;
+
+        // Gyerekek: a lap tetejével együtt mozognak, a navbarnál eltűnnek
+        const kh = kids.offsetHeight;
+        kids.style.transform = `translate3d(-50%, ${top + SIT - kh}px, 0)`;
+        const k = Math.min(Math.max((top - navH) / FADE, 0), 1);
+        kids.style.opacity = k;
+        kids.style.visibility = k > 0 ? 'visible' : 'hidden';
+
+        // Dini: fix helyen a navbar alján, csak a gyerekek eltűnése után jelenik meg
+        const dh = dini.offsetHeight;
+        dini.style.transform = `translate3d(-50%, ${navH - dh / 2}px, 0)`;
+        dini.style.visibility = 'visible';
+        dini.classList.toggle('is-shown', k === 0);
+
         ticking = false;
     }
     const request = () => { if (!ticking) { requestAnimationFrame(place); ticking = true; } };
