@@ -1309,7 +1309,7 @@ html, body { overflow-x: clip; }
 
 		/* ═══════════ MOBIL HERO: teljes hero látszik, mielőtt jön a lap ═══════════ */
 .hero { height: 100vh; height: 100svh; }
-		.hero { padding-bottom: 170px; }   /* nagyobb = a gombok feljebb, távolabb a gyerekektől */
+		.hero { padding-bottom: 80px; }   /* nagyobb = a gombok feljebb, távolabb a gyerekektől */
 
 @media (max-width: 992px) {
     .hero {
@@ -1363,7 +1363,27 @@ html, body { overflow-x: clip; }
     visibility: hidden;          /* amíg a JS el nem helyezi */
     will-change: transform, opacity;
 }
-.kids-anchor img { display: block; width: 100%; height: auto; }
+/* Kontúrárnyék: a sziluettet követi, így leemeli a gyerekeket a háttérről */
+.kids-anchor img {
+    display: block; width: 100%; height: auto;
+    filter: drop-shadow(0 6px 8px rgba(3, 22, 64, 0.22));
+}
+
+/* Puha érintkezési árnyék a lapon, a gyerekek alatt */
+.kids-anchor::before {
+    content: '';
+    position: absolute;
+    left: 4%; right: 4%;
+    bottom: -12px;
+    height: 28px;
+    background: radial-gradient(ellipse at center,
+        rgba(3, 22, 64, 0.38) 0%,
+        rgba(3, 22, 64, 0.18) 45%,
+        transparent 72%);
+    filter: blur(6px);
+    z-index: -1;               /* a gyerekek mögött marad */
+    pointer-events: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
     .dini-anchor .floating-dini { transition: none; }
