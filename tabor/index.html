@@ -1309,13 +1309,14 @@ html, body { overflow-x: clip; }
 
 		/* ═══════════ MOBIL HERO: teljes hero látszik, mielőtt jön a lap ═══════════ */
 .hero { height: 100vh; height: 100svh; }
+		.hero { padding-bottom: 170px; }   /* nagyobb = a gombok feljebb, távolabb a gyerekektől */
 
 @media (max-width: 992px) {
     .hero {
         height: auto;
         min-height: 100vh;
         min-height: 100svh;
-        padding: 96px 0 118px;   /* alul hely a lapnak (36px) és Dininek */
+        padding: 96px 0 190px;   /* volt: 118px */
     }
 }
 
@@ -3591,7 +3592,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nav   = document.querySelector('nav');
     if (!dini || !kids || !sheet || !nav) return;
 
-    const SIT  = 6;    // ennyivel lógnak a lap fölé "beülve" (px)
+    const SIT  = 30;    // ennyivel lógnak a lap fölé "beülve" (px)
     const FADE = 80;   // ennyi px úton halványulnak el a navbar alsó vonala előtt
 
     let ticking = false;
