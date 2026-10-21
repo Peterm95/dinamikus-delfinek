@@ -2332,7 +2332,23 @@ html, body { overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
     .js-anim
 }
+/* A gyerekek a szekció alsó élére ülnek */
+.champ-section { padding-bottom: 0; }
 
+.champ-kids {
+    display: block;                 /* nincs rés a kép alatt */
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    margin: 40px auto 0;            /* ez adja a megtartott hézagot a gomb és a kép között */
+    position: relative;
+    z-index: 5;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .champ-kids { max-width: 92%; margin-top: 28px; }
+}
 
 
 
@@ -2691,7 +2707,16 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     </div>
                 </div>
             </div>
-        </details>
+                </details>
+<div class="section-cta">
+                <a href="#jelentkezes" class="cta-btn cta-btn-sm" data-umami-event="cta-csomag">🔔 Feliratkozás a 2027-es táborra</a>
+                
+            </div>
+        <img src="gyerekek-mutatnak.webp"
+             alt="Lelkesen az ég felé mutató gyerekek"
+             class="champ-kids champ-reveal"
+             width="1774" height="887"
+             loading="lazy">
     </div>
 </section>
         
