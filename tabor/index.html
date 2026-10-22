@@ -2349,8 +2349,161 @@ html, body { overflow-x: clip; }
 @media (max-width: 768px) {
     .champ-kids { max-width: 92%; margin-top: 18px; }
 }
+/* ════════════════════════════════════════════════════════════
+   RÁÚSZÓ LAPOK · EGYSÉGES HÁTTÉR · LEVEGŐS RITMUS
+   ════════════════════════════════════════════════════════════ */
+:root {
+    --paper: #f4f9ff;                          /* az egyetlen "világos" háttér a fehér mellett */
+    --sheet-r: 48px;                           /* minden lap felső lekerekítése */
+    --space-y: clamp(64px, 10vw, 136px);       /* szekciók belső függőleges levegője */
+    --gap-card: clamp(24px, 3vw, 40px);
+}
+body { background: var(--paper); }
 
+/* ── 1. LAPOK: minden szekció a megelőző FÖLÉ csúszik ── */
+body > section:not(.hero),
+body > footer.footer,
+#miert-minket {
+    position: relative;
+    z-index: 2;
+    margin-top: calc(var(--sheet-r) * -1) !important;
+    padding: var(--space-y) 0 !important;
+    border-radius: var(--sheet-r) var(--sheet-r) 0 0;
+    box-shadow: 0 -20px 50px rgba(3, 22, 64, 0.08);
+    overflow: hidden;
+}
+body > footer.footer { padding: 96px 0 52px !important; border-top: 0; }
+#bajnoksag { padding-bottom: var(--sheet-r) !important; }
 
+/* a rögzített navbar ne takarja el a horgonyok címét */
+section[id] { scroll-margin-top: 20px; }
+
+.sheet-measure { position: relative !important; top: auto !important; }   /* a JS használja méréshez */
+
+/* ── 2. EGYSÉGES HÁTTEREK: fehér ⇄ halvány kék, váltakozva ── */
+#miert-minket, #napirend, #csapatunk, #velemenyek, #uszoiskola { background: var(--white) !important; }
+#programok, #csomag, #idopontok, #gyik, #jelentkezes          { background: var(--paper) !important; }
+
+/* kártyák: fehér háttéren halvány kék, halvány kék háttéren fehér */
+.feature-row-card, .team-card, .panel-right { background: var(--paper); }
+.team-card { --card-bg: var(--paper); }
+.feature-row-card:hover, .team-card:hover { background: var(--white); }
+.review-grid > div {
+    background: var(--paper) !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 28px !important;
+}
+.faq-item { background: var(--white) !important; border-radius: 24px !important; }
+
+/* ── 3. LEVEGŐ: címek, bevezetők, CTA-k ── */
+.section-title { font-size: clamp(32px, 4.4vw, 52px); margin-bottom: 20px; }
+.section-sub {
+    font-size: clamp(16px, 1.5vw, 19px);
+    line-height: 1.75;
+    max-width: 700px;
+    margin-bottom: clamp(44px, 6vw, 80px);
+}
+.section-cta { margin-top: clamp(48px, 6vw, 72px); }
+.tabor-header { margin-bottom: 64px; }
+.faq-container { gap: 20px !important; }
+.faq-trigger { padding: 26px 32px !important; }
+.faq-content p, .faq-content > div { padding: 18px 32px 28px !important; }
+.faq-contact-card { position: static; margin-top: 24px; }
+.promo-banner { padding: clamp(32px, 5vw, 64px) !important; border-radius: 36px !important; }
+.review-grid > div { padding: 36px 32px !important; }
+
+/* ── 4. ASZTALI NÉZET: nagyobb felület, nagyobb rések ── */
+@media (min-width: 993px) {
+    .container { padding: 0 40px; max-width: 1240px; }
+
+    .why-us-grid    { gap: var(--gap-card); margin-bottom: 96px; }
+    .features-list-grid { gap: 28px; }
+    .prog-grid, .team-grid, .review-grid { gap: var(--gap-card); }
+
+    .stat-card        { padding: 44px 28px; }
+    .feature-row-card { padding: 32px; gap: 22px; }
+    .prog-img-holder  { height: 150px; }
+    .prog-body        { padding: 36px 30px 32px; }
+    .team-card        { padding: 44px 30px 38px; }
+
+    .tabor-premium-box     { padding: clamp(48px, 6vw, 80px); }
+    .tabor-content-wrapper { gap: 64px; }
+    .tabor-include-grid    { gap: 40px 36px; }
+
+    .panel-left, .panel-right { padding: 64px; }
+    .unified-info-panel { margin-top: 0; }
+    .form-container-box { padding: 64px 56px; }
+
+    .champ-head   { margin-bottom: 72px; }
+    .champ-balance { margin-bottom: 48px; }
+    .champ-points { gap: 24px; margin-bottom: 80px; }
+    .champ-days   { margin-bottom: 80px; }
+    .champ-final  { margin-bottom: 64px; }
+
+    .footer-content-grid { margin-bottom: 56px; }
+}
+@media (min-width: 769px) {
+    .df-path { --row: 176px; margin-bottom: 48px; }
+}
+
+/* ── 5. MOBIL: kisebb, de így is szellősebb ── */
+@media (max-width: 992px) {
+    .tabor-premium-box { padding: 44px 24px; }
+    .stat-card { border-radius: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body > section:not(.hero), body > footer.footer, #miert-minket { position: relative; }
+}
+/* ── 5. MOBIL: kisebb, de így is szellősebb ── */
+@media (max-width: 992px) {
+    .tabor-premium-box { padding: 44px 24px; }
+    .stat-card { border-radius: 20px; }
+}
+
+/* ── 6. BELÉPŐ ANIMÁCIÓ (ÚJ) ── */
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .section-title, .section-sub, .prog-card, .feature-row-card,
+        .team-card, .review-grid > div, .faq-item, .tabor-include-item {
+            animation: riseIn linear backwards;
+            animation-timeline: view();
+            animation-range: entry 0% entry 35%;
+        }
+        @keyframes riseIn {
+            from { opacity: 0; transform: translateY(36px); }
+        }
+    }
+}
+/* ── Tábori díj: asztali nézetben a díjdoboz a felsorolás ALATT, szélesen ── */
+@media (min-width: 993px) {
+    .tabor-premium-box .tabor-content-wrapper {
+        grid-template-columns: 1fr;
+        gap: 56px;
+        align-items: stretch;
+    }
+
+    /* a 6 elem 3 oszlopban, 2 sorban: kevésbé magas, jobban kitölti a szélességet */
+    .tabor-premium-box .tabor-include-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 44px 40px;
+    }
+
+    /* díjdoboz: egy széles, vízszintes sáv */
+    .tabor-premium-box .tabor-price-side { width: 100%; }
+    .tabor-premium-box .price-giant-badge {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        padding: 36px 56px;
+        text-align: left;
+        border-radius: 32px;
+    }
+    .tabor-premium-box .p-g-lbl  { flex: 0 0 auto; }
+    .tabor-premium-box .p-g-cost { margin: 0; white-space: nowrap; flex: 0 0 auto; }
+    .tabor-premium-box .p-g-note { margin: 0; flex: 0 1 auto; text-align: center; }
+}
 
 
 
@@ -2507,15 +2660,8 @@ html, body { overflow-x: clip; }
 <div class="feature-row-card">
                 <div class="feature-row-icon">🌟</div>
                 <div class="feature-row-body">
-                    <h5>Kezdőknek is, személyes figyelemmel</h5>
+                    <h5>Kezdőbarát, teljes biztonságban</h5>
                     <p>Nem kell előre úszni tudni. Szintfelmérés után kis csoportokba osztjuk a gyerekeket: a kezdők játékos vízhez szoktatást kapnak, a haladók technikát fejlesztenek.</p>
-                </div>
-            </div>
-			
-            <div class="feature-row-card quote-box">
-                <div class="feature-row-body">
-                    <p style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; margin-bottom: 4px; color: var(--orange);">A legnagyobb büszkeségünk</p>
-                    <div class="quote-text">„Jövőre is jövök!”</div>
                 </div>
             </div>
             
@@ -2523,8 +2669,6 @@ html, body { overflow-x: clip; }
 
     </div>
 </section>
-
-    
 
     <section class="section-space programs-bg" id="programok">
         <div class="container">
@@ -2595,9 +2739,10 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     </div>
                 </div>
             </div>
-        </div>
+                </div>   <!-- ez a .container zárása, prog-grid után -->
+</section>       <!-- ÚJ: itt zár a #programok -->
 
-		<section class="section-space champ-section" id="bajnoksag" style="margin-top: 30px;">
+<section class="section-space champ-section" id="bajnoksag">
     <div class="champ-bubbles" aria-hidden="true">
         <span style="--x:6%;--s:14px;--d:11s;--dl:0s"></span>
         <span style="--x:16%;--s:22px;--d:14s;--dl:3s"></span>
@@ -2720,9 +2865,9 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
     </div>
 </section>
         
-        <div class="dayflow" id="napirend">
+        <section class="section-space dayflow" id="napirend">
     <div class="container">
-        <h3 class="section-title" style="font-size: 36px; margin-bottom: 10px;">Egy nap <span>a táborban</span></h3>
+		<h2 class="section-title">Egy nap <span>a táborban</span></h2>
         <p class="section-sub" style="margin-bottom: 40px;">Reggeltől délutánig pörgős, mégis nyugodt ritmus – így telik egy átlagos tábori nap.</p>
 
         <div class="df-path">
@@ -2805,8 +2950,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
 
         <p class="dayflow-note">⏰ 7:45–16:30: a teljes munkanapot lefedjük – a program néha változhat, a jó hangulat viszont mindig marad!</p>
     </div>
-</div>
-    </section>
+</section>
 
 
 
@@ -3016,8 +3160,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
 
 	<section class="section-space" style="background: var(--white); padding: 60px 0;" id="gyik">
     <div class="container" style="max-width: 800px; margin: 0 auto;">
-            
-            <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">Gyakran ismételt kérdések</h2>
+            <h2 class="section-title">Gyakran ismételt <span>kérdések</span></h2>
             
             <div class="faq-container" style="display: flex; flex-direction: column; gap: 16px;">
                 
@@ -3955,5 +4098,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 })();
 </script>
+	
 </body>
 </html>
