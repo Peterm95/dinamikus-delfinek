@@ -1888,7 +1888,7 @@ select.tj-input {
             .then(function (t) {
                 if (timer) clearTimeout(timer);
                 try { return JSON.parse(t); }
-                catch (e) { console.error('A szerver nem JSON-t adott vissza:', t.slice(0, 500)); throw new Error('nem-json'); }
+                catch (e) { console.error('A szerver nem JSON-t adott vissza:', t.slice(0, 500)); var ne = new Error('nem-json'); ne.timeout = true; throw ne; }
             })
             .catch(function (err) {
                 if (timer) clearTimeout(timer);
@@ -2024,7 +2024,10 @@ select.tj-input {
             return api('jelentkezes', { payload: JSON.stringify(payload), recaptcha_token: token, nyilatkozat: 'Elfogadva' }, 60000);
         }).then(function (r) {
             reset();
-            if (r && r.result === 'success') { showSuccess(r); return; }
+            if (r && r.result === 'success') {
+    try { showSuccess(r); } catch (e) { console.error('showSuccess hiba:', e); $('tj-modal').hidden = false; }
+    return;
+}
             var err = new Error((r && r.message) || 'Szerveroldali hiba történt.');
             err.code = r && r.code; err.server = true;
             throw err;
