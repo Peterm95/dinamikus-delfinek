@@ -2,6 +2,7 @@
 <html lang="hu">
 <head>
 <meta name="robots" content="noindex, nofollow">
+<script src="https://www.google.com/recaptcha/api.js?render=6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dinamikus Delfinek - Nyári Úszó és Élménytábor 2026 - Győr</title>
@@ -1635,7 +1636,7 @@ select.tj-input {
 
                             <label class="tj-consent">
                                 <input type="checkbox" id="tj-consent" required>
-                                <span>Kijelentem, hogy a jelentkezés során megadott adatok a valóságnak megfelelnek. Elolvastam és elfogadom a <a href="#" onclick="openPolicyInModal('jelentkezesi-feltetelek.html'); return false;">Jelentkezési és Lemondási Feltételeket</a>, valamint megismertem az <a href="#" onclick="openPolicyInModal('adatkezelesi-tajekoztato.html'); return false;">Adatkezelési Tájékoztatóban</a> foglaltakat. Tudomásul veszem, hogy a jelentkezés véglegesítéséhez gyermekenként <strong>30&nbsp;000&nbsp;Ft előleg</strong> előleg megfizetése szükséges, az előlegfizetésre vonatkozó feltételek szerint.</span>
+                                <span>Kijelentem, hogy a jelentkezés során megadott adatok a valóságnak megfelelnek. Elolvastam és elfogadom a <a href="#" onclick="openPolicyInModal('jelentkezesi-feltetelek.html'); return false;">Jelentkezési és Lemondási Feltételeket</a>, valamint megismertem az <a href="#" onclick="openPolicyInModal('adatkezelesi-tajekoztato.html'); return false;">Adatkezelési Tájékoztatóban</a> foglaltakat. Tudomásul veszem, hogy a jelentkezés véglegesítéséhez gyermekenként <strong>30&nbsp;000&nbsp;Ft előleg</strong> megfizetése szükséges, az előlegfizetésre vonatkozó feltételek szerint.</span>
                             </label>
 
                             <div class="tj-alert" id="tj-error" role="alert"></div>
@@ -1875,18 +1876,34 @@ select.tj-input {
     }
 
     // ═══════════════════ SZERVER-KAPCSOLAT ═══════════════════
-    function api(action, data) {
+        function api(action, data, timeoutMs) {
         var fd = new FormData();
         fd.append('formTipus', 'tabor');
         fd.append('action', action);
         Object.keys(data || {}).forEach(function (k) { fd.append(k, data[k]); });
-        return fetch(CFG.scriptURL, { method: 'POST', body: fd }).then(function (r) { return r.json(); });
+        var ctrl = ('AbortController' in window) ? new AbortController() : null;
+        var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, timeoutMs || 60000) : null;
+        return fetch(CFG.scriptURL, { method: 'POST', body: fd, signal: ctrl ? ctrl.signal : undefined })
+            .then(function (r) { return r.text(); })
+            .then(function (t) {
+                if (timer) clearTimeout(timer);
+                try { return JSON.parse(t); }
+                catch (e) { console.error('A szerver nem JSON-t adott vissza:', t.slice(0, 500)); throw new Error('nem-json'); }
+            })
+            .catch(function (err) {
+                if (timer) clearTimeout(timer);
+                if (err && err.name === 'AbortError') { var te = new Error('timeout'); te.timeout = true; throw te; }
+                throw err;
+            });
     }
     function getToken() {
         return new Promise(function (res) {
-            if (!window.grecaptcha || !window.grecaptcha.ready) { res(''); return; }
+            var done = false;
+            function fin(v) { if (!done) { done = true; res(v || ''); } }
+            setTimeout(function () { fin(''); }, 8000);
+            if (!window.grecaptcha || !window.grecaptcha.ready) { fin(''); return; }
             window.grecaptcha.ready(function () {
-                window.grecaptcha.execute(CFG.recaptchaKey, { action: 'submit' }).then(res).catch(function () { res(''); });
+                window.grecaptcha.execute(CFG.recaptchaKey, { action: 'submit' }).then(fin).catch(function () { fin(''); });
             });
         });
     }
@@ -2002,25 +2019,30 @@ select.tj-input {
         showLoading('Jelentkezés küldése…');
         function reset() { hideLoading(); btn.disabled = false; btn.textContent = original; }
 
-        getToken().then(function (token) {
-            return api('jelentkezes', { payload: JSON.stringify(payload), recaptcha_token: token, nyilatkozat: 'Elfogadva' });
+                getToken().then(function (token) {
+            if (!token) { var te = new Error('A biztonsági ellenőrzés (reCAPTCHA) nem töltődött be. Frissítsd az oldalt, és próbáld újra.'); te.server = true; throw te; }
+            return api('jelentkezes', { payload: JSON.stringify(payload), recaptcha_token: token, nyilatkozat: 'Elfogadva' }, 60000);
         }).then(function (r) {
             reset();
             if (r && r.result === 'success') { showSuccess(r); return; }
             var err = new Error((r && r.message) || 'Szerveroldali hiba történt.');
-            err.code = r && r.code;
+            err.code = r && r.code; err.server = true;
             throw err;
         }).catch(function (err) {
             reset();
-            if (err && err.code === 'kupon') {          // a kupon időközben érvénytelenné vált
+            if (err && err.code === 'kupon') {
                 setCoupon('hiba', 'DINI-' + kuponNorm($('tj-kupon').value), err.message);
                 goTo(1);
                 return;
             }
             if (err && err.code === 'hely') loadAllapot();
-            showError(err && err.code ? err.message : 'Nem sikerült elküldeni a jelentkezést. Ellenőrizd az internetkapcsolatot, és próbáld újra. Ha többször nem megy, írj nekünk: dinamikus.delfinek@gmail.com');
+            if (err && err.timeout) {
+                showError('A szerver most lassan válaszol, ezért nem tudjuk, megérkezett-e a jelentkezés. Mielőtt újra elküldenéd, nézd meg a postaládádat (a spam mappát is): ha megjött a visszaigazoló e-mail, a jelentkezésed rendben van. Ha 10 percen belül nem érkezik levél, írj nekünk: dinamikus.delfinek@gmail.com');
+                return;
+            }
+            console.error('Jelentkezés hiba:', err);
+            showError(err && err.server ? err.message : 'Nem sikerült elküldeni a jelentkezést. Ellenőrizd az internetkapcsolatot, és próbáld újra. Ha többször nem megy, írj nekünk: dinamikus.delfinek@gmail.com');
         });
-    }
 
         function showSuccess(r) {
         function setTxt(id, t) { var e = $(id); if (e) e.textContent = t; }
