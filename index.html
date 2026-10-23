@@ -2813,15 +2813,25 @@ html, body { overflow-x: clip; }
     transform: translateY(-15px);   /* + = lejjebb tolja, - = feljebb */
 }
 
+/* Az meglévő avatar konténered */
 .member-avatar {
-    width: 84px;      /* volt: 74px */
+    width: 84px;
     height: 84px;
     border-radius: 50%;
     overflow: hidden;
     background: #f1f5f9;
     border: 3px solid #fff;
-    box-shadow: 0 4px 10px rgba(10,48,117,0.12);
+    box-shadow: 0 4px 10px rgba(10, 48, 117, 0.12);
     flex-shrink: 0;
+}
+
+/* A videó pontos illesztése a konténerbe */
+.member-avatar video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Kitölti a 84x84-es kört torzulás nélkül */
+    object-position: center top; /* Vagy 'center center' / 'center 20%' */
+    display: block;
 }
     .member-avatar img {
     width: 100%;
