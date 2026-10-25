@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Tábori adatlap 2027 | Dinamikus Delfinek</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script src="https://www.google.com/recaptcha/api.js?render=6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq" async defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!--
+═══════════════════════════════════════════════════════════════════════════
+  DINAMIKUS DELFINEK – 2027-ES TÁBORI ADATLAP
+
+  ELŐRE KITÖLTÉS (a levélben / a Jelentkezés fülön képzett link paraméterei):
+    ?az=AZONOSÍTÓ         a jelentkezés azonosítója (a szerver ezzel párosítja az adatlapot)
+    &gyerek=Kiss Márton   &becenev=Marci   &szul=2018-05-04   &anya=Kovács Julianna
+    &szulo=Kiss Gábor     &email=...       &tel=+36301234567
+    &irsz=9024 &varos=Győr &utca=Példa utca 5.      (vagy egyben: &lakcim=9024 Győr, Példa utca 5.)
+    &turnus=1  vagy  &turnus=1,2                   (a CFG.turnusok azonosítói)
+  Minden paraméter elhagyható; ami megvan, az ki lesz töltve, de a szülő mindent átírhat.
+
+  BACKEND: a 'adatlap' action-t kell kezelnie (formTipus='adatlap'); a mezőnevek megegyeznek
+  a korábbi adatlapéval, ezért a táblázat oszlopai nem változnak. Új oszlopok: 'Jelentkezés azonosító',
+  'Gyermek lakcíme' (egyben), 'Előre kitöltött mezők'.
+═══════════════════════════════════════════════════════════════════════════
+-->
+
+<style>
+/* ═══════════ ALAP + TOKENEK (a tábor oldal arculata) ═══════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: clip; }
+body { font-family: 'Nunito', sans-serif; background: var(--paper); color: #1e293b; overflow-x: clip; }
+:root {
+    --navy-deep:#031640; --navy-light:#06225e; --blue-royal:#0056b3; --blue-bright:#00a2ff;
+    --navy:#0a3075; --navy2:#061e50; --sky:#38bdf8; --sky-lt:#e0f2fe;
+    --yellow:#f5c400; --orange:#ff7a00; --green:#15803d; --bad:#b91c1c;
+    --white:#fff; --paper:#f4f9ff; --line:#e2e8f0;
+    --shadow-sm:0 8px 24px rgba(3,22,64,.05); --shadow-md:0 16px 36px rgba(3,22,64,.09); --shadow-lg:0 24px 50px rgba(3,22,64,.14);
+    --sheet-r:48px;
+}
+h1,h2,h3,h4 { font-family: 'Baloo 2', cursive; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--blue-bright); outline-offset: 2px; }
+.grecaptcha-badge { visibility: hidden !important; }
+
+/* ═══════════ NAVBAR ═══════════ */
+nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 14px 0; background: rgba(3,22,64,.95);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 2px solid rgba(0,162,255,.2);
+      border-bottom-left-radius: 36px; border-bottom-right-radius: 36px; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; }
+.nav-flex { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.nav-brand { font-family: 'Baloo 2', cursive; font-size: 20px; font-weight: 900; color: #fff; text-decoration: none; line-height: 1; }
+.nav-brand span { color: var(--yellow); }
+.cta-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; cursor: pointer;
+           background: linear-gradient(135deg, var(--yellow), #ffb700); color: var(--navy-deep);
+           font-family: 'Baloo 2', cursive; font-weight: 900; font-size: 15px; padding: 10px 22px; border-radius: 50px;
+           border: 2px solid rgba(255,255,255,.2); box-shadow: 0 4px 14px rgba(245,196,0,.25);
+           transition: transform .25s cubic-bezier(.175,.885,.32,1.275), box-shadow .25s; }
+.cta-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 20px rgba(245,196,0,.4); }
+.cta-btn:disabled { opacity: .7; cursor: wait; transform: none; }
+
+/* ═══════════ FEJLÉC ═══════════ */
+.top { position: relative; overflow: hidden; color: #fff; padding: 128px 0 118px;
+       background: radial-gradient(circle at 12% 0%, rgba(0,162,255,.28), transparent 46%),
+                   radial-gradient(circle at 92% 100%, rgba(255,122,0,.18), transparent 46%),
+                   linear-gradient(180deg, #031640 0%, #06225e 100%); }
+.bubbles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.bubbles i { position: absolute; bottom: -40px; left: var(--x); width: var(--s); height: var(--s); border-radius: 50%;
+             background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.25);
+             animation: rise var(--d) linear var(--dl) infinite; }
+@keyframes rise { 0% { transform: translateY(0); opacity: 0; } 12% { opacity: 1; } 100% { transform: translateY(-110vh) translateX(26px); opacity: 0; } }
+.top-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: center; }
+.top h1 { font-size: clamp(38px, 5.6vw, 64px); font-weight: 900; line-height: 1.05; margin-bottom: 14px; }
+.top h1 span { color: var(--yellow); }
+.top p.lead { font-size: clamp(16px, 1.8vw, 19px); line-height: 1.65; color: rgba(255,255,255,.88); max-width: 520px; }
+
+.glass { background: rgba(255,255,255,.11); border: 1px solid rgba(255,255,255,.22); border-radius: 24px; padding: 22px 24px;
+         backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.glass-h { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.glass-av { width: 58px; height: 58px; border-radius: 50%; border: 3px solid var(--blue-bright); background: var(--sky-lt); object-fit: cover; flex-shrink: 0; }
+.glass-t { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 18px; line-height: 1.2; }
+.glass-s { font-size: 13.5px; color: rgba(255,255,255,.75); margin-top: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); padding: 6px 13px; border-radius: 50px; font-size: 13px; font-weight: 700; }
+.chip.y { background: rgba(245,196,0,.18); border-color: rgba(245,196,0,.5); color: var(--yellow); }
+
+/* ═══════════ LAP (rácsúszik a fejlécre, mint a tábor oldalon) ═══════════ */
+.sheet { position: relative; z-index: 2; margin-top: calc(var(--sheet-r) * -1); background: var(--paper);
+         border-radius: var(--sheet-r) var(--sheet-r) 0 0; box-shadow: 0 -20px 50px rgba(3,22,64,.1);
+         padding: 40px 0 90px; min-height: 60vh; }
+.col { max-width: 720px; margin: 0 auto; }
+
+/* ── lépésjelző ── */
+.steps { position: sticky; top: 78px; z-index: 40; scroll-margin-top: 84px; display: flex; gap: 6px; margin: 0 auto 22px; padding: 8px;
+         background: rgba(255,255,255,.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+         border: 1px solid var(--line); border-radius: 100px; box-shadow: var(--shadow-sm); }
+.step { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 0; padding: 8px 6px;
+        border: 0; background: transparent; border-radius: 100px; cursor: default; font-family: 'Nunito', sans-serif;
+        font-weight: 800; font-size: 13px; color: #94a3b8; transition: background .25s, color .25s; }
+.step b { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: #e2e8f0; color: #64748b; font-size: 12.5px; transition: all .25s; }
+.step span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.step.done { color: var(--navy); cursor: pointer; }
+.step.done b { background: var(--green); color: #fff; }
+.step.cur { background: var(--navy); color: #fff; }
+.step.cur b { background: var(--yellow); color: var(--navy-deep); animation: pop .35s ease; }
+@keyframes pop { 0% { transform: scale(.7); } 60% { transform: scale(1.18); } 100% { transform: scale(1); } }
+@media (max-width: 640px) { .step span { display: none; } .step.cur span { display: inline; } .step { flex: 0 0 auto; } .step.cur { flex: 1; } .steps { justify-content: space-between; } }
+
+/* ── kártya + körbefutó fény ── */
+@property --beam { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes beam { to { --beam: 360deg; } }
+.card { position: relative; background: #fff; border-radius: 28px; padding: 38px 34px 26px; box-shadow: var(--shadow-lg); }
+.card::before { content: ''; position: absolute; inset: -1px; padding: 1.5px; border-radius: inherit; pointer-events: none;
+    background: conic-gradient(from var(--beam), transparent 0%, transparent 84%, rgba(14,165,233,.25) 91%, #0ea5e9 98%, transparent 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); animation: beam 9s linear infinite; }
+
+.panel { display: none; }
+.panel.on { display: block; animation: panelIn .32s ease; }
+@keyframes panelIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.p-title { font-size: 28px; font-weight: 900; color: var(--navy-deep); line-height: 1.15; margin-bottom: 6px; }
+.p-desc { font-size: 15px; color: #64748b; line-height: 1.6; margin-bottom: 24px; }
+
+/* ── mezők ── */
+.grp { margin-bottom: 20px; }
+.lbl { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 15.5px; color: var(--navy); margin-bottom: 7px; transition: color .2s; }
+.grp:focus-within > .lbl { color: var(--blue-royal); }
+.opt { font-family: 'Nunito', sans-serif; font-weight: 600; font-size: 12.5px; color: #94a3b8; }
+.pre { margin-left: auto; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 11px; color: var(--green); background: #dcfce7; padding: 2px 9px; border-radius: 50px; }
+.pre.mod { color: #a16207; background: #fef9c3; }
+.in { width: 100%; padding: 14px 16px; border: 2px solid #cbd5e1; border-radius: 14px; background: #fff; color: #1e293b;
+      font-family: 'Nunito', sans-serif; font-size: 16px; outline: none; transition: border-color .2s, box-shadow .2s; -webkit-appearance: none; appearance: none; }
+.in:focus { border-color: var(--sky); box-shadow: 0 0 0 4px var(--sky-lt); }
+.in[data-pre="1"]:not(.edited) { background: #f0fdf4; border-color: #bbf7d0; }
+textarea.in { resize: vertical; min-height: 92px; line-height: 1.5; }
+input[type="date"].in { min-height: 52px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.addr { display: grid; grid-template-columns: 130px 1fr; gap: 10px; }
+.addr + .in { margin-top: 10px; }
+.err { display: none; margin-top: 6px; font-size: 13px; font-weight: 700; color: var(--bad); }
+.grp.bad .err { display: block; }
+.grp.bad > .in, .grp.bad .addr .in { border-color: #ef4444; box-shadow: 0 0 0 4px #fee2e2; }
+.grp.bad .tile, .grp.bad .seg { border-color: #ef4444; }
+.hint { display: none; margin-top: 7px; font-size: 13px; line-height: 1.45; color: #a16207; background: #fef9c3; padding: 7px 11px; border-radius: 10px; }
+.hint.show { display: block; }
+.note { font-size: 13px; color: #64748b; line-height: 1.5; margin-top: 6px; }
+
+/* ── pipa a mezők alatt ── */
+.tick { display: flex; align-items: flex-start; gap: 10px; margin-top: 10px; font-size: 14px; font-weight: 700; color: #475569; cursor: pointer; line-height: 1.4; }
+.tick input { width: 19px; height: 19px; margin-top: 1px; flex-shrink: 0; accent-color: var(--blue-bright); }
+
+/* ── választókártyák ── */
+.tiles { display: grid; gap: 10px; }
+.tiles.two { grid-template-columns: 1fr 1fr; }
+.tile { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: #fff; border: 2px solid var(--line);
+        border-radius: 16px; cursor: pointer; box-shadow: var(--shadow-sm); transition: border-color .2s, background .2s, box-shadow .2s, transform .15s; }
+.tile:hover { border-color: #cbd5e1; transform: translateY(-1px); }
+.tile input { width: 20px; height: 20px; margin-top: 2px; flex-shrink: 0; accent-color: var(--sky); }
+.tile .t1 { display: block; font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 16px; color: var(--navy); line-height: 1.25; }
+.tile .t2 { display: block; font-size: 13px; color: #64748b; font-weight: 600; line-height: 1.45; margin-top: 2px; }
+.tile:has(input:checked) { background: var(--sky-lt); border-color: var(--sky); box-shadow: var(--shadow-md); }
+@media (max-width: 560px) { .tiles.two { grid-template-columns: 1fr; } .row2 { grid-template-columns: 1fr; gap: 0; } .row2 > .grp { margin-bottom: 20px; } .addr { grid-template-columns: 110px 1fr; } }
+
+.reveal { display: none; margin-top: 12px; padding: 16px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 16px; }
+.reveal.on { display: block; animation: panelIn .28s ease; }
+.reveal .grp:last-child { margin-bottom: 0; }
+
+/* ── egészségügyi kérdések ── */
+.quick { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; padding: 14px 16px;
+         background: #fffde7; border: 2px dashed var(--yellow); border-radius: 18px; }
+.quick-t { font-size: 14px; font-weight: 700; color: var(--navy2); line-height: 1.4; }
+.quick button { border: 0; cursor: pointer; background: var(--navy); color: #fff; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px; padding: 10px 18px; border-radius: 50px; transition: transform .15s; }
+.quick button:hover { transform: translateY(-1px); }
+.hq { padding: 16px; margin-bottom: 12px; background: #f8fafc; border: 2px solid var(--line); border-radius: 18px; transition: border-color .2s, background .2s; }
+.hq.van { background: #fff7ed; border-color: #fdba74; }
+.hq.nincs { background: #f0fdf4; border-color: #bbf7d0; }
+.hq.bad { border-color: #ef4444; }
+.hq-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.hq-q { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 16px; color: var(--navy); line-height: 1.3; flex: 1 1 230px; }
+.hq-q small { display: block; font-family: 'Nunito', sans-serif; font-weight: 600; font-size: 12.5px; color: #64748b; margin-top: 2px; }
+.seg { display: inline-flex; padding: 4px; background: #fff; border: 2px solid var(--line); border-radius: 100px; }
+.seg label { cursor: pointer; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg span { display: block; padding: 8px 20px; border-radius: 100px; font-weight: 800; font-size: 14px; color: #64748b; transition: all .2s; }
+.seg input:focus-visible + span { outline: 3px solid var(--blue-bright); outline-offset: 1px; }
+.seg input[value="nincs"]:checked + span { background: #16a34a; color: #fff; }
+.seg input[value="van"]:checked + span { background: var(--orange); color: #fff; }
+.hq-more { display: none; margin-top: 12px; }
+.hq.van .hq-more { display: block; animation: panelIn .25s ease; }
+.hq .err { margin-top: 8px; }
+.hq.bad .err { display: block; }
+.prog-pill { display: inline-block; margin-bottom: 14px; font-size: 13px; font-weight: 800; color: var(--navy); background: var(--sky-lt); padding: 5px 13px; border-radius: 50px; }
+
+/* ── nyilatkozatok ── */
+.policy { display: flex; gap: 12px; align-items: flex-start; padding: 15px 16px; margin-bottom: 10px; background: #f8fafc; border: 2px solid var(--line); border-radius: 16px; font-size: 14px; line-height: 1.5; font-weight: 600; color: #475569; cursor: pointer; transition: border-color .2s, background .2s; }
+.policy:has(input:checked) { background: #f0fdf4; border-color: #86efac; }
+.policy input { width: 20px; height: 20px; margin-top: 2px; flex-shrink: 0; accent-color: var(--blue-bright); }
+.policy a { color: var(--blue-royal); font-weight: 800; text-decoration: underline; }
+.grp.bad .policy { border-color: #ef4444; }
+.all { display: flex; align-items: center; gap: 12px; padding: 13px 16px; margin-bottom: 14px; background: var(--navy); color: #fff; border-radius: 16px; font-weight: 800; font-size: 15px; cursor: pointer; }
+.all input { width: 20px; height: 20px; accent-color: var(--yellow); }
+
+.alert { display: none; margin: 14px 0 0; padding: 13px 15px; background: #fef2f2; border: 2px solid #ef4444; color: var(--bad); border-radius: 14px; font-size: 14px; font-weight: 700; line-height: 1.5; }
+.alert.show { display: block; }
+
+/* ── ragadós gombsáv ── */
+.bar { position: sticky; bottom: 12px; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 22px;
+       padding: 10px 10px 10px 14px; background: rgba(6,30,80,.96); color: #fff; border-radius: 100px; box-shadow: 0 14px 34px rgba(6,30,80,.3); }
+.bar-info { font-size: 13px; font-weight: 700; opacity: .85; padding-left: 8px; }
+.bar-info b { font-family: 'Baloo 2', cursive; font-size: 17px; opacity: 1; }
+.bar-btns { display: flex; gap: 8px; margin-left: auto; }
+.btn-back { border: 0; cursor: pointer; background: rgba(255,255,255,.14); color: #fff; font-weight: 800; font-size: 14px; padding: 12px 18px; border-radius: 50px; font-family: 'Nunito', sans-serif; }
+.btn-back:hover { background: rgba(255,255,255,.22); }
+.btn-next { border: 0; cursor: pointer; background: var(--yellow); color: var(--navy2); font-family: 'Baloo 2', cursive; font-weight: 900; font-size: 16px; padding: 12px 26px; border-radius: 50px; box-shadow: 0 8px 24px rgba(245,196,0,.28); transition: transform .15s; white-space: nowrap; }
+.btn-next:hover { transform: translateY(-2px); }
+.btn-next:active { transform: scale(.96); }
+.btn-next:disabled { opacity: .7; cursor: wait; }
+.btn-next.final { animation: glow 3.2s ease-in-out infinite; }
+@keyframes glow { 0%,100% { box-shadow: 0 8px 24px rgba(245,196,0,.25), 0 0 0 0 rgba(245,196,0,0); } 50% { box-shadow: 0 10px 30px rgba(245,196,0,.45), 0 0 0 7px rgba(245,196,0,.12); } }
+.saved { text-align: center; font-size: 12.5px; color: #94a3b8; margin-top: 14px; font-weight: 700; }
+
+/* ── sikeres kitöltés ── */
+.thanks { text-align: center; padding: 18px 6px 10px; }
+.thanks .big { font-size: 64px; line-height: 1; margin-bottom: 10px; display: inline-block; animation: hop 1.6s ease-in-out infinite; }
+@keyframes hop { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-10px) rotate(6deg); } }
+.thanks h2 { font-size: 32px; font-weight: 900; color: var(--navy-deep); margin-bottom: 10px; }
+.thanks p { font-size: 16px; color: #475569; line-height: 1.65; max-width: 480px; margin: 0 auto 14px; }
+.thanks .box { text-align: left; background: var(--sky-lt); border-radius: 16px; padding: 14px 18px; max-width: 480px; margin: 18px auto 22px; font-size: 14.5px; line-height: 1.7; color: var(--navy2); }
+
+/* ── betöltő: Dini kiugrik a vízből ── */
+.loading { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 100000; background: rgba(244,249,255,.92); backdrop-filter: blur(3px); }
+.loading.on { display: flex; }
+.loading-card { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+#load-txt { font-size: 17px; font-weight: 700; color: var(--navy); }
+.anim { position: relative; width: 240px; height: 170px; overflow: hidden; border-radius: 0 0 28px 28px; }
+.jx { position: absolute; left: 50%; bottom: 0; width: 0; height: 0; z-index: 1; animation: mvx 1.6s linear infinite; }
+.jy { position: absolute; left: -26px; bottom: 0; width: 52px; font-size: 50px; line-height: 1; transform-origin: 50% 55%; animation: mvy 1.6s infinite; }
+.jy span { display: block; transform: scaleX(-1); }
+.water { position: absolute; left: 0; right: 0; bottom: 0; height: 30px; background: linear-gradient(180deg, #7DD3FC, #38BDF8); border-radius: 0 0 28px 28px; z-index: 2; }
+.water::before { content: ''; position: absolute; left: 0; top: -10px; width: calc(100% + 20px); height: 20px; background: radial-gradient(circle at 10px 10px, #7DD3FC 9px, transparent 10px) repeat-x; background-size: 20px 20px; animation: wv 1s linear infinite; }
+@keyframes mvx { from { transform: translateX(-70px); } to { transform: translateX(70px); } }
+@keyframes mvy { 0% { transform: translateY(50px) rotate(-24deg); animation-timing-function: cubic-bezier(.33,1,.68,1); } 50% { transform: translateY(-86px) rotate(30deg); animation-timing-function: cubic-bezier(.32,0,.67,0); } 100% { transform: translateY(50px) rotate(78deg); } }
+@keyframes wv { to { transform: translateX(-20px); } }
+
+/* ── szabályzat modal ── */
+.modal-overlay { position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center; background: rgba(6,30,80,.55); backdrop-filter: blur(6px); padding: 20px; }
+.modal-box { background: #fff; padding: 30px; border-radius: 24px; max-width: 700px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; }
+.modal-box h2 { font-size: 22px; margin-bottom: 15px; border-bottom: 2px solid var(--sky-lt); padding-bottom: 10px; color: var(--navy); }
+.modal-body { overflow-y: auto; flex-grow: 1; margin-bottom: 20px; padding-right: 5px; color: #334155; line-height: 1.6; font-size: 14.5px; }
+
+/* ── lábléc ── */
+footer { position: relative; z-index: 2; margin-top: calc(var(--sheet-r) * -1); background: var(--navy-deep); color: #fff; text-align: center;
+         border-radius: var(--sheet-r) var(--sheet-r) 0 0; padding: 70px 0 34px; border-top: 5px solid var(--yellow); }
+footer .f1 { font-family: 'Baloo 2', cursive; font-weight: 900; font-size: 22px; margin-bottom: 10px; }
+footer p { font-size: 14.5px; color: rgba(255,255,255,.8); line-height: 1.7; }
+footer a { color: var(--yellow); font-weight: 800; text-decoration: none; }
+footer .legal { margin-top: 20px; font-size: 13px; }
+footer .legal a { color: rgba(255,255,255,.6); font-weight: 600; text-decoration: underline; }
+footer .small { opacity: .4; font-size: 12px; margin-top: 14px; display: block; }
+.sheet { padding-bottom: calc(var(--sheet-r) + 60px); }
+
+/* ── mobil ── */
+@media (max-width: 860px) {
+    .top { padding: 104px 0 100px; }
+    .top-grid { grid-template-columns: 1fr; gap: 24px; }
+    .glass { padding: 18px; }
+}
+@media (max-width: 560px) {
+    .wrap { padding: 0 16px; }
+    .card { padding: 26px 16px 18px; border-radius: 22px; }
+    .p-title { font-size: 24px; }
+    .bar { padding-left: 8px; }
+    .bar-info { display: none; }
+    .btn-next { padding: 12px 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .card::before, .bubbles i, .btn-next.final, .jx, .jy, .water::before, .thanks .big, .step.cur b { animation: none !important; }
+    .panel.on, .reveal.on, .hq.van .hq-more { animation: none; }
+    html { scroll-behavior: auto; }
+}
+
+
+
+/* ── MOBIL: kompakt fejléc és sűrűbb űrlap, hogy minél kevesebb görgetés kelljen ── */
+@media (max-width: 860px) {
+    .top { padding: 84px 0 62px; }
+    .top h1 { font-size: 30px; margin-bottom: 0; }
+    .top p.lead { display: none; }
+    .top-grid { gap: 12px; }
+    .glass { padding: 12px 14px; border-radius: 18px; }
+    .glass-h { margin-bottom: 8px; }
+    .glass-av { width: 38px; height: 38px; }
+    .glass-t { font-size: 16px; }
+    .glass-s { display: none; }
+    .chip { font-size: 12px; padding: 4px 10px; }
+    .sheet { padding-top: 18px; --sheet-r: 34px; }
+    .steps { top: 70px; margin-bottom: 14px; }
+}
+@media (max-width: 560px) {
+    .card { padding: 20px 14px 14px; }
+    .p-title { font-size: 22px; }
+    .p-desc { font-size: 13.5px; margin-bottom: 16px; line-height: 1.5; }
+    .grp { margin-bottom: 14px; }
+    .lbl { font-size: 15px; margin-bottom: 5px; }
+    .in { padding: 12px 14px; }
+    .hq { padding: 12px; margin-bottom: 10px; }
+    .tile { padding: 12px 14px; }
+    .policy { padding: 12px 14px; }
+    .bar { margin-top: 14px; bottom: 8px; }
+    .saved { display: none; }
+    .grp.cur::after { left: -8px; }
+}
+
+/* ── mobil finomítás ── */
+.cta-btn, .nav-brand { white-space: nowrap; }
+@media (max-width: 860px) {
+    .nav-brand { font-size: 17px; }
+    nav .cta-btn { font-size: 13px; padding: 8px 14px; }
+    nav { padding: 10px 0; }
+    .top { padding: 70px 0 54px; }
+    .top h1 { font-size: 26px; }
+    .chip:nth-child(n+3) { display: none; }
+    .glass { padding: 10px 12px; }
+    .glass-h { margin-bottom: 6px; }
+    .steps { top: 58px; }
+    .row2 > .grp { margin-bottom: 14px; }
+    .grp, .hq { scroll-margin-top: 100px; }
+    .sheet { padding-bottom: calc(var(--sheet-r) + 90px); }
+}
+@media (max-width: 560px) {
+    .p-desc { display: none; }
+    .p-title { margin-bottom: 14px; }
+    .pre { font-size: 10.5px; padding: 2px 7px; }
+}
+
+/* ── több személy (sürgősség, átvétel) + opcionális másik szülő ── */
+.person { padding: 14px 14px 2px; margin-top: 12px; background: #fff; border: 2px solid var(--line); border-radius: 16px; animation: panelIn .28s ease; }
+.person-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.person-n { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 15.5px; color: var(--navy); }
+.person-del { border: 0; background: transparent; color: #94a3b8; font-weight: 800; font-size: 13px; cursor: pointer; padding: 6px 10px; border-radius: 50px; font-family: 'Nunito', sans-serif; }
+.person-del:hover { background: #fee2e2; color: var(--bad); }
+.person-del[hidden] { display: none; }
+.add { width: 100%; padding: 13px 14px; margin-top: 12px; border: 2px dashed #94a3b8; background: transparent; border-radius: 16px; color: var(--navy);
+       font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14.5px; cursor: pointer; transition: all .2s; text-align: center; }
+.add:hover { border-color: var(--sky); background: var(--sky-lt); }
+.add:disabled { opacity: .5; cursor: not-allowed; }
+.add small { display: block; font-weight: 600; color: #64748b; font-size: 12.5px; margin-top: 2px; line-height: 1.4; }
+.add small:empty { display: none; }
+.grp + .add { margin-top: 0; margin-bottom: 4px; }
+
+/* ── 5. lépés: nyilatkozat-szekciók ── */
+.sec { margin-bottom: 28px; }
+.sec-h { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.sec-h span { font-size: 24px; line-height: 1; }
+.sec-h h3 { font-size: 19px; font-weight: 800; color: var(--navy); line-height: 1.25; }
+.sec-t { font-size: 14.5px; color: #475569; line-height: 1.65; margin-bottom: 12px; }
+.sec-q { font-size: 14px; font-style: italic; color: var(--navy2); line-height: 1.6; background: #fffde7; border-left: 4px solid var(--yellow); padding: 10px 14px; border-radius: 0 14px 14px 0; margin-bottom: 14px; }
+.tile .t2 em { display: block; margin-top: 4px; font-style: normal; color: var(--navy); font-weight: 700; }
+.sec-health .policy { background: #eff6ff; border-color: #93c5fd; }
+.sec-health .policy:has(input:checked) { background: #f0fdf4; border-color: #86efac; }
+.note a { color: var(--blue-royal); font-weight: 800; }
+.infobox { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; background: var(--sky-lt); border: 1px solid #bae6fd; border-radius: 16px; font-size: 14px; line-height: 1.55; color: var(--navy2); }
+.infobox > span { font-size: 24px; line-height: 1.2; }
+.infobox b { display: block; font-family: 'Baloo 2', cursive; font-size: 15.5px; margin-bottom: 2px; }
+@media (max-width: 560px) { .sec { margin-bottom: 22px; } .sec-t { font-size: 14px; } .sec-h h3 { font-size: 17.5px; } }
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="wrap nav-flex">
+        <a href="https://www.dinamikusdelfinek.hu/tabor" class="nav-brand">Dinamikus Delfinek <span>Tábor</span></a>
+        <a href="mailto:dinamikus.delfinek@gmail.com" class="cta-btn">Kérdésem van</a>
+    </div>
+</nav>
+
+<header class="top">
+    <div class="bubbles" aria-hidden="true">
+        <i style="--x:6%;--s:14px;--d:11s;--dl:0s"></i><i style="--x:19%;--s:22px;--d:14s;--dl:3s"></i>
+        <i style="--x:36%;--s:10px;--d:9s;--dl:1s"></i><i style="--x:58%;--s:18px;--d:13s;--dl:5s"></i>
+        <i style="--x:74%;--s:12px;--d:10s;--dl:2s"></i><i style="--x:90%;--s:20px;--d:15s;--dl:6s"></i>
+    </div>
+    <div class="wrap top-grid">
+        <div>
+            <h1>Tábori adatlap <span>2027</span></h1>
+            <p class="lead" id="lead">Öt rövid lépés, pár perc az egész. Amit a jelentkezéskor már megadtál, azt előre kitöltöttük, neked csak át kell nézned.</p>
+        </div>
+        <div class="glass" id="welcome" hidden>
+            <div class="glass-h">
+                <img class="glass-av" src="bozsi karakter.png" alt="">
+                <div>
+                    <div class="glass-t" id="w-title">Szia!</div>
+                    <div class="glass-s" id="w-sub">A jelentkezésedből átvettük az adataitokat.</div>
+                </div>
+            </div>
+            <div class="chips" id="w-chips"></div>
+        </div>
+    </div>
+</header>
+
+<main class="sheet">
+    <div class="wrap">
+        <div class="col">
+
+            <div class="steps" id="steps" role="list" aria-label="Az adatlap lépései"></div>
+
+            <div class="card" id="card">
+                <form id="adatlap" novalidate autocomplete="on">
+
+                    <!-- ═══ 1. TÖRVÉNYES KÉPVISELŐ ═══ -->
+                    <section class="panel on" data-p="1">
+                        <h2 class="p-title">Törvényes képviselő</h2>
+                        <p class="p-desc">Ezen az e-mail-címen és telefonszámon érünk el benneteket a tábor előtt és alatt.</p>
+
+                        <div class="grp"><label class="lbl" for="p-name">Teljes név</label>
+                            <input class="in" id="p-name" type="text" autocomplete="name" placeholder="Pl. Kiss Gábor" data-save>
+                            <span class="err"></span></div>
+
+                        <div class="row2">
+                            <div class="grp"><label class="lbl" for="p-email">E-mail-cím</label>
+                                <input class="in" id="p-email" type="email" autocomplete="email" inputmode="email" placeholder="minta@szulo.hu" data-save>
+                                <span class="err"></span></div>
+                            <div class="grp"><label class="lbl" for="p-tel">Telefonszám</label>
+                                <input class="in" id="p-tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="+36 30 123 4567" data-save>
+                                <span class="err"></span></div>
+                        </div>
+
+                        <div class="grp"><label class="lbl" for="p-irsz">Lakcím</label>
+                            <div class="addr">
+                                <input class="in" id="p-irsz" type="text" inputmode="numeric" maxlength="4" autocomplete="postal-code" placeholder="Irányítószám" data-save>
+                                <input class="in" id="p-varos" type="text" autocomplete="address-level2" placeholder="Település" data-save>
+                            </div>
+                            <input class="in" id="p-utca" type="text" autocomplete="address-line1" placeholder="Utca, házszám" data-save>
+                            <span class="err"></span></div>
+
+                        <button type="button" class="add" id="s-toggle">＋ Másik szülő elérhetőségének megadása<small>Nem kötelező, de ha az egyikőtök nem veszi fel, gyorsabban elérünk valakit.</small></button>
+                        <div class="reveal" id="s-box">
+                            <div class="grp"><label class="lbl" for="s-name">Másik szülő neve <span class="opt">(nem kötelező)</span></label>
+                                <input class="in" id="s-name" type="text" autocomplete="off" placeholder="Pl. Kiss Anna" data-save><span class="err"></span></div>
+                            <div class="row2">
+                                <div class="grp"><label class="lbl" for="s-tel">Telefonszáma</label>
+                                    <input class="in" id="s-tel" type="tel" inputmode="tel" autocomplete="off" placeholder="+36 20 555 6677" data-save><span class="err"></span></div>
+                                <div class="grp"><label class="lbl" for="s-email">E-mail-címe <span class="opt">(nem kötelező)</span></label>
+                                    <input class="in" id="s-email" type="email" inputmode="email" autocomplete="off" placeholder="minta@email.hu" data-save><span class="err"></span></div>
+                            </div>
+                            <label class="tick" style="margin-top:0"><input type="checkbox" id="s-urg" checked data-save> Sürgősség esetén őt is hívhatjuk</label>
+                            <p class="note">Kérjük, csak olyan személy adatait add meg, akit erről előre tájékoztattál.</p>
+                        </div>
+                    </section>
+
+                    <!-- ═══ 2. GYERMEK ═══ -->
+                    <section class="panel" data-p="2">
+                        <h2 class="p-title">Kis delfin adatai</h2>
+                        <p class="p-desc">A gyermek hivatalos adatai a biztosításhoz és a tábori nyilvántartáshoz kellenek.</p>
+
+                        <div class="row2">
+                            <div class="grp"><label class="lbl" for="c-name">Teljes név</label>
+                                <input class="in" id="c-name" type="text" placeholder="Pl. Kiss Márton" maxlength="100" data-save>
+                                <span class="err"></span></div>
+                            <div class="grp"><label class="lbl" for="c-nick">Hogyan szólítsuk?</label>
+                                <input class="in" id="c-nick" type="text" placeholder="Pl. Marci" maxlength="40" data-save>
+                                <span class="err"></span></div>
+                        </div>
+
+                        <div class="row2">
+                            <div class="grp"><label class="lbl" for="c-birth">Születési idő</label>
+                                <input class="in" id="c-birth" type="date" data-save>
+                                <span class="err"></span><div class="hint" id="age-hint"></div></div>
+                            <div class="grp"><label class="lbl" for="c-place">Születési hely</label>
+                                <input class="in" id="c-place" type="text" placeholder="Pl. Győr" data-save>
+                                <span class="err"></span></div>
+                        </div>
+
+                        <div class="grp"><label class="lbl" for="c-mother">Édesanyja neve</label>
+                            <input class="in" id="c-mother" type="text" autocomplete="off" placeholder="Pl. Kovács Julianna" data-save>
+                            <label class="tick"><input type="checkbox" id="mother-me" data-save> Én vagyok az édesanyja (a fenti nevemet átmásoljuk)</label>
+                            <span class="err"></span></div>
+
+                        <div class="grp"><label class="lbl" for="c-taj">TAJ-szám</label>
+                            <input class="in" id="c-taj" type="text" inputmode="numeric" maxlength="11" autocomplete="off" placeholder="123 456 789" data-save>
+                            <span class="err"></span><div class="hint" id="taj-hint">Ez a szám nem tűnik érvényes TAJ-számnak. Kérjük, nézd át még egyszer; ha jó, mehetsz tovább.</div></div>
+
+                        <div class="grp" id="g-addr"><label class="lbl">Gyermek lakcíme</label>
+                            <label class="tick" style="margin-top:0"><input type="checkbox" id="addr-same" checked data-save> Ugyanaz, mint a törvényes képviselő lakcíme</label>
+                            <div class="reveal" id="addr-box">
+                                <div class="addr">
+                                    <input class="in" id="c-irsz" type="text" inputmode="numeric" maxlength="4" placeholder="Irányítószám" data-save>
+                                    <input class="in" id="c-varos" type="text" placeholder="Település" data-save>
+                                </div>
+                                <input class="in" id="c-utca" type="text" placeholder="Utca, házszám" data-save>
+                            </div>
+                            <span class="err"></span></div>
+
+                        <div class="grp" id="g-turnus"><label class="lbl">Melyik héten jön?</label>
+                            <div class="tiles" id="turnus-tiles"></div>
+                            <span class="err"></span></div>
+
+                        <div class="grp" id="g-volt"><label class="lbl">Volt már nálunk korábban?</label>
+                            <div class="tiles two">
+                                <label class="tile"><input type="radio" name="volt" value="Igen" data-save><span><span class="t1">Igen, régi delfin</span></span></label>
+                                <label class="tile"><input type="radio" name="volt" value="Nem" data-save><span><span class="t1">Nem, most jön először</span></span></label>
+                            </div>
+                            <span class="err"></span></div>
+                    </section>
+
+                    <!-- ═══ 3. EGÉSZSÉG ═══ -->
+                    <section class="panel" data-p="3">
+                        <h2 class="p-title">Egészség és allergiák</h2>
+                        <p class="p-desc">Ezek az információk a gyermek biztonságához kellenek. Bizalmasan kezeljük őket, kizárólag a tábor oktatói látják.</p>
+
+                        <div class="quick">
+                            <span class="quick-t">A gyermeknek semmilyen allergiája, betegsége vagy gyógyszere nincs?</span>
+                            <button type="button" id="all-nincs">Mindenhol „Nincs”</button>
+                        </div>
+                        <span class="prog-pill" id="hq-prog">0 / 6 megválaszolva</span>
+                        <div id="hq-list"></div>
+
+                        <div class="grp" style="margin-top:18px"><label class="lbl" for="c-extra">Van bármi, amit még tudnunk kell a gyermekről? <span class="opt">(nem kötelező)</span></label>
+                            <textarea class="in" id="c-extra" placeholder="Pl. félelmek, alvási szokások, különleges igények, étrend…" data-save></textarea></div>
+                    </section>
+
+                    <!-- ═══ 4. ELÉRHETŐSÉG, ÁTVÉTEL ═══ -->
+                    <section class="panel" data-p="4">
+                        <h2 class="p-title">Sürgősség és átvétel</h2>
+                        <p class="p-desc">Kit hívjunk, ha baj van, és ki jöhet a gyerekért a tábor végén?</p>
+
+                        <div class="grp" id="g-urg"><label class="lbl">Sürgősség esetén kit értesítsünk?</label>
+                            <div class="tiles">
+                                <label class="tile"><input type="radio" name="urg" value="same" checked data-save><span><span class="t1">A törvényes képviselőt</span><span class="t2" id="urg-same-txt">A fent megadott telefonszámon hívunk.</span></span></label>
+                                <label class="tile"><input type="radio" name="urg" value="diff" data-save><span><span class="t1">Más személyt is megadok</span><span class="t2">Például nagyszülőt vagy családi barátot. Több személyt is megadhatsz.</span></span></label>
+                            </div>
+                            <div class="reveal" id="urg-box">
+                                <div id="urg-list"></div>
+                                <button type="button" class="add" id="urg-add">＋ Újabb személy hozzáadása<small></small></button>
+                            </div>
+                        </div>
+
+                        <div class="grp" id="g-pick"><label class="lbl">Ki jogosult a gyermek átvételére a tábor végén?</label>
+                            <div class="tiles">
+                                <label class="tile"><input type="radio" name="pick" value="Csak a törvényes képviselő" data-save><span><span class="t1">Csak a törvényes képviselő</span><span class="t2">Ha megadtad a másik szülőt, ő is átveheti.</span></span></label>
+                                <label class="tile"><input type="radio" name="pick" value="Más, előre egyeztetett személy" data-save><span><span class="t1">Más, előre egyeztetett személy is</span><span class="t2">Pl. nagyszülő, testvér, szomszéd. Több személyt is megadhatsz.</span></span></label>
+                            </div>
+                            <div class="reveal" id="pick-box">
+                                <div id="pick-list"></div>
+                                <button type="button" class="add" id="pick-add">＋ Újabb személy hozzáadása<small></small></button>
+                            </div>
+                            <span class="err"></span></div>
+                    </section>
+
+                    <!-- ═══ 5. NYILATKOZATOK ═══ -->
+                    <section class="panel" data-p="5">
+                        <h2 class="p-title">Nyilatkozatok</h2>
+                        <p class="p-desc">Három rövid rész: fényképezés, egészségügyi adatok, feltételek. Kérjük, figyelmesen olvasd el őket.</p>
+
+                        <div class="sec">
+                            <div class="sec-h"><span>📸</span><h3>Fénykép- és videófelvétel hozzájárulás</h3></div>
+                            <p class="sec-t">A tábor ideje alatt szeretnénk megörökíteni a gyerekek legszebb élményeit, mosolyát és az úszásban való fejlődését! A felvételeket zárt felületen megosztjuk a táborozó családokkal, emellett a Dinamikus Delfinek hivatalos felületein (Facebook, Instagram, weboldal) is bemutatjuk a tábori hangulatot.</p>
+                            <p class="sec-q">Vállaljuk, hogy kizárólag olyan, pozitív hangulatú felvételeket használunk fel, amelyek a gyermekek méltóságát és jó hírnevét tiszteletben tartják. Nyilvános felületen a gyermek nevét nem tüntetjük fel.</p>
+                            <div class="grp" id="g-media">
+                                <div class="tiles">
+                                    <label class="tile"><input type="radio" name="media" value="Igen, hozzájárulok a felvételek elkészítéséhez, valamint azok zárt (szülői) és nyilvános (Facebook, Instagram, weboldal) felületeken történő megjelenítéséhez." data-save><span><span class="t1">Igen, hozzájárulok</span><span class="t2">A felvételek elkészítéséhez, valamint azok zárt (szülői) és nyilvános (Facebook, Instagram, weboldal) felületeken történő megjelenítéséhez.</span></span></label>
+                                    <label class="tile"><input type="radio" name="media" value="Csak a felvételek elkészítéséhez és zárt (szülői) felületen történő megosztásához járulok hozzá; nyilvános közzétételhez nem." data-save><span><span class="t1">Csak zárt, szülői felületen</span><span class="t2">Nem járulok hozzá a gyermekemről készült felvételek nyilvános közzétételéhez. <em>Tájékoztatás: gondoskodunk róla, hogy a gyermek arca a nyilvános felületeken ne legyen azonosítható.</em></span></span></label>
+                                    <label class="tile"><input type="radio" name="media" value="Nem járulok hozzá a gyermekemről készült azonosítható felvételek közzétételéhez sem zárt, sem nyilvános felületen." data-save><span><span class="t1">Egyáltalán nem járulok hozzá</span><span class="t2">A gyermekről azonosítható felvétel se zárt, se nyilvános felületen ne kerüljön közzétételre.</span></span></label>
+                                </div>
+                                <span class="err"></span>
+                            </div>
+                            <p class="note">A hozzájárulást bármikor, indokolás nélkül visszavonhatod a dinamikus.delfinek@gmail.com címen. A visszavonás a korábbi adatkezelés jogszerűségét nem érinti, a nyilvános felületen megjelent felvételek törlését kérésre elvégezzük.</p>
+                        </div>
+
+                        <div class="sec sec-health">
+                            <div class="sec-h"><span>🩺</span><h3>Egészségügyi adatok kezelése</h3></div>
+                            <div class="grp" id="g-health">
+                                <label class="policy"><input type="checkbox" id="decl-health" data-save data-name="Nyilatkozat 3 - Egészségügyi adatok kezelése (kifejezett hozzájárulás)"><span>Kifejezetten hozzájárulok a gyermek TAJ-számának és egészségügyi adatainak (pl. allergia, diéta, betegségek, gyógyszerek) kezeléséhez, kizárólag a tábor biztonságos lebonyolítása és az esetleges egészségügyi ellátás érdekében.</span></label>
+                                <p class="note">Az adatokat csak a táborban dolgozó oktatók, illetve szükség esetén az ellátó egészségügyi szolgálat ismerheti meg, a kezelés részleteit az <a href="#" onclick="openPolicy('adatkezelesi-tajekoztato.html'); return false;">Adatkezelési Tájékoztató</a> tartalmazza. A hozzájárulás bármikor visszavonható; ennek hiányában a gyermek biztonságos ellátását nem tudjuk biztosítani, így a tábori részvétel nem lehetséges.</p>
+                                <span class="err"></span>
+                            </div>
+                        </div>
+
+                        <div class="sec">
+                            <div class="sec-h"><span>📋</span><h3>Feltételek és tudomásulvétel</h3></div>
+                            <div class="grp" id="g-decl">
+                                <label class="all"><input type="checkbox" id="decl-all"> Az alábbi négy pontot elolvastam és elfogadom</label>
+                                <label class="policy"><input type="checkbox" class="decl" data-name="Nyilatkozat 1 - Valós adatok"><span>Kijelentem, hogy a fenti adatokat a gyermek törvényes képviselőjeként adtam meg, és azok a valóságnak megfelelnek.</span></label>
+                                <label class="policy"><input type="checkbox" class="decl" data-name="Nyilatkozat 2 - Adatkezelési tájékoztató"><span>Megismertem és tudomásul veszem a Dinamikus Delfinek <a href="#" onclick="openPolicy('adatkezelesi-tajekoztato.html'); return false;">Adatkezelési Tájékoztatóját</a>.</span></label>
+                                <label class="policy"><input type="checkbox" class="decl" data-name="Nyilatkozat 4 - ÁSZF és lemondási feltételek"><span>Elolvastam és elfogadom a Dinamikus Delfinek <a href="#" onclick="openPolicy('aszf.html'); return false;">Általános Szerződési Feltételeit (ÁSZF)</a>, beleértve a <a href="#" onclick="openPolicy('jelentkezesi-feltetelek.html'); return false;">lemondási és visszatérítési feltételeket</a> is.</span></label>
+                                <label class="policy"><input type="checkbox" class="decl" data-name="Nyilatkozat 5 - Házirend"><span>Elolvastam és elfogadom a napközis tábor <a data-doc="hazirend" target="_blank" rel="noopener">Házirendjét</a> és az Aqua Sportközpont <a data-doc="aqua" target="_blank" rel="noopener">Házirendjét</a>.</span></label>
+                                <span class="err"></span>
+                            </div>
+                        </div>
+
+                        <div class="infobox"><span>📄</span><div><b>Tudnivaló a tábor első napjára</b>A jogszabály által előírt, legfeljebb 4 napnál nem régebbi szülői egészségügyi nyilatkozatot (fertőző betegségektől mentes állapotról) a tábor első napján, papír alapon aláírva kell átadni.</div></div>
+                    </section>
+
+                    <div class="alert" id="alert" role="alert"></div>
+
+                    <div class="bar">
+                        <div class="bar-info" id="bar-info"></div>
+                        <div class="bar-btns">
+                            <button type="button" class="btn-back" id="btn-back" hidden>← Vissza</button>
+                            <button type="button" class="btn-next" id="btn-next">Tovább →</button>
+                        </div>
+                    </div>
+                    <p class="saved" id="saved">A kitöltött adatokat ebben a böngészőlapban megőrizzük, ha véletlenül frissítenéd az oldalt.</p>
+                </form>
+
+                <!-- sikeres kitöltés -->
+                <div class="thanks" id="done" hidden>
+                    <span class="big">🎉</span>
+                    <h2 id="done-t">Köszönjük, kész az adatlap!</h2>
+                    <p id="done-p"></p>
+                    <div class="box" id="done-box"></div>
+                    <a class="cta-btn" href="https://www.dinamikusdelfinek.hu/tabor">Vissza a tábor oldalára</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="wrap">
+        <div class="f1">Dinamikus Delfinek SE</div>
+        <p>Kérdésed van az adatlappal kapcsolatban? Írj nekünk: <a href="mailto:dinamikus.delfinek@gmail.com">dinamikus.delfinek@gmail.com</a><br>
+           vagy hívj minket: <a href="tel:+36203938067">06 20 393 8067</a></p>
+        <div class="legal">
+            <a href="adatkezelesi-tajekoztato.html" target="_blank">Adatkezelés</a> &nbsp;|&nbsp;
+            <a href="impresszum.html" target="_blank">Impresszum</a> &nbsp;|&nbsp;
+            <a href="aszf.html" target="_blank">ÁSZF</a>
+        </div>
+        <span class="small">Ezt az oldalt a reCAPTCHA védi, és a Google <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:inherit;font-weight:600">Adatvédelmi irányelvei</a> és <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:inherit;font-weight:600">Általános Szerződési Feltételei</a> érvényesek rá.</span>
+        <span class="small">&copy; 2026 Dinamikus Delfinek SE. Minden jog fenntartva.</span>
+    </div>
+</footer>
+
+<div class="loading" id="loading" aria-live="polite">
+    <div class="loading-card">
+        <div class="anim"><div class="jx"><div class="jy"><span>🐬</span></div></div><div class="water"></div></div>
+        <div id="load-txt">Küldés…</div>
+    </div>
+</div>
+
+<div id="policy-modal" class="modal-overlay">
+    <div class="modal-box">
+        <h2 id="policy-title">Betöltés…</h2>
+        <div class="modal-body" id="policy-body"><p>Kérjük, várj, a dokumentum betöltődik…</p></div>
+        <button type="button" class="cta-btn" id="policy-close" style="width:100%;background:var(--navy);color:#fff;padding:12px">Bezárás</button>
+    </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    /* ═══════════════════ BEÁLLÍTÁSOK ═══════════════════ */
+    var CFG = {
+        // Apps Script webapp: az 'adatlap' action-t kell kezelnie (formTipus = 'adatlap')
+        scriptURL: 'https://script.google.com/macros/s/AKfycbwnanNMs8pMXjwsAuVyo4jlfSOw8BOsr6dF3YBI6TfeGCyPh9I9FHGREehNiNZ4NCNG/exec',
+        recaptchaKey: '6Le-gActAAAAACV802jPZ4Vp29oz_6h-323HOtKq',
+        turnusok: [
+            { id: '1', nev: 'I. tábori hét',  datum: '2027. július 12–16.' },
+            { id: '2', nev: 'II. tábori hét', datum: '2027. július 19–23.' }
+        ],
+        korMin: 6, korMax: 14, taborKezdete: '2027-07-12',
+        nyilatkozatVerzio: '2027-1',   // ha a nyilatkozatok szövegét módosítod, növeld: így visszakereshető, ki melyik szöveget fogadta el
+        // a Házirendek linkjei; amelyik üres, az sima szövegként jelenik meg (link nélkül)
+        docs: { hazirend: 'https://docs.google.com/forms/d/1SlxRqm015GYOZDW6D80gq7YQaQ4v-gXH_-QHXyh-9lc/printform', aqua: '' }
+    };
+
+    var STEPS = ['Képviselő', 'Gyermek', 'Egészség', 'Átvétel', 'Nyilatkozat'];
+    var HEALTH = [
+        { f: 'Van gyógyszerallergiája? (ha van, részletezd!)',                         q: 'Van gyógyszerallergiája?',            ph: 'Melyik gyógyszerre, és milyen reakciót okoz?' },
+        { f: 'Van ételallergiája vagy ételérzékenysége?',                              q: 'Van ételallergiája vagy ételérzékenysége?', s: 'A menü összeállításánál figyelembe vesszük.', ph: 'Mire érzékeny (pl. tej, glutén, mogyoró)? Milyen súlyos?' },
+        { f: 'Van környezeti allergiája? (pl. pollen, darázscsípés stb.)',             q: 'Van környezeti allergiája?',          s: 'Pl. pollen, darázscsípés, klór.', ph: 'Mire allergiás, és mit kell tenni, ha tünet jelentkezik?' },
+        { f: 'Szed rendszeresen gyógyszert? (ha igen, mit és mikor?)',                 q: 'Szed rendszeresen gyógyszert?',       ph: 'Mit, mikor és mennyit szed?' },
+        { f: 'Van bármilyen krónikus betegsége vagy egészségügyi állapota, amiről tudnunk kell?', q: 'Van krónikus betegsége vagy olyan állapota, amiről tudnunk kell?', ph: 'Pl. asztma, epilepszia, cukorbetegség, fülproblémák…' },
+        { f: 'Volt az elmúlt 1 évben komolyabb sérülése vagy műtétje?',                q: 'Volt az elmúlt 1 évben komolyabb sérülése vagy műtétje?', ph: 'Mi történt, és van-e olyan mozgás, amit kerülni kell?' }
+    ];
+
+    /* ═══════════════════ SEGÉDEK ═══════════════════ */
+    function $(id) { return document.getElementById(id); }
+    function qa(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function val(id) { var e = $(id); return e ? e.value.trim() : ''; }
+    function param(n) { try { return (new URLSearchParams(location.search).get(n) || '').trim(); } catch (e) { return ''; } }
+    function radio(name) { var c = document.querySelector('input[name="' + name + '"]:checked'); return c ? c.value : ''; }
+    function grpOf(el) { return el.closest('.grp'); }
+    function turnusById(id) { for (var i = 0; i < CFG.turnusok.length; i++) if (CFG.turnusok[i].id === id) return CFG.turnusok[i]; return null; }
+    function parseAddr(l) { var m = String(l || '').match(/^\s*(\d{4})\s+([^,]+?)\s*,\s*(.+)$/); return m ? { irsz: m[1], varos: m[2], utca: m[3] } : null; }
+
+    var S = { step: 1, pre: {}, az: param('az') };
+
+    /* ═══════════════════ LÉPÉSJELZŐ ═══════════════════ */
+    function renderSteps() {
+        $('steps').innerHTML = STEPS.map(function (n, i) {
+            var k = i + 1, cls = k < S.step ? 'done' : k === S.step ? 'cur' : '';
+            return '<button type="button" class="step ' + cls + '" data-s="' + k + '" role="listitem"' + (k === S.step ? ' aria-current="step"' : '') + (k > S.step ? ' tabindex="-1"' : '') + '><b>' + (k < S.step ? '✓' : k) + '</b><span>' + n + '</span></button>';
+        }).join('');
+    }
+
+    /* ═══════════════════ ELŐRE KITÖLTÉS ═══════════════════ */
+    function setPre(id, v) {
+        var e = $(id);
+        if (!e || !v) return;
+        e.value = v; e.setAttribute('data-pre', '1');
+        S.pre[id] = 1;
+        tagLabel(e, false);
+    }
+    function tagLabel(el, mod) {
+        var g = grpOf(el); if (!g) return;
+        var l = g.querySelector('.lbl'); if (!l) return;
+        var t = l.querySelector('.pre');
+        if (!t) { t = document.createElement('span'); t.className = 'pre'; l.appendChild(t); }
+        t.textContent = mod ? 'módosítva' : '✓ jelentkezésből átvéve';
+        t.classList.toggle('mod', !!mod);
+    }
+    function applyPrefill() {
+        setPre('p-name', param('szulo')); setPre('p-email', param('email')); setPre('p-tel', param('tel'));
+        var a = parseAddr(param('lakcim'));
+        setPre('p-irsz', param('irsz') || (a && a.irsz)); setPre('p-varos', param('varos') || (a && a.varos)); setPre('p-utca', param('utca') || (a && a.utca));
+        setPre('s-name', param('szulo2')); setPre('s-email', param('email2')); setPre('s-tel', param('tel2'));
+        setPre('c-name', param('gyerek')); setPre('c-nick', param('becenev')); setPre('c-birth', param('szul')); setPre('c-mother', param('anya'));
+        var t = param('turnus');
+        if (t) {
+            t.split(/[,;]/).forEach(function (id) {
+                var cb = document.querySelector('#turnus-tiles input[value="' + id.trim() + '"]');
+                if (cb) { cb.checked = true; S.pre.turnus = 1; }
+            });
+            if (S.pre.turnus) tagLabel(document.querySelector('#turnus-tiles input'), false);
+        }
+    }
+    function renderWelcome() {
+        var n = Object.keys(S.pre).length;
+        if (!n) return;
+        var first = (val('p-name').split(/\s+/)[1] || val('p-name').split(/\s+/)[0] || '');
+        $('w-title').textContent = first ? 'Szia, ' + first + '!' : 'Szia!';
+        $('w-sub').textContent = 'A jelentkezésedből már átvettünk ' + n + ' adatot, csak nézd át őket, és egészítsd ki a többit.';
+        var chips = [];
+        if (val('c-name')) chips.push('<span class="chip y">🐬 ' + esc(val('c-name')) + '</span>');
+        qa('#turnus-tiles input:checked').forEach(function (c) { var t = turnusById(c.value); if (t) chips.push('<span class="chip">' + esc(t.nev + ' · ' + t.datum) + '</span>'); });
+        chips.push('<span class="chip">✓ ' + n + ' mező előre kitöltve</span>');
+        $('w-chips').innerHTML = chips.join('');
+        $('welcome').hidden = false;
+        $('lead').textContent = 'Öt rövid lépés, pár perc az egész. A zölddel jelölt mezőket a jelentkezésedből töltöttük ki, ha valami nem stimmel, egyszerűen írd át.';
+    }
+
+    /* ═══════════════════ ÉPÍTÉS ═══════════════════ */
+    function buildTurnus() {
+        $('turnus-tiles').innerHTML = CFG.turnusok.map(function (t) {
+            return '<label class="tile"><input type="checkbox" name="turnus" value="' + esc(t.id) + '" data-save><span><span class="t1">' + esc(t.nev) + '</span><span class="t2">' + esc(t.datum) + '</span></span></label>';
+        }).join('');
+    }
+    function buildHealth() {
+        $('hq-list').innerHTML = HEALTH.map(function (h, i) {
+            return '<div class="grp hq" data-i="' + i + '"><div class="hq-top"><div class="hq-q">' + esc(h.q) + (h.s ? '<small>' + esc(h.s) + '</small>' : '') + '</div>' +
+                '<div class="seg" role="radiogroup" aria-label="' + esc(h.q) + '">' +
+                '<label><input type="radio" name="hq' + i + '" value="nincs" data-save><span>Nincs</span></label>' +
+                '<label><input type="radio" name="hq' + i + '" value="van" data-save><span>Van</span></label></div></div>' +
+                '<div class="hq-more"><textarea class="in" id="hq' + i + '-t" placeholder="' + esc(h.ph) + '" data-save></textarea></div>' +
+                '<span class="err"></span></div>';
+        }).join('');
+    }
+    function hqSync() {
+        var done = 0;
+        qa('.hq').forEach(function (b) {
+            var v = radio('hq' + b.getAttribute('data-i'));
+            b.classList.toggle('van', v === 'van'); b.classList.toggle('nincs', v === 'nincs');
+            if (v) done++;
+        });
+        $('hq-prog').textContent = done + ' / ' + HEALTH.length + ' megválaszolva';
+    }
+
+    /* ═══════════════════ DINAMIKUS UI ═══════════════════ */
+    function syncUI() {
+        $('addr-box').classList.toggle('on', !$('addr-same').checked);
+        var uOn = radio('urg') === 'diff', pOn = radio('pick') === 'Más, előre egyeztetett személy';
+        if (uOn && !personsOf('urg').length) addPerson('urg');
+        if (pOn && !personsOf('pick').length) addPerson('pick');
+        $('urg-box').classList.toggle('on', uOn);
+        $('pick-box').classList.toggle('on', pOn);
+        if (val('s-name') || val('s-tel') || val('s-email')) { $('s-box').classList.add('on'); $('s-toggle').hidden = true; }
+        var d = qa('.decl'); $('decl-all').checked = d.length && d.every(function (c) { return c.checked; });
+        var tel = val('p-tel'), st = val('s-tel'); $('urg-same-txt').textContent = (tel ? 'A megadott telefonszámon hívunk: ' + tel : 'A fent megadott telefonszámon hívunk.') + (st && $('s-urg').checked ? ' Illetve a másik szülőt: ' + st + '.' : '');
+        hqSync();
+    }
+    function fmtTaj(v) { var d = v.replace(/\D/g, '').slice(0, 9); return d.replace(/(\d{3})(?=\d)/g, '$1 ').trim(); }
+    function tajOk(v) { var d = v.replace(/\D/g, ''); if (d.length !== 9) return false; var s = 0; for (var i = 0; i < 8; i++) s += (+d[i]) * (i % 2 === 0 ? 3 : 7); return s % 10 === +d[8]; }
+    function validDate(v) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(v || '')) return false;
+        var p = v.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]);
+        return d.getFullYear() === +p[0] && d.getMonth() === +p[1] - 1 && d.getDate() === +p[2] && d <= new Date() && +p[0] >= 2000;
+    }
+    function ageHint() {
+        var v = val('c-birth'), h = $('age-hint');
+        if (!validDate(v)) { h.classList.remove('show'); return; }
+        var p = v.split('-'), b = new Date(+p[0], +p[1] - 1, +p[2]), t = new Date(CFG.taborKezdete);
+        var a = t.getFullYear() - b.getFullYear(), m = t.getMonth() - b.getMonth();
+        if (m < 0 || (m === 0 && t.getDate() < b.getDate())) a--;
+        if (a < CFG.korMin || a > CFG.korMax) { h.textContent = 'A tábor ' + CFG.korMin + '–' + CFG.korMax + ' éves gyerekeknek szól (a gyermek a tábor kezdetén ' + a + ' éves lesz). Ha ez nem elírás, írj nekünk, és megnézzük.'; h.classList.add('show'); }
+        else h.classList.remove('show');
+    }
+
+    /* ═══════════════════ MENTÉS (csak az adott böngészőlapban) ═══════════════════ */
+    var KEY = 'dd-adatlap-2027-' + (S.az || 'x');
+    function save() {
+        try {
+            var o = {};
+            qa('[data-save]').forEach(function (e) {
+                if (e.type === 'radio') { if (e.checked) o['r:' + e.name] = e.value; }
+                else if (e.type === 'checkbox') { o['c:' + (e.id || e.name + '=' + e.value)] = e.checked; }
+                else if (e.id) o['v:' + e.id] = e.value;
+            });
+            qa('.decl').forEach(function (c, i) { o['d:' + i] = c.checked; });
+            sessionStorage.setItem(KEY, JSON.stringify(o));
+        } catch (e) { /* nem baj, ha nem megy */ }
+    }
+    function restore() {
+        try {
+            var o = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (!o) return;
+            ['urg', 'pick'].forEach(function (kind) {
+                var seen = {};
+                Object.keys(o).forEach(function (k) { var m = k.match(new RegExp('^v:' + kind + '(\\d+)-')); if (m) seen[+m[1]] = 1; });
+                Object.keys(seen).map(Number).sort(function (a, b) { return a - b; }).forEach(function (i) { addPerson(kind, i); });
+            });
+            qa('[data-save]').forEach(function (e) {
+                if (e.type === 'radio') { e.checked = o['r:' + e.name] === e.value; }
+                else if (e.type === 'checkbox') { var k = 'c:' + (e.id || e.name + '=' + e.value); if (k in o) e.checked = !!o[k]; }
+                else if (e.id && ('v:' + e.id) in o && o['v:' + e.id] !== '') { e.value = o['v:' + e.id]; }
+            });
+            qa('.decl').forEach(function (c, i) { c.checked = !!o['d:' + i]; });
+        } catch (e) { /* üres */ }
+    }
+
+    /* ═══════════════════ ELLENŐRZÉS (mezőcsoportonként) ═══════════════════ */
+    function G(id) { return grpOf($(id)); }
+    function narrow() { return window.matchMedia('(max-width: 860px)').matches; }
+
+    // visszaadja az adott lépés LÁTHATÓ mezőcsoportjait; m = hibaüzenet (üres, ha rendben)
+    function check(n) {
+        var L = [];
+        function add(g, m) { if (g) L.push({ g: g, m: m || '' }); }
+        if (n === 1) {
+            add(G('p-name'), (val('p-name').length < 4 || !/\s/.test(val('p-name'))) ? 'Add meg a teljes nevet (vezeték- és keresztnév).' : '');
+            add(G('p-email'), !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val('p-email')) ? 'Érvényes e-mail-címet adj meg.' : '');
+            add(G('p-tel'), val('p-tel').replace(/\D/g, '').length < 9 ? 'Add meg a telefonszámot (legalább 9 számjegy).' : '');
+            add(G('p-irsz'), (!/^\d{4}$/.test(val('p-irsz')) || !val('p-varos') || !val('p-utca')) ? 'Add meg a teljes lakcímet: irányítószám, település, utca, házszám.' : '');
+            var sn = val('s-name'), st = val('s-tel'), se = val('s-email');
+            add(G('s-name'), ((st || se) && sn.length < 4) ? 'Add meg a másik szülő nevét, vagy hagyd üresen a többi mezőt is.' : '');
+            add(G('s-tel'), ((sn || st) && st.replace(/\D/g, '').length < 9) ? 'Add meg a telefonszámát (legalább 9 számjegy).' : '');
+            add(G('s-email'), (se && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(se)) ? 'Érvényes e-mail-címet adj meg.' : '');
+        }
+        if (n === 2) {
+            add(G('c-name'), (val('c-name').length < 4 || !/\s/.test(val('c-name'))) ? 'Add meg a gyermek teljes nevét.' : '');
+            add(G('c-nick'), val('c-nick').length < 2 ? 'Hogyan szólítsuk a gyermeket?' : '');
+            add(G('c-birth'), !validDate(val('c-birth')) ? 'Add meg a születési időt (múltbeli, érvényes dátum).' : '');
+            add(G('c-place'), val('c-place').length < 2 ? 'Add meg a születési helyet.' : '');
+            add(G('c-mother'), val('c-mother').length < 4 ? 'Add meg az édesanya nevét.' : '');
+            add(G('c-taj'), val('c-taj').replace(/\D/g, '').length !== 9 ? 'A TAJ-szám 9 számjegyből áll.' : '');
+            add($('g-addr'), (!$('addr-same').checked && (!/^\d{4}$/.test(val('c-irsz')) || !val('c-varos') || !val('c-utca'))) ? 'Add meg a gyermek teljes lakcímét.' : '');
+            add($('g-turnus'), !qa('#turnus-tiles input:checked').length ? 'Válaszd ki legalább az egyik tábori hetet.' : '');
+            add($('g-volt'), !radio('volt') ? 'Jelöld be, járt-e már nálunk a gyermek.' : '');
+        }
+        if (n === 3) {
+            HEALTH.forEach(function (h, i) {
+                var v = radio('hq' + i);
+                add(document.querySelector('.hq[data-i="' + i + '"]'), !v ? 'Válaszd ki: Nincs vagy Van.' : (v === 'van' && val('hq' + i + '-t').length < 2) ? 'Kérjük, írd le röviden, mi az.' : '');
+            });
+        }
+        if (n === 4) {
+            add($('g-urg'), '');
+            if (radio('urg') === 'diff') personsOf('urg').forEach(function (p) {
+                var k = 'urg' + p.getAttribute('data-i');
+                add(G(k + '-name'), val(k + '-name').length < 4 ? 'Add meg a személy nevét.' : '');
+                add(G(k + '-tel'), val(k + '-tel').replace(/\D/g, '').length < 9 ? 'Add meg a telefonszámát.' : '');
+                add(G(k + '-rel'), val(k + '-rel').length < 2 ? 'Add meg, ki ő a gyermeknek.' : '');
+            });
+            add($('g-pick'), !radio('pick') ? 'Válaszd ki, ki jöhet a gyermekért.' : '');
+            if (radio('pick') && radio('pick') !== 'Csak a törvényes képviselő') personsOf('pick').forEach(function (p) {
+                var k = 'pick' + p.getAttribute('data-i'), t = val(k + '-tel');
+                add(G(k + '-name'), val(k + '-name').length < 4 ? 'Add meg az átvevő nevét.' : '');
+                add(G(k + '-rel'), val(k + '-rel').length < 2 ? 'Add meg, ki ő a gyermeknek.' : '');
+                add(G(k + '-tel'), (t && t.replace(/\D/g, '').length < 9) ? 'Hibás telefonszám.' : '');
+            });
+        }
+        if (n === 5) {
+            add($('g-media'), !radio('media') ? 'Kérjük, válassz a fénykép- és videófelvételekre vonatkozó lehetőségek közül.' : '');
+            add($('g-health'), !$('decl-health').checked ? 'Az egészségügyi adatok kezeléséhez a kifejezett hozzájárulás a biztonságos ellátáshoz szükséges.' : '');
+            add($('g-decl'), !qa('.decl').every(function (c) { return c.checked; }) ? 'A jelentkezéshez mind a négy pontot el kell fogadni.' : '');
+        }
+        return L;
+    }
+    function mark(it) {
+        it.g.classList.toggle('bad', !!it.m);
+        var e = it.g.querySelector(':scope > .err'); if (e) e.textContent = it.m;
+    }
+    function clearBad(scope) { qa('.bad', scope).forEach(function (g) { g.classList.remove('bad'); }); }
+
+    /* ═══════════════════ LÉPÉSEK ═══════════════════ */
+    function scrollToEl(el, gap) {
+        var sb = $('steps').getBoundingClientRect().bottom;
+        window.scrollTo({ top: Math.max(0, window.pageYOffset + el.getBoundingClientRect().top - sb - (gap == null ? 14 : gap)), behavior: 'smooth' });
+    }
+    function updateBtn() {
+        var last = S.step === STEPS.length;
+        $('btn-back').hidden = S.step === 1;
+        $('btn-next').textContent = last ? 'Adatlap elküldése 🐬' : 'Tovább →';
+        $('btn-next').classList.toggle('final', last);
+        $('bar-info').innerHTML = '<b>' + S.step + '</b> / ' + STEPS.length + ' lépés';
+    }
+    // lépésváltás: a nézet az új rész tetejére ugrik (a cím látszik)
+    function goTo(n, o) {
+        o = o || {};
+        S.step = n;
+        qa('.panel').forEach(function (p) { p.classList.toggle('on', +p.getAttribute('data-p') === n); });
+        $('alert').classList.remove('show');
+        renderSteps(); syncUI(); updateBtn();
+        if (!o.noScroll) scrollToEl(document.querySelector('.panel.on .p-title'), 20);
+    }
+    // a lépés ellenőrzése: hibánál az első hibás mezőhöz görget
+    function validate(n) {
+        var L = check(n); L.forEach(mark);
+        var f = null; for (var i = 0; i < L.length; i++) if (L[i].m) { f = L[i]; break; }
+        if (f) {
+            scrollToEl(f.g, 24);
+            var inp = qa('input:not([type=checkbox]):not([type=radio]), textarea', f.g).filter(function (x) { return x.offsetParent !== null; })[0];
+            if (inp) { try { inp.focus({ preventScroll: true }); } catch (e) {} }
+        }
+        return !f;
+    }
+
+    /* ═══════════════════ TÖBB SZEMÉLY (sürgősség, átvétel) ═══════════════════ */
+    var MAXP = 4, PN = { urg: 0, pick: 0 };
+    function personsOf(kind) { return qa('.person[data-kind="' + kind + '"]'); }
+    function personHtml(kind, i) {
+        var u = kind === 'urg', k = kind + i;
+        return '<div class="person" data-kind="' + kind + '" data-i="' + i + '"><div class="person-h"><b class="person-n"></b><button type="button" class="person-del" data-del="1">Törlés ✕</button></div>' +
+            '<div class="grp"><label class="lbl" for="' + k + '-name">Név</label><input class="in" id="' + k + '-name" type="text" autocomplete="off" placeholder="' + (u ? 'Pl. Kiss Imre' : 'Pl. Nagy Erzsébet') + '" data-save><span class="err"></span></div>' +
+            '<div class="row2"><div class="grp"><label class="lbl" for="' + k + '-tel">Telefonszám' + (u ? '' : ' <span class="opt">(nem kötelező)</span>') + '</label><input class="in" id="' + k + '-tel" type="tel" inputmode="tel" autocomplete="off" placeholder="+36 20 555 6677" data-save><span class="err"></span></div>' +
+            '<div class="grp"><label class="lbl" for="' + k + '-rel">Kapcsolata a gyermekkel</label><input class="in" id="' + k + '-rel" type="text" autocomplete="off" placeholder="Pl. nagyszülő" data-save><span class="err"></span></div></div></div>';
+    }
+    function renumber(kind) {
+        var ps = personsOf(kind), add = $(kind + '-add');
+        ps.forEach(function (p, k) {
+            p.querySelector('.person-n').textContent = (kind === 'urg' ? 'Értesítendő személy' : 'Átvevő személy') + (ps.length > 1 ? ' · ' + (k + 1) : '');
+            p.querySelector('.person-del').hidden = ps.length < 2;
+        });
+        add.disabled = ps.length >= MAXP;
+        add.querySelector('small').textContent = ps.length >= MAXP ? 'Legfeljebb ' + MAXP + ' személy adható meg.' : '';
+    }
+    function addPerson(kind, idx) {
+        var i = idx != null ? idx : PN[kind];
+        PN[kind] = Math.max(PN[kind], i + 1);
+        $(kind + '-list').insertAdjacentHTML('beforeend', personHtml(kind, i));
+        renumber(kind);
+        return $(kind + '-list').lastElementChild;
+    }
+
+    /* ═══════════════════ SZERVER ═══════════════════ */
+    function api(action, fd, ms) {
+        fd.append('formTipus', 'adatlap'); fd.append('action', action);
+        var ctrl = ('AbortController' in window) ? new AbortController() : null;
+        var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, ms || 60000) : null;
+        return fetch(CFG.scriptURL, { method: 'POST', body: fd, signal: ctrl ? ctrl.signal : undefined })
+            .then(function (r) { return r.text(); })
+            .then(function (t) {
+                if (timer) clearTimeout(timer);
+                try { return JSON.parse(t); } catch (e) { var ne = new Error('nem-json'); ne.timeout = true; throw ne; }
+            })
+            .catch(function (err) {
+                if (timer) clearTimeout(timer);
+                if (err && err.name === 'AbortError') { var te = new Error('timeout'); te.timeout = true; throw te; }
+                throw err;
+            });
+    }
+    function getToken() {
+        return new Promise(function (res) {
+            var done = false; function fin(v) { if (!done) { done = true; res(v || ''); } }
+            setTimeout(function () { fin(''); }, 8000);
+            if (!window.grecaptcha || !window.grecaptcha.ready) { fin(''); return; }
+            window.grecaptcha.ready(function () { window.grecaptcha.execute(CFG.recaptchaKey, { action: 'adatlap' }).then(fin).catch(function () { fin(''); }); });
+        });
+    }
+    function showLoading(t) { $('load-txt').textContent = t; $('loading').classList.add('on'); }
+    function hideLoading() { $('loading').classList.remove('on'); }
+    function showError(m) { var a = $('alert'); a.textContent = m; a.classList.add('show'); a.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+
+    function lakcim(prefix) { return val(prefix + '-irsz') + ' ' + val(prefix + '-varos') + ', ' + val(prefix + '-utca'); }
+
+    function submit() {
+        for (var i = 1; i <= STEPS.length; i++) {
+            if (!validate(i)) { goTo(i, { noScroll: true }); validate(i); return; }
+        }
+        var fd = new FormData();
+        function put(k, v) { fd.append(k, v == null ? '' : v); }
+        var turn = qa('#turnus-tiles input:checked').map(function (c) { var t = turnusById(c.value); return t ? t.nev + ' (' + t.datum + ')' : c.value; }).join(', ');
+
+        put('Időbélyeg', new Date().toISOString());
+        put('Jelentkezés azonosító', S.az);
+        put('Előre kitöltött mezők', Object.keys(S.pre).join(', '));
+        put('Gyermek teljes neve', val('c-name'));
+        put('Hogyan szólítsuk?', val('c-nick'));
+        put('Édesanyja neve', val('c-mother'));
+        put('Gyermek születési helye', val('c-place'));
+        put('Gyermek születési ideje', val('c-birth'));
+        put('Gyermek lakcíme', $('addr-same').checked ? lakcim('p') : lakcim('c'));
+        put('Gyermek TAJ száma', val('c-taj'));
+        put('Melyik tábori időpontra jelentkeztek?', turn);
+        put('Volt már nálunk korábban a gyermek?', radio('volt'));
+        HEALTH.forEach(function (h, i) { put(h.f, radio('hq' + i) === 'nincs' ? 'Nincs' : val('hq' + i + '-t')); });
+        put('Van bármi, amit még tudnunk kell a gyermekről? (szokások, félelmek, különleges igények, étrend stb.)', val('c-extra'));
+        put('Törvényes képviselő teljes neve', val('p-name'));
+        put('Törvényes képviselő e-mail címe', val('p-email'));
+        put('Törvényes képviselő telefonszáma', val('p-tel'));
+        put('Törvényes képviselő lakcíme', lakcim('p'));
+        function pp(kind) { return personsOf(kind).map(function (p) { var k = kind + p.getAttribute('data-i'); return { n: val(k + '-name'), t: val(k + '-tel'), r: val(k + '-rel') }; }); }
+        var urg = radio('urg') === 'diff' ? pp('urg') : [];
+        put('Sürgősség esetén értesítendő személy neve (ha nem a törvényes képviselő)', urg.map(function (x) { return x.n; }).join(' | '));
+        put('Sürgősség esetén értesítendő személy telefonszáma (ha nem a törvényes képviselő)', urg.map(function (x) { return x.t; }).join(' | '));
+        put('Milyen kapcsolatban áll a gyermekkel?', urg.map(function (x) { return x.r; }).join(' | '));
+        put('Sürgősségi kontaktok (összesítve)', urg.map(function (x) { return x.n + ' (' + x.r + ', ' + x.t + ')'; }).join('; '));
+        var pk = radio('pick') === 'Csak a törvényes képviselő' ? [] : pp('pick');
+        put('Ki jogosult a gyermek átvételére a tábor végén?', radio('pick'));
+        put('Ki jogosult a gyermek átvételére a tábor végén? (Egyéb részletek)', pk.map(function (x) { return x.n + ' (' + x.r + (x.t ? ', ' + x.t : '') + ')'; }).join('; '));
+        put('Másik szülő neve', val('s-name'));
+        put('Másik szülő telefonszáma', val('s-tel'));
+        put('Másik szülő e-mail-címe', val('s-email'));
+        put('Másik szülő sürgősség esetén is hívható', val('s-name') ? ($('s-urg').checked ? 'Igen' : 'Nem') : '');
+        put('Média hozzájárulás nyilatkozat', radio('media'));
+        qa('.decl').forEach(function (c) { put(c.getAttribute('data-name'), 'Elfogadva'); });
+        put($('decl-health').getAttribute('data-name'), 'Elfogadva');
+        put('Nyilatkozatok szövegének verziója', CFG.nyilatkozatVerzio);
+
+        var btn = $('btn-next'), orig = btn.textContent;
+        btn.disabled = true; btn.textContent = 'Küldés…';
+        showLoading('Adatlap küldése…');
+        function reset() { hideLoading(); btn.disabled = false; btn.textContent = orig; }
+
+        getToken().then(function (token) {
+            if (!token) { var te = new Error('A biztonsági ellenőrzés (reCAPTCHA) nem töltődött be. Frissítsd az oldalt, és próbáld újra.'); te.server = true; throw te; }
+            fd.append('recaptcha_token', token);
+            return api('adatlap', fd, 60000);
+        }).then(function (r) {
+            reset();
+            if (r && r.result === 'success') { showSuccess(); return; }
+            var e = new Error((r && r.message) || 'Szerveroldali hiba történt.'); e.server = true; throw e;
+        }).catch(function (err) {
+            reset();
+            if (err && err.timeout) {
+                showError('A szerver most lassan válaszol, ezért nem tudjuk, megérkezett-e az adatlap. Kérjük, ne küldd el újra azonnal: írj nekünk a dinamikus.delfinek@gmail.com címre, és megnézzük. A beírt adataid nem vesznek el, amíg ezt az oldalt nyitva tartod.');
+                return;
+            }
+            console.error('Adatlap hiba:', err);
+            showError(err && err.server ? err.message : 'Nem sikerült elküldeni az adatlapot. Ellenőrizd az internetkapcsolatot, és próbáld újra. Ha többször nem megy, írj nekünk: dinamikus.delfinek@gmail.com');
+        });
+    }
+
+    function showSuccess() {
+        try { sessionStorage.removeItem(KEY); } catch (e) {}
+        var nick = val('c-nick') || val('c-name');
+        $('done-p').textContent = nick + ' tábori adatlapját megkaptuk és elmentettük. Nincs több teendőd: a tábor előtt pár nappal e-mailben küldjük a csomagolási listát és a részleteket.';
+        $('done-box').innerHTML = '<strong>' + esc(val('c-name')) + '</strong><br>' +
+            esc(qa('#turnus-tiles input:checked').map(function (c) { var t = turnusById(c.value); return t ? t.nev + ' (' + t.datum + ')' : ''; }).join(', ')) + '<br>' +
+            'Visszaigazolás és kapcsolat: ' + esc(val('p-email')) +
+            '<br><span style="font-size:13px;color:#64748b">Ha testvéred adatlapja is hiányzik, használd a hozzá kapott külön linket.</span>';
+        $('adatlap').hidden = true; $('steps').hidden = true; $('done').hidden = false;
+        $('card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* ═══════════════════ SZABÁLYZAT MODAL ═══════════════════ */
+    window.openPolicy = function (url) {
+        var m = $('policy-modal'), t = $('policy-title'), b = $('policy-body');
+        t.textContent = 'Betöltés…'; b.innerHTML = '<p style="text-align:center;color:#64748b;padding:20px">Dokumentum beolvasása…</p>'; m.style.display = 'flex';
+        fetch(url).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (h) {
+            var d = new DOMParser().parseFromString(h, 'text/html'), h1 = d.querySelector('h1');
+            t.textContent = h1 ? h1.innerText : 'Tájékoztató';
+            ['h1', '.back-btn-wrap', '.meta-info'].forEach(function (s) { var x = d.querySelector(s); if (x) x.remove(); });
+            var c = d.querySelector('.policy-container'); b.innerHTML = c ? c.innerHTML : d.body.innerHTML;
+        }).catch(function () { t.textContent = 'Hiba történt'; b.innerHTML = '<p style="color:#ef4444;text-align:center">A dokumentum jelenleg nem érhető el. Kérjük, próbáld meg később!</p>'; });
+    };
+
+    /* ═══════════════════ INDÍTÁS ═══════════════════ */
+    document.addEventListener('DOMContentLoaded', function () {
+        buildTurnus(); buildHealth();
+        qa('a[data-doc]').forEach(function (a) {
+            var u = CFG.docs[a.getAttribute('data-doc')];
+            if (u) a.href = u; else { var sp = document.createElement('span'); sp.textContent = a.textContent; a.replaceWith(sp); }
+        });
+        applyPrefill();
+        restore();
+        renderWelcome(); renderSteps(); ageHint(); syncUI();
+        goTo(1, { noScroll: true });
+
+        var form = $('adatlap');
+        form.addEventListener('submit', function (e) { e.preventDefault(); });
+        form.addEventListener('keydown', function (e) {
+            if (e.key !== 'Enter' || e.target.tagName !== 'INPUT' || e.target.type === 'checkbox' || e.target.type === 'radio') return;
+            e.preventDefault();
+            var f = qa('.panel.on input:not([type=checkbox]):not([type=radio]), .panel.on textarea', form).filter(function (x) { return x.offsetParent !== null; });
+            var i = f.indexOf(e.target); if (i >= 0 && i < f.length - 1) f[i + 1].focus();
+        });
+
+        form.addEventListener('input', function (e) {
+            var t = e.target, g = grpOf(t) || t.closest('.hq');
+            if (g) g.classList.remove('bad');
+            if (t.getAttribute('data-pre') === '1') { t.classList.add('edited'); tagLabel(t, true); }
+            if (t.id === 'c-taj') { t.value = fmtTaj(t.value); $('taj-hint').classList.toggle('show', t.value.replace(/\D/g, '').length === 9 && !tajOk(t.value)); }
+            if (t.id === 'c-birth') ageHint();
+            if (t.id === 'p-name' && $('mother-me').checked) $('c-mother').value = t.value;
+            if (t.id === 'p-tel') syncUI();
+            updateBtn(); save();
+        });
+        form.addEventListener('change', function (e) {
+            var t = e.target, g = t.closest('.grp, .hq'); if (g) g.classList.remove('bad');
+            if (t.id === 'mother-me') { $('c-mother').value = t.checked ? val('p-name') : ''; }
+            if (t.id === 'c-birth') ageHint();
+            if (t.name === 'turnus' && S.pre.turnus) tagLabel(document.querySelector('#turnus-tiles input'), true);
+            syncUI(); save();
+        });
+
+        $('all-nincs').addEventListener('click', function () {
+            HEALTH.forEach(function (h, i) { var r = document.querySelector('input[name="hq' + i + '"][value="nincs"]'); if (r) r.checked = true; });
+            clearBad($('hq-list')); syncUI(); save();
+        });
+        $('decl-all').addEventListener('change', function () { var v = this.checked; qa('.decl').forEach(function (c) { c.checked = v; }); clearBad($('g-decl')); save(); });
+        qa('.decl').forEach(function (c) { c.addEventListener('change', function () { syncUI(); clearBad($('g-decl')); save(); }); });
+
+        $('btn-next').addEventListener('click', function () {
+            if (!validate(S.step)) return;
+            if (S.step < STEPS.length) goTo(S.step + 1); else submit();
+        });
+        $('btn-back').addEventListener('click', function () { goTo(S.step - 1); });
+
+        // több személy: hozzáadás / törlés
+        ['urg', 'pick'].forEach(function (kind) {
+            $(kind + '-add').addEventListener('click', function () {
+                if (personsOf(kind).length >= MAXP) return;
+                var p = addPerson(kind);
+                scrollToEl(p, 20);
+                var i = p.querySelector('input'); if (i) { try { i.focus({ preventScroll: true }); } catch (e) {} }
+                save();
+            });
+            $(kind + '-list').addEventListener('click', function (e) {
+                var d = e.target.closest('[data-del]'); if (!d) return;
+                d.closest('.person').remove(); renumber(kind); save();
+            });
+        });
+        $('s-toggle').addEventListener('click', function () {
+            $('s-box').classList.add('on'); this.hidden = true;
+            var i = $('s-name'); i.focus({ preventScroll: true });
+        });
+        qa('input.in:not([type=date])').forEach(function (e) { e.enterKeyHint = 'next'; e.setAttribute('enterkeyhint', 'next'); });
+        $('steps').addEventListener('click', function (e) {
+            var b = e.target.closest('.step'); if (!b) return;
+            var k = +b.getAttribute('data-s'); if (k < S.step) goTo(k, {});
+        });
+
+        ['p', 'c'].forEach(function (p) {
+            $(p + '-irsz').addEventListener('blur', function () {
+                var z = this.value.trim(); if (!/^\d{4}$/.test(z) || val(p + '-varos')) return;
+                fetch('https://api.zippopotam.us/HU/' + z).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+                    .then(function (d) { var n = d && d.places && d.places[0] && d.places[0]['place name']; if (n && !val(p + '-varos')) { $(p + '-varos').value = n; save(); } })
+                    .catch(function () {});
+            });
+        });
+
+        $('policy-close').addEventListener('click', function () { $('policy-modal').style.display = 'none'; });
+        $('policy-modal').addEventListener('click', function (e) { if (e.target === this) this.style.display = 'none'; });
+    });
+})();
+</script>
+</body>
+</html>
