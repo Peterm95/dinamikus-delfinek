@@ -3719,12 +3719,29 @@ if (nextBtn) {
 
             const gyermekNeve = childNameInput ? childNameInput.value : 'a gyermek';
 
+                        function showSubmitError() {
+                alert(
+                    'Sajnos nem sikerült elküldeni a jelentkezést. 😔\n\n' +
+                    'Kérjük, próbáld újra egy perc múlva, vagy írj nekünk, és mi rögzítjük a jelentkezést:\n\n' +
+                    '✉️ dinamikus.delfinek@gmail.com\n' +
+                    '📞 06 20 393 8067\n\n' +
+                    'Kérjük, add meg a gyermek nevét, születési idejét és a választott napo(ka)t.'
+                );
+            }
+            
             function resetSubmit() {
                 hideLoading();
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     submitBtn.innerText = originalBtnText;
                 }
+            }
+
+                        if (typeof grecaptcha === 'undefined') {
+                console.error('A reCAPTCHA nem töltődött be.');
+                resetSubmit();
+                showSubmitError();
+                return;
             }
 
             grecaptcha.ready(function() {
@@ -3749,10 +3766,10 @@ if (nextBtn) {
                         }
                     });
 
-                }).catch(function(error) {
+                               }).catch(function(error) {
                     console.error('Küldési hiba:', error);
                     resetSubmit();
-                    alert('Hiba történt a jelentkezés közben: ' + (error && error.message ? error.message : 'Kérjük, próbáld újra.'));
+                    showSubmitError();
                 });
             });
         });
