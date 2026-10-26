@@ -2,16 +2,6 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
-  <script>
-(function () {
-    try {
-        if (location.search) {
-            sessionStorage.setItem('dd-adatlap-qs', location.search);
-            history.replaceState(null, '', location.pathname);
-        }
-    } catch (e) {}
-})();
-</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Tábori adatlap 2027 | Dinamikus Delfinek</title>
@@ -693,15 +683,7 @@ footer .small { opacity: .4; font-size: 12px; margin-top: 14px; display: block; 
     function qa(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
     function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
     function val(id) { var e = $(id); return e ? e.value.trim() : ''; }
-    var QS = (function () {
-    try {
-        var q = location.search;
-        if (q) sessionStorage.setItem('dd-adatlap-qs', q);
-        else q = sessionStorage.getItem('dd-adatlap-qs') || '';
-        return q;
-    } catch (e) { return location.search; }
-})();
-function param(n) { try { return (new URLSearchParams(QS).get(n) || '').trim(); } catch (e) { return ''; } }
+    function param(n) { try { return (new URLSearchParams(location.search).get(n) || '').trim(); } catch (e) { return ''; } }
     function radio(name) { var c = document.querySelector('input[name="' + name + '"]:checked'); return c ? c.value : ''; }
     function grpOf(el) { return el.closest('.grp'); }
     function turnusById(id) { for (var i = 0; i < CFG.turnusok.length; i++) if (CFG.turnusok[i].id === id) return CFG.turnusok[i]; return null; }
@@ -1074,13 +1056,13 @@ function param(n) { try { return (new URLSearchParams(QS).get(n) || '').trim(); 
     }
 
     function showSuccess() {
-        try { sessionStorage.removeItem(KEY); } catch (e) {} try { sessionStorage.removeItem('dd-adatlap-qs'); } catch (e) {}
+        try { sessionStorage.removeItem(KEY); } catch (e) {}
         var nick = val('c-nick') || val('c-name');
         $('done-p').textContent = nick + ' tábori adatlapját megkaptuk és elmentettük. Nincs több teendőd: a tábor előtt pár nappal e-mailben küldjük a csomagolási listát és a részleteket.';
         $('done-box').innerHTML = '<strong>' + esc(val('c-name')) + '</strong><br>' +
             esc(qa('#turnus-tiles input:checked').map(function (c) { var t = turnusById(c.value); return t ? t.nev + ' (' + t.datum + ')' : ''; }).join(', ')) + '<br>' +
             'Visszaigazolás és kapcsolat: ' + esc(val('p-email')) +
-            '<br><span style="font-size:13px;color:#64748b">Ha testvéred adatlapja is hiányzik, használd a hozzá kapott külön linket.</span>';
+            '<br><span style="font-size:13px;color:#64748b">Ha a testvér adatlapját is ki kell töltened, használd a számára kapott külön linket.</span>';
         $('adatlap').hidden = true; $('steps').hidden = true; $('done').hidden = false;
         $('card').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -1105,7 +1087,6 @@ function param(n) { try { return (new URLSearchParams(QS).get(n) || '').trim(); 
             if (u) a.href = u; else { var sp = document.createElement('span'); sp.textContent = a.textContent; a.replaceWith(sp); }
         });
         applyPrefill();
-      try { if (location.search) history.replaceState(null, '', location.pathname); } catch (e) {}
         restore();
         renderWelcome(); renderSteps(); ageHint(); syncUI();
         goTo(1, { noScroll: true });
