@@ -1144,6 +1144,16 @@
     align-items: flex-end;
     gap: 10px;
 }
+        .dini-widget {
+    transition: opacity .3s ease, transform .3s ease, visibility 0s;
+}
+.dini-widget.is-hidden {
+    opacity: 0;
+    transform: translateY(14px);
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease, visibility 0s linear .3s;
+}
 .floating-dini {
     width: 80px;
     height: auto;
@@ -4134,11 +4144,11 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    var widget = document.getElementById('dini-widget');
     var bubble = document.getElementById('dini-bubble');
     var closeBtn = document.getElementById('dini-bubble-close');
-    var avatar = document.getElementById('dini-avatar');
     var link = document.getElementById('dini-bubble-link');
-    if (!bubble) return;
+    if (!widget || !bubble) return;
 
     var STORAGE_KEY = 'dini_buborek_zarva';
 
@@ -4148,47 +4158,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function showBubble() {
+    // ha ebben a munkamenetben már bezárták, Dini sem jelenik meg
+    var alreadyClosed = false;
+    try { alreadyClosed = !!sessionStorage.getItem(STORAGE_KEY); } catch (e) {}
+    if (alreadyClosed) {
+        widget.classList.add('is-hidden');
+        return;
+    }
+
+    // a buborék késleltetve jelenik meg, Dini már az elejétől táncol
+    setTimeout(function() {
         bubble.classList.add('visible');
         track('dini_buborek_megjelenitve');
-    }
+    }, 4000);
 
-    function hideBubble(remember) {
-        bubble.classList.remove('visible');
-        if (remember) {
-            try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
-        }
-    }
-
-    // Csak akkor jelenik meg, ha ebben a munkamenetben még nem zárták be
-    if (!sessionStorage.getItem(STORAGE_KEY)) {
-        setTimeout(showBubble, 4000);
+    // bezáráskor a buborékkal együtt Dini is eltűnik
+    function closeAll(eventName) {
+        widget.classList.add('is-hidden');
+        try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
+        track(eventName);
     }
 
     if (closeBtn) {
         closeBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            hideBubble(true);
-            track('dini_buborek_bezarva');
+            closeAll('dini_buborek_bezarva');
         });
     }
 
     if (link) {
         link.addEventListener('click', function() {
-            hideBubble(true);
-            track('dini_buborek_kattintas');
-        });
-    }
-
-    // Dinire kattintva elő-/eltüntethető a buborék
-    if (avatar) {
-        avatar.addEventListener('click', function() {
-            if (bubble.classList.contains('visible')) {
-                hideBubble(true);
-            } else {
-                sessionStorage.removeItem(STORAGE_KEY);
-                bubble.classList.add('visible');
-            }
+            closeAll('dini_buborek_kattintas');
         });
     }
 });
