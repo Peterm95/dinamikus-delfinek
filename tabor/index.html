@@ -2680,7 +2680,9 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
             <div class="prog-grid">
                 <div class="prog-card">
                     <div class="prog-img-holder">
-                        <img src="tabor-uszoda.jpeg" alt="Úszásoktatás">
+                        <video class="hover-video" muted loop playsinline preload="metadata" aria-label="Úszásoktatás">
+  <source src="1.webm#t=0.001" type="video/webm">
+</video>
                         <div class="prog-icon-tag">🏊‍♂️</div>
                     </div>
                     <div class="prog-body">
@@ -2691,7 +2693,10 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                 </div>
                 <div class="prog-card">
                     <div class="prog-img-holder">
-                        <img src="tabor-sarkanyhajoid.jpg" alt="Sárkányhajó">
+						<video class="hover-video" muted loop playsinline preload="metadata" aria-label="Sárkányhajó">
+  <source src="2.webm#t=0.001" type="video/webm">
+</video>
+        
                         <div class="prog-icon-tag">🐲</div>
                     </div>
                     <div class="prog-body">
@@ -2701,7 +2706,9 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                 </div>
                 <div class="prog-card">
                     <div class="prog-img-holder">
-                        <img src="tabor-lovas.jpg" alt="Lovaskocsikázás">
+						<video class="hover-video" muted loop playsinline preload="metadata" aria-label="Lovaskocsikázás">
+  <source src="3.webm#t=0.001" type="video/webm">
+</video>
                         <div class="prog-icon-tag">🐴</div>
                     </div>
                     <div class="prog-body">
@@ -2711,7 +2718,10 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                 </div>
                 <div class="prog-card">
                     <div class="prog-img-holder">
-                        <img src="tabor-kreativ.jpg" alt="Kreatív óra">
+						<video class="hover-video" muted loop playsinline preload="metadata" aria-label="Kreatív óra">
+  <source src="4.webm#t=0.001" type="video/webm">
+</video>
+                        
                         <div class="prog-icon-tag">🎨</div>
                     </div>
                     <div class="prog-body">
@@ -2721,7 +2731,10 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                 </div>
                 <div class="prog-card">
                     <div class="prog-img-holder">
-                        <img src="tabor-jatekok.jpg" alt="Játékok">
+						<video class="hover-video" muted loop playsinline preload="metadata" aria-label="Játékok">
+  <source src="5.webm#t=0.001" type="video/webm">
+</video>
+                        
                         <div class="prog-icon-tag">⚽</div>
                     </div>
                     <div class="prog-body">
@@ -2731,7 +2744,10 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                 </div>
                 <div class="prog-card">
                     <div class="prog-img-holder">
-                        <img src="tabor-baratok.jpg" alt="Barátok">
+						<video class="hover-video" muted loop playsinline preload="metadata" aria-label="Barátok">
+  <source src="6.webm#t=0.001" type="video/webm">
+</video>
+                    
                         <div class="prog-icon-tag">🤗</div>
                     </div>
                     <div class="prog-body">
@@ -4098,6 +4114,25 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 })();
+</script>
+	<script>
+document.querySelectorAll('.hover-video').forEach(function (video) {
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  if (canHover) {
+    // Asztali gép: csak hoverre megy
+    video.addEventListener('mouseenter', function () {
+      video.play().catch(function () {});
+    });
+    video.addEventListener('mouseleave', function () {
+      video.pause();
+      
+    });
+  } else {
+    // Mobil/tablet: folyamatosan megy
+    video.play().catch(function () {});
+  }
+});
 </script>
 	
 </body>
