@@ -2694,6 +2694,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     <div class="prog-img-holder">
                         <video class="hover-video" muted loop playsinline preload="metadata" aria-label="Úszásoktatás">
   <source src="1.webm#t=0.001" type="video/webm">
+	<source src="1.mp4#t=0.001" type="video/mp4">
 </video>
                         <div class="prog-icon-tag">🏊‍♂️</div>
                     </div>
@@ -2707,6 +2708,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     <div class="prog-img-holder">
 						<video class="hover-video" muted loop playsinline preload="metadata" aria-label="Sárkányhajó">
   <source src="2.webm#t=0.001" type="video/webm">
+							<source src="2.mp4#t=0.001" type="video/mp4">
 </video>
         
                         <div class="prog-icon-tag">🐲</div>
@@ -2720,6 +2722,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     <div class="prog-img-holder">
 						<video class="hover-video" muted loop playsinline preload="metadata" aria-label="Lovaskocsikázás">
   <source src="3.webm#t=0.001" type="video/webm">
+							<source src="3.mp4#t=0.001" type="video/mp4">
 </video>
                         <div class="prog-icon-tag">🐴</div>
                     </div>
@@ -2732,6 +2735,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     <div class="prog-img-holder">
 						<video class="hover-video" muted loop playsinline preload="metadata" aria-label="Kreatív óra">
   <source src="4.webm#t=0.001" type="video/webm">
+							<source src="4.mp4#t=0.001" type="video/mp4">
 </video>
                         
                         <div class="prog-icon-tag">🎨</div>
@@ -2745,6 +2749,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     <div class="prog-img-holder">
 						<video class="hover-video" muted loop playsinline preload="metadata" aria-label="Játékok">
   <source src="5.webm#t=0.001" type="video/webm">
+							<source src="5.mp4#t=0.001" type="video/mp4">
 </video>
                         
                         <div class="prog-icon-tag">⚽</div>
@@ -2758,6 +2763,7 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
                     <div class="prog-img-holder">
 						<video class="hover-video" muted loop playsinline preload="metadata" aria-label="Barátok">
   <source src="6.webm#t=0.001" type="video/webm">
+							<source src="6.mp4#t=0.001" type="video/mp4">
 </video>
                     
                         <div class="prog-icon-tag">🤗</div>
@@ -4129,14 +4135,19 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 	<script>
 document.querySelectorAll('.hover-video').forEach(function (video) {
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   var card = video.closest('.prog-card') || video;
-card.addEventListener('mouseenter', function () { video.play().catch(function () {}); });
-card.addEventListener('mouseleave', function () { video.pause(); });
-      
+
+  if (canHover) {
+    card.addEventListener('mouseenter', function () {
+      var p = video.play();
+      if (p) p.catch(function (err) { console.warn('Video hiba:', video.currentSrc, err); });
+    });
+    card.addEventListener('mouseleave', function () {
+      video.pause();
     });
   } else {
-    // Mobil/tablet: folyamatosan megy
-    video.play().catch(function () {});
+    video.play().catch(function (err) { console.warn('Video hiba:', err); });
   }
 });
 </script>
