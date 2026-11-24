@@ -2519,7 +2519,77 @@ section[id] { scroll-margin-top: 20px; }
 
 .tabor-header { margin-bottom: 48px; }
 .tabor-premium-box .tabor-badge { margin-bottom: 0; }
+/* ═══ BAJNOKSÁG: kattintásra induló videó ═══ */
+.champ-video {
+    position: relative;
+    z-index: 5;
+    max-width: 860px;
+    margin: 0 auto 40px;
+    aspect-ratio: 16 / 9;              /* álló videónál: 9 / 16 és max-width: 380px */
+    border-radius: 32px;
+    overflow: hidden;
+    background: #031640;
+    border: 2px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4), 0 0 0 6px rgba(0, 162, 255, 0.12);
+}
+.champ-video video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
+.champ-play {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--white);
+    background: linear-gradient(to bottom, rgba(3, 22, 64, 0.25), rgba(3, 22, 64, 0.55));
+    transition: opacity 0.35s ease, background 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.champ-play:hover { background: linear-gradient(to bottom, rgba(3, 22, 64, 0.1), rgba(3, 22, 64, 0.4)); }
+
+.champ-play-btn {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--yellow), var(--orange));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    animation: vsBeat 1.8s ease-in-out infinite;
+    transition: transform 0.3s cubic-bezier(.175, .885, .32, 1.275);
+}
+.champ-play:hover .champ-play-btn { transform: scale(1.1); }
+.champ-play-btn svg { width: 38px; height: 38px; fill: var(--navy-deep); margin-left: 5px; }
+
+.champ-play-label {
+    font-family: 'Baloo 2', cursive;
+    font-size: 20px;
+    font-weight: 800;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.champ-video.is-playing .champ-play {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .champ-video { border-radius: 22px; margin-bottom: 32px; }
+    .champ-play-btn { width: 68px; height: 68px; }
+    .champ-play-btn svg { width: 30px; height: 30px; }
+    .champ-play-label { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .champ-play-btn { animation: none !important; }
+}
 
 
 
@@ -2794,104 +2864,26 @@ Gondosan felépített, biztonságos és aktív napirendünk garantálja, hogy eg
             <span class="champ-new">✨ ÚJDONSÁG 2027</span>
             <h2 class="champ-title">Delfin <span>Bajnokság</span></h2>
             <p class="champ-tagline">Két csapat. Öt nap. Sok közös játék.</p>
-            <p class="champ-lead">
-                2027 nyarán egy egész héten át tartó közös csapatjátékkal is készülünk.
-                A gyerekek két csapatba kerülnek, és a hét folyamán különböző játékos feladatokban
-                gyűjthetnek pontokat. Lesznek sorversenyek, ügyességi játékok és vízi feladatok is.
-            </p>
+            <p class="champ-lead">A tábor új csapatjátéka: a gyerekek két csapatban gyűjtenek pontokat a hét során. Nézd meg a videót, és kiderül, hogyan működik!</p>
         </div>
 
-        <!-- Két csapat -->
-        <div class="champ-arena">
-            <div class="champ-team champ-team-a champ-reveal">
-                <div class="champ-team-icon">🐬</div>
-                <h3>Delfinek</h3>
-                <p>Együtt gyűjtjük a pontokat</p>
-            </div>
-
-            <div class="champ-vs champ-reveal" style="--i:2">
-                <span>VS</span>
-            </div>
-
-            <div class="champ-team champ-team-b champ-reveal">
-                <div class="champ-team-icon">🦈</div>
-                <h3>Cápák</h3>
-                <p>Együtt gyűjtjük a pontokat</p>
-            </div>
+        <div class="champ-video champ-reveal">
+            <video playsinline preload="metadata" aria-label="Delfin Bajnokság: így működik a tábori csapatjáték">
+                <source src="delfin-bajnoksag.webm#t=0.001" type="video/webm">
+                <source src="delfin-bajnoksag.mp4#t=0.001" type="video/mp4">
+            </video>
+            <button type="button" class="champ-play" aria-label="Videó lejátszása" data-umami-event="champ-video-gomb">
+                <span class="champ-play-btn">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+                <span class="champ-play-label">Így működik a bajnokság</span>
+            </button>
         </div>
 
-        <!-- Kötélhúzás-sáv (csak díszítő animáció) -->
-        <div class="champ-tug champ-reveal" aria-hidden="true">
-            <div class="champ-tug-track"><div class="champ-tug-fill"></div></div>
-            <div class="champ-tug-knob">🚀</div>
+        <div class="section-cta">
+            <a href="#jelentkezes" class="cta-btn cta-btn-sm" data-umami-event="cta-csomag">🔔 Feliratkozás a 2027-es táborra</a>
         </div>
 
-               <!-- Lenyíló részletek -->
-        <details class="champ-more champ-reveal">
-            <summary data-umami-event="champ-reszletek">
-                <span>Hogyan zajlik a bajnokság?</span>
-                <span class="champ-more-icon" aria-hidden="true">+</span>
-            </summary>
-
-            <div class="champ-more-body">
-                <p class="champ-balance">
-            A tábor első napján két, lehetőség szerint <strong>életkor és úszástudás szerint kiegyensúlyozott</strong>
-            csapatot alakítunk ki. Így a kisebbek és a nagyobbak is együtt játszhatnak, és mindenki hozzátehet valamit a csapata eredményéhez.
-        </p>
-                <div class="champ-games">
-                    <div class="champ-game">
-                        <span>🏊‍♂️</span>
-                        <div>
-                            <h4>Vízi játékok</h4>
-                            <p>Játékos feladatok, váltók és ügyességi játékok a medencében.</p>
-                        </div>
-                    </div>
-                    <div class="champ-game">
-                        <span>🏃</span>
-                        <div>
-                            <h4>Sorversenyek</h4>
-                            <p>Egyszerű, vidám csapatjátékok, ahol mindenki bekapcsolódhat.</p>
-                        </div>
-                    </div>
-                    <div class="champ-game">
-                        <span>🎯</span>
-                        <div>
-                            <h4>Ügyességi játékok</h4>
-                            <p>Akadálypályák, célba dobós és más ügyességi feladatok.</p>
-                        </div>
-                    </div>
-                    <div class="champ-game">
-                        <span>⭐</span>
-                        <div>
-                            <h4>Meglepetés játékok</h4>
-                            <p>A hét folyamán újabb játékokkal is készülünk, amiket együtt próbálhatnak ki a csapatok.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="champ-days">
-                    <div class="champ-day">
-                        <div class="champ-day-dot">🤝</div>
-                        <h4>Hétfő</h4>
-                        <p>Megalakul a két csapat, és elkezdődnek az első közös játékok.</p>
-                    </div>
-                    <div class="champ-day">
-                        <div class="champ-day-dot">🎉</div>
-                        <h4>Kedd – Csütörtök</h4>
-                        <p>Sorversenyek, vízi és ügyességi játékok. A pontokat folyamatosan gyűjtjük.</p>
-                    </div>
-                    <div class="champ-day is-final">
-                        <div class="champ-day-dot">🏆</div>
-                        <h4>Péntek</h4>
-                        <p>Az utolsó játékok után összesítjük a pontokat, és kiderül, melyik csapat végzett az élen.</p>
-                    </div>
-                </div>
-            </div>
-                </details>
-<div class="section-cta">
-                <a href="#jelentkezes" class="cta-btn cta-btn-sm" data-umami-event="cta-csomag">🔔 Feliratkozás a 2027-es táborra</a>
-                
-            </div>
         <img src="gyerekek-mutatnak.webp"
              alt="Lelkesen az ég felé mutató gyerekek"
              class="champ-kids champ-reveal"
@@ -4151,6 +4143,30 @@ document.querySelectorAll('.hover-video').forEach(function (video) {
   }
 });
 </script>
-	
+<script>
+document.querySelectorAll('.champ-video').forEach(function (box) {
+  var video = box.querySelector('video');
+  var btn = box.querySelector('.champ-play');
+  if (!video || !btn) return;
+  var tracked = false;
+
+  btn.addEventListener('click', function () {
+    video.controls = true;
+    var p = video.play();
+    if (p) p.catch(function (err) { console.warn('Video hiba:', video.currentSrc, err); });
+  });
+
+  video.addEventListener('play', function () {
+    box.classList.add('is-playing');
+    if (!tracked) { tracked = true; if (window.dtrack) dtrack('bajnoksag-video-inditas'); }
+  });
+
+  video.addEventListener('ended', function () {
+    box.classList.remove('is-playing');
+    video.controls = false;
+    video.currentTime = 0.001;   // vissza az első képkockára, újra indítható
+  });
+});
+</script>	
 </body>
 </html>
